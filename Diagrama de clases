@@ -1,19 +1,23 @@
-[Grafico| #x: short; #y: short; #alto: short; #largo: short | Grafico(); #dibujar(Graficador): void]
-[Grafico_animado| #anim-filas: short; #anim-columnas: short | Grafico_animado(); #dibujar(Graficador): void ]
+[Grafico| #x: short; #y: short; #alto: short; #ancho: short | Grafico(); +dibujar(Graficador): void ; +get_x(): short; +set_x(): void; +get_y(): short; +set_y(): void; +get_ancho(): short; +set_ancho(): void; +get_alto(): short; +set_alto(): void;]
+
+[Municion|- cantidad_max_balas: short; - balas: List(Grafico); | Municiones(); ~Municiones();]
+
+[Grafico_animado| #anim-filas: short; #anim-columnas: short | +Grafico_animado(); +dibujar(Graficador): void]
+
 [Entidad| #dx: short; #dy: short; #acciones: enum | Entidad(); #mover(): void;]
 
-[Protagonista| -cant_vidas: short; | Protagonista(); caminar(): void; correr(): void; +hacer_portales(): void; +disparar(): void; get_cantvidas(): short; set_cantvidas(): void; get_dx(): short; set_dx(): void; get_dy(): short; set_dy(): void]
+[Protagonista| -cant_vidas: short; -municiones: List(Municion)| Protagonista(); ~Protagonista(); +caminar(): void; +correr(): void; +hacer_portales(): void; +recoger_municiones(): void; +disparar(): void; +get_cantvidas(): short; +set_cantvidas(): void; +get_dx(): short; +set_dx(): void; +get_dy(): short; +set_dy(): void]
 
 [OtroPersonaje| OtroPersonaje(); #mover_auto(): void; #seguir(): void]
 [Aliado| rango_vida: short | Aliado(); +seguir(): void;]
 [Asesino| Asesino(); +seguir(): void; +colisiona_aliado(): bool; +colisiona_prota(): bool;]
 [Corrupto| Corrupto(); +seguir(): void;]
 
-[Juego| tiempo_s_total: int; tiempo_s_corrupcion: int; laberinto: Laberinto; jugador: Protagonista; cantidad_aliados: short; aliados: List(Aliado); corruptos: List(Corrupto); asesinos: List(Asesino) | convencer_asesinos(): void; mover_personaje(accion: bool, keypressed:  Key):void;]
+[Juego| tiempo_s_total: int; tiempo_s_corrupcion: int; laberinto: Laberinto; jugador: Protagonista; cantidad_aliados: short; aliados: List(Aliado); corruptos: List(Corrupto); asesinos: List(Asesino) | Juego(); ~Juego(); convencer_asesinos(): void; mover_personaje(accion: bool, keypressed:  Key):void; ]
 
-[Laberinto| ancho: short; alto: short | Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void;]
+[Laberinto| ancho: short; alto: short | Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void; -colocar_municiones(): void;]
 
-
+[Municion]-^[Grafico]
 [Grafico_animado]-^[Grafico]
 [Entidad]-^[Grafico_animado]
 [Protagonista]-^[Entidad]
@@ -22,8 +26,11 @@
 [Asesino]-^[OtroPersonaje]
 [Corrupto]-^[OtroPersonaje]
 
+[Municion]++1-1*>[Grafico]
+[Protagonista]<>1-0*>[Municion]
+
 [Juego]++1-1>[Laberinto]
 [Juego]<>1-1>[Protagonista]
-[Juego]<>1-2>[Aliado]
-[Juego]<>1-1>[Corrupto]
+[Juego]<>1-2*>[Aliado]
+[Juego]<>1-1*>[Corrupto]
 [Juego]<>1-1*>[Asesino]
