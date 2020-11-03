@@ -15,7 +15,7 @@
 
 [Juego| tiempo_s_total: int; tiempo_s_corrupcion: int; laberinto: Laberinto; jugador: Protagonista; cantidad_aliados: short; aliados: List(Aliado); corruptos: List(Corrupto); asesinos: List(Asesino) | Juego(); ~Juego(); convencer_asesinos(): void; mover_personaje(accion: bool, keypressed:  Key):void; ]
 
-[Laberinto| ancho: short; alto: short | Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void; -colocar_municiones(): void;]
+[Laberinto| -ancho: short; -alto: short; -mapa: Grafico(alto)(ancho); -municiones: List(Municion)| Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void; -colocar_municiones(): void; +quitar_municion(): void;]
 
 [Municion]-^[Grafico]
 [Grafico_animado]-^[Grafico]
@@ -28,6 +28,8 @@
 
 [Municion]++1-1*>[Grafico]
 [Protagonista]<>1-0*>[Municion]
+[Municion]<>1-0*>[Laberinto]
+[Grafico]<>1-1*>[Laberinto]
 
 [Juego]++1-1>[Laberinto]
 [Juego]<>1-1>[Protagonista]
