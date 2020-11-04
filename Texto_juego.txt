@@ -1,0 +1,44 @@
+Textos:
+Primer cuadro:
+Título del juego: Anticiudadano #1
+Historia del juego: 
+Existe un mundo llamado Zion, que se encuentra regido por un grupo de personas de gran poder, quienes han establecido una dictadura total. Pero uno de los gobernantes se cansó de este tipo de gobierno y decidió renunciar, emprendiendo un viaje hacia las afueras de Zion, con el propósito de buscar ayuda para acabar con la tiranía. Ese personaje, eres tú. Pero cuidado!!! Al igual que como puedes encontrar aliados en tu travesía, existen personas que conspiraran en tu contra y buscaran exterminarte para que no logres tu cometido. 
+Instrucciones:
+Este es tu personaje *Imagen del personaje*
+Lo controlas usando las teclas direccionales *se muestran flechitas*
+Esta es tu barra de vida, inicias con *cantidad de vida* de vida
+La meta del juego es lograr atravesar el laberinto sin morir
+A lo largo del laberinto te podrás encontrar con tres tipos de personaje:
+Aliados *imagen de aliados* 
+Son personajes que te ayudaran en tu viaje y te seguirán a lo largo de este dando su vida por la tuya.
+Corrupts *imagen de corrupts*
+Estan en tu contra, caminan a lo largo del mapa y cuando encuentran un aliado lo asesinan y lo suplantan cambiando su aspecto, siendo iguales a los aliados
+Cuando te tocan te hacen un daño de *cantidad de daño*
+Assassins *imagen de assassins*
+Su apariencia es igual a la de los corrupts, pero es la única similitud.
+Su movilidad es mucho mayor y aparecen recién cuando los corrupts son incapaces de matarte
+El daño que te hacen es de *cantidad de daño*
+Interacción especial:
+Una vez los assassins son liberados, se generaran portales en distintas partes del laberinto, lo que permitirá un escape de cualquier situación de riesgo de forma segura
+*imagen del portal*
+
+Eso es todo lo que debes saber para tu misión
+Te deseamos suerte en tu viaje y esperamos que acabes con la injustica de este mundo.
+Texto de inicio: CORRE
+Texto de interacción aliado-personaje: CUENTA CONMIGO!!!
+Texto de interacción corrupt-aliado: Tomaré tu puesto
+Texto de interacción corrupt-assassin: Hemos fallado en detener al anticiudadano, necesitamos su ayuda.
+Texto de interacción assassin-corrupt: Esta bien, aniquilaré al rebelde, pero les saldrá caro.
+Texto de interacción corrupt-personaje: Impediré tu paso
+Texto de interacción assassin-personaje: MORIRAS
+Texto de cuando inicia la fase de peligro: PELIGRO!!!!
+Se han generado los portales CORREEEE
+Texto del personaje cuando mueres: No nos privaran de la libertad
+VAMOS OTRA VEZ
+Texto cuando ganas: FELICIDADES
+Pero este es solo el primer paso hacia la libertad
+Créditos:
+*Nombres de los desarrolladores*
+*Curso*
+*Texto adicional*
+
