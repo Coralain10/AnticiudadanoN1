@@ -1,15 +1,14 @@
 [Grafico| #x: short; #y: short; #alto: short; #ancho: short; #p_anclaje_x: short; #p_anclaje_y: short; | Grafico(); +dibujar(Graficador): void ; +get_x(): short; +set_x(x: short): void; +get_y(): short; +set_y(y: short): void; +get_ancho(): short; +set_ancho(ancho: short): void; +get_alto(): short; +set_alto(alto: short): void; +rotar(angulo: float): void; +escalar_x(escala_x: float):void; +escalar_y(escala_y: float):void; +escalar(escala_x: float, escala_y: float):void; ]
 
-[Municion|- cantidad_max_balas: short; - balas: List(Grafico); | Municiones(); ~Municiones();]
 
 [Grafico_animado| #anim-filas: short; #anim-columnas: short | +Grafico_animado(); +dibujar(Graficador): void]
 
 [Entidad| #dx: short; #dy: short; #acciones: enum; #radio_vision: short; #circulo_vision_map: vector(vector(short)) | Entidad(); +mover(): void; +set_radio_vision(radio_vision: short): void; +get_radio_vision(): short; #set_circulo_vision(radio_vision short): void; #get_circulo_vision(): vector(vector(short)); #set_circulo_map(radio short): void; #get_circulo_map(): vector(vector(short)); #buscar_radio_vision(vector(vector(short)), tipo_grafico:string): void;]
 
-[Protagonista| -cant_vidas: short; -municiones: List(Municion)| Protagonista(); ~Protagonista(); +caminar(): void; +correr(): void; +hacer_portales(): void; +recoger_municiones(): void; +disparar(): void; +get_cant_vidas(): short; +set_cantvidas(cant_vidas: short): void; +get_dx(): short; +set_dx(dx: short): void; +get_dy(): short; +set_dy(dy: short): void]
+[Protagonista| -cant_vidas: short; -cant_balas: short| Protagonista(); ~Protagonista(); +caminar(): void; +correr(): void; +hacer_portales(): void; +recoger_municiones(): void; +disparar(): void; +get_cant_vidas(): short; +set_cantvidas(cant_vidas: short): void; +get_dx(): short; +set_dx(dx: short): void; +get_dy(): short; +set_dy(dy: short): void]
 
 
-[OtroPersonaje| OtroPersonaje(); #mover_auto(): void; #seguir(): void]
+[NPC| NPC(); #mover_auto(): void; #seguir(): void]
 
 [Aliado| -tiempo_s_ataque: int; -rango_vida: short | Aliado(); +seguir(): void; +set_tiempo_seguir(segundos: int): void; +get_tiempo_seguir(): int]
 
@@ -18,7 +17,7 @@
 [Corrupto| -tiempo_s_corrupcion: int | Corrupto(); +seguir(): void; +set_tiempo_corrup(segundos: int): void; +get_tiempo_corrup(): int]
 
 
-[Laberinto| -ancho: short; -alto: short; -mapa: Grafico(alto)(ancho); -municiones: List(Municion)| Laberinto(); ~Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void; -colocar_municiones(): void; +quitar_municion(): void;]
+[Laberinto| -ancho: short; -alto: short; -mapa: Grafico(alto)(ancho); -balas: List(Grafico)| Laberinto(); ~Laberinto(); -crear_mapa(): short(alto)(ancho); -existe_camino(short(alto)(ancho)): bool; -pintar_mapa(): void; -colocar_balas(): void; +quitar_bala(): void;]
 
 
 [Configuracion|Configuracion(); +actualizar_aliados(cantidad_ini: short; radio_vision: short; tiempo_seguir: short); +actualizar_asesinos(rango_vision: short; tiempo_ataque:short); +actualizar_corruptos(rango_vision: short; tiempo_corrupcion:short); +iniciar_juego(): void;]
@@ -26,18 +25,16 @@
 [Juego| tiempo_s_total: int; laberinto: Laberinto; cantidad_aliados: short; aliados: List(Aliado); corruptos: List(Corrupto); asesinos: List(Asesino) | Juego(); ~Juego(); convencer_asesinos(): void; mover_personaje(accion: bool, keypressed:  Key):void; ]
 
 
-[Municion]-^[Grafico]
+
 [Grafico_animado]-^[Grafico]
 [Entidad]-^[Grafico_animado]
 [Protagonista]-^[Entidad]
-[OtroPersonaje]-^[Entidad]
-[Aliado]-^[OtroPersonaje]
-[Asesino]-^[OtroPersonaje]
-[Corrupto]-^[OtroPersonaje]
+[NPC]-^[Entidad]
+[Aliado]-^[NPC]
+[Asesino]-^[NPC]
+[Corrupto]-^[NPC]
 
-[Municion]<>1-1*>[Grafico]
-[Protagonista]<>1-0*>[Municion]
-[Municion]<>1-0*>[Laberinto]
+
 [Grafico]<>1-1*>[Laberinto]
 
 [Configuracion]-.->[Juego]
