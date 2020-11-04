@@ -1,44 +1,54 @@
 Textos:
 Primer cuadro:
-TÌtulo del juego: Anticiudadano #1
+T√≠tulo del juego: Anticiudadano #1
 Historia del juego: 
-Existe un mundo llamado Zion, que se encuentra regido por un grupo de personas de gran poder, quienes han establecido una dictadura total. Pero uno de los gobernantes se cansÛ de este tipo de gobierno y decidiÛ renunciar, emprendiendo un viaje hacia las afueras de Zion, con el propÛsito de buscar ayuda para acabar con la tiranÌa. Ese personaje, eres t˙. Pero cuidado!!! Al igual que como puedes encontrar aliados en tu travesÌa, existen personas que conspiraran en tu contra y buscaran exterminarte para que no logres tu cometido. 
+Existe un mundo llamado Zion, que se encuentra regido por un grupo de personas de gran poder, quienes han establecido una dictadura total donde ning√∫n ciudadano tiene voz ni voto, y son atormentados constantemente con tal de que se mantengan volubles ante la tiran√≠a del grupo. 
+Pero hay algo que este grupo de dictadores ignora, es que durante a√±os, se ha ido formando en silencio una rebeli√≥n, con el prop√≥sito de liberar a todos los pueblos y alcanzar la armon√≠a que una vez existi√≥ Zion, y que ahora solo vive en la memoria de los m√°s viejos.
+El l√≠der de este grupo de rebeldes ha estado viviendo por mucho tiempo en el grupo privilegiado, buscando alcanzar los altos mandos. Despu√©s de a√±os de soportar ver tratos hacia su pueblo, por fin est√° listo para actuar.
+Durante su estancia recopil√≥ informaci√≥n acerca de los mundos adyacentes a Zion, y encontr√≥ uno con el que puede contar para la liberaci√≥n de su pueblo. Pero para ello debe salir de Zion personalmente, renunciando as√≠ a su posici√≥n como gobernante y siendo declarado como "anticiudadano".
+¬°¬°¬°CUIDADO!!! 
+Han sido liberados los "corruptos", quienes van a ir buscando a tus aliados y los ir√°n eliminando uno por uno. Recuerda que mientras m√°s tardes en salir, los "corruptos" pueden ir cerrando tratos con los "asesinos", despiadados seres que no dudaran ni un segundo en matarte.
+Te deseamos suerte en tu viaje, y te apoyamos en el camino de Zion hacia la libertad.
+
 Instrucciones:
 Este es tu personaje *Imagen del personaje*
 Lo controlas usando las teclas direccionales *se muestran flechitas*
 Esta es tu barra de vida, inicias con *cantidad de vida* de vida
 La meta del juego es lograr atravesar el laberinto sin morir
-A lo largo del laberinto te podr·s encontrar con tres tipos de personaje:
+A lo largo del laberinto te podr√°s encontrar con tres tipos de personaje:
 Aliados *imagen de aliados* 
-Son personajes que te ayudaran en tu viaje y te seguir·n a lo largo de este dando su vida por la tuya.
+Son personajes que te ayudaran en tu viaje y te seguir√°n a lo largo de este dando su vida por la tuya.
 Corrupts *imagen de corrupts*
 Estan en tu contra, caminan a lo largo del mapa y cuando encuentran un aliado lo asesinan y lo suplantan cambiando su aspecto, siendo iguales a los aliados
-Cuando te tocan te hacen un daÒo de *cantidad de daÒo*
+Cuando te tocan te hacen un da√±o de *cantidad de da√±o*
 Assassins *imagen de assassins*
-Su apariencia es igual a la de los corrupts, pero es la ˙nica similitud.
-Su movilidad es mucho mayor y aparecen reciÈn cuando los corrupts son incapaces de matarte
-El daÒo que te hacen es de *cantidad de daÒo*
-InteracciÛn especial:
-Una vez los assassins son liberados, se generaran portales en distintas partes del laberinto, lo que permitir· un escape de cualquier situaciÛn de riesgo de forma segura
+Su apariencia es igual a la de los corrupts, pero es la √∫nica similitud.
+Su movilidad es mucho mayor y aparecen recien cuando los corrupts son incapaces de matarte
+El da√±o que te hacen es de *cantidad de da√±o*
+Interacci√≥n especial:
+Una vez los assassins son liberados, se generaran portales en distintas partes del laberinto, lo que permitir√° un escape de cualquier situaci√≥n de riesgo de forma segura
 *imagen del portal*
+A lo largo del mapa se han colocado balas, las cuales cargaran tu pistola, la que usar√°s para salir de las situaciones de alto riesgo haciendo frente al peligro.
 
-Eso es todo lo que debes saber para tu misiÛn
+Eso es todo lo que debes saber para tu misi√≥n
 Te deseamos suerte en tu viaje y esperamos que acabes con la injustica de este mundo.
 Texto de inicio: CORRE
-Texto de interacciÛn aliado-personaje: CUENTA CONMIGO!!!
-Texto de interacciÛn corrupt-aliado: TomarÈ tu puesto
-Texto de interacciÛn corrupt-assassin: Hemos fallado en detener al anticiudadano, necesitamos su ayuda.
-Texto de interacciÛn assassin-corrupt: Esta bien, aniquilarÈ al rebelde, pero les saldr· caro.
-Texto de interacciÛn corrupt-personaje: ImpedirÈ tu paso
-Texto de interacciÛn assassin-personaje: MORIRAS
-Texto de cuando inicia la fase de peligro: PELIGRO!!!!
+Texto de interacci√≥n aliado-personaje: CUENTA CONMIGO!!!
+Texto de interacci√≥n corrupt-aliado: Corrompido
+Texto de interacci√≥n corrupt-assassin 1: Hemos fallado en detener al anticiudadano, necesitamos su ayuda.
+Texto de interaccion assassin-corrupt: Esta bien, aniquilar√° al rebelde, pero les saldr√° caro.
+Texto de interacci√≥n corrupt-assassin 1: Todo sea para eliminar a esa escoria.
+Texto de interacci√≥n corrupt-personaje: Impedir√° tu paso
+Texto de interacci√≥n assassin-personaje: MORIRAS
+Texto de cuando inicia la fase de peligro: ¬°¬°¬°PELIGRO!!!!
 Se han generado los portales CORREEEE
 Texto del personaje cuando mueres: No nos privaran de la libertad
 VAMOS OTRA VEZ
 Texto cuando ganas: FELICIDADES
 Pero este es solo el primer paso hacia la libertad
-CrÈditos:
+Cr√©ditos:
 *Nombres de los desarrolladores*
+*Nombre de la m√∫sica empleada*
 *Curso*
 *Texto adicional*
 
