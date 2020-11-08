@@ -123,6 +123,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CCamino.hpp" />
     <ClInclude Include="CEntidad.hpp" />
     <ClInclude Include="CGrafico.hpp" />
     <ClInclude Include="CJuego.hpp" />
