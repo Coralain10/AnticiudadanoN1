@@ -15,6 +15,8 @@ protected:
 
 public:
 	CGrafico();
+	CGrafico(String^ ruta_imagen, short ancho, short alto)
+		:ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true) {}
 	CGrafico(String^ ruta_imagen, short x, short y, short ancho, short alto)
 		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true) {}
 	CGrafico(String^ ruta_imagen, short x, short y, short ax, short ay, short ancho, short alto)
@@ -27,6 +29,12 @@ public:
 
 	void dibujar(Graphics^ graficador) {
 		graficador->DrawImage(this->imagen, x, y, ancho, alto);
+	}
+
+	void dibujar(Graphics^ graficador, short x_pos_img, short y_pos_img, short ancho_img, short alto_img) {
+		System::Drawing::Rectangle area_recorte = Rectangle(x_pos_img, y_pos_img, ancho_img, alto_img);
+		System::Drawing::Rectangle area_dibujo = System::Drawing::Rectangle(x, y, this->ancho, this->alto);
+		graficador->DrawImage(this->imagen, area_dibujo, area_recorte, GraphicsUnit::Pixel);
 	}
 
 	void hacerTransparente() {

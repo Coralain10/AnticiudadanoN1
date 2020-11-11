@@ -1,4 +1,5 @@
 #pragma once
+#include "CJuego.hpp"
 
 namespace pryProyectoFinal {
 
@@ -9,11 +10,11 @@ namespace pryProyectoFinal {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Resumen de menu
-	/// </summary>
 	public ref class frmMenu : public System::Windows::Forms::Form
 	{
+		Graphics^ graficador;
+		BufferedGraphics^ buffer;
+
 	public:
 		frmMenu(void)
 		{

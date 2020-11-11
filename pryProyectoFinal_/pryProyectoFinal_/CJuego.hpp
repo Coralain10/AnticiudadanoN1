@@ -9,15 +9,27 @@ using namespace System::Collections::Generic;
 ref class CJuego {
 private:
 	int tiempo_s_total;
-	CLaberinto laberinto;
-	int cant_aliados;
-	List<CAliado^> aliados;
-	List<CCorrupto^> corruptos;
-	List<CAsesino^> asesinos;
+	CLaberinto^ laberinto;
+	short cant_aliados;
+	List<CAliado^>^ aliados;
+	List<CCorrupto^>^ corruptos;
+	List<CAsesino^>^ asesinos;
 
 public:
-	CJuego(){}
-	~CJuego() {}
+	CJuego(short cant_aliados):cant_aliados(cant_aliados){
+		laberinto = gcnew CLaberinto(96, 44, 20);
+		/*for (int i = 0; i < cant_aliados; i++)
+			aliados->Add(gcnew CAliado());*/
+	}
+	~CJuego() {
+		delete laberinto;
+		for (short i = 0; i < aliados->Count; i++)
+			delete aliados[i];
+		delete aliados;
+		for (short i = 0; i < corruptos->Count; i++)
+			delete corruptos[i];
+		delete aliados;
+	}
 
 	void convencer_asesinos() {
 		//TO DO

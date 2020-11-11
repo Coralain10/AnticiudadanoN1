@@ -6,21 +6,28 @@ using namespace std;
 
 ref class CLaberinto {
 private:
-	short ancho;
-	short alto;
+	short ancho, alto;
+	short tamanho_celda;
 	CCelda^ entrada;
 	CCelda^ salida;
 	vector<vector<short>>* mapa;
-	vector<CGrafico>* balas; //municiones
+	CGrafico^ piso;
+	CGrafico^ pared;
+	vector<CGrafico^>* balas; //municiones
 
 	enum paredes_pos { ARRIBA, ABAJO, IZQUIERDA, DERECHA };
 
 public:
-	CLaberinto(short ancho, short alto)
-:ancho(ancho),alto(alto){}
+	CLaberinto(short ancho, short alto, short tamanho_celda) :ancho(ancho),alto(alto), tamanho_celda(tamanho_celda) {
+		pared = gcnew CGrafico("Imagenes\\dialog.png", tamanho_celda, tamanho_celda);
+		piso = gcnew CGrafico("Imagenes\\dialog.png", tamanho_celda, tamanho_celda);
+		crear_mapa();
+	}
 	~CLaberinto() {
 		delete mapa;
 		delete balas;
+		delete piso;
+		delete pared;
 		delete entrada;
 		delete salida;
 	}
@@ -28,8 +35,22 @@ public:
 	CCelda^ get_entrada() { return this->entrada; }
 	CCelda^ get_salida() { return this->salida; }
 
-	void pintar_mapa() {
-		//TO DO
+	void pintar_mapa(Graphics^ graficador) {
+		for (int i = 0; i < alto; i++)
+		{
+			for (int j = 0; j < ancho; j++)
+			{
+				if (mapa->at(i).at(j) == 0)
+				{
+					piso->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+					piso->dibujar(graficador, 0, 0, 64, 64);
+				}
+				else if (mapa->at(i).at(j) == 1) {
+					pared->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+					pared->dibujar(graficador, 0, 120, 128, 128);
+				}
+			}
+		}
 	}
 
 	void colocar_balas() {
@@ -43,12 +64,12 @@ public:
 private:
 
 	void crear_mapa() {
-		vector<vector<short>>* aux_mapa;
+		vector<vector<short>>* aux_mapa = new vector<vector<short>>;
 
 		for (short i = 0; i < alto; i++)
 			for (short j = 0; j < ancho; j++)
 				aux_mapa->at(i).at(j) = rand() % 2;
-
+		/*
 		set_entrada_salida();
 
 		CCamino^ aux_camino = gcnew CCamino(aux_mapa, entrada, salida);
@@ -59,7 +80,8 @@ private:
 		else {
 			delete aux_mapa;
 			crear_mapa();
-		}
+		}*/
+		this->mapa = aux_mapa;
 	}
 
 	CCelda^ celda_pared() {
