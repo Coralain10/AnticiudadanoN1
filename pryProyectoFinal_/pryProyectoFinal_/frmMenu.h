@@ -30,7 +30,7 @@ namespace pryProyectoFinal {
 			srand(time(NULL));
 			this->graficador = this->CreateGraphics();
 			this->buffer = BufferedGraphicsManager::Current->Allocate(this->graficador, this->ClientRectangle);
-			this->juego = gcnew CJuego(30,20,10);
+			this->juego = gcnew CJuego(this->Width/20,this->Height/20,20,10);
 		}
 
 	protected:
@@ -73,9 +73,11 @@ namespace pryProyectoFinal {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(624, 401);
+			this->ClientSize = System::Drawing::Size(624, 321);
 			this->Name = L"frmMenu";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"menu principal";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &frmMenu::frmMenu_Paint);
 			this->ResumeLayout(false);
 

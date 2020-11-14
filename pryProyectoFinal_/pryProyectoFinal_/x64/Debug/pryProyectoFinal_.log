@@ -1,10 +1,10 @@
 ﻿  main.cpp
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(54,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(55,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(57,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(58,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(61,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(62,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(64,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(65,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(67,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(68,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(71,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(72,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
 E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\frmMenu.h(30,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
   main.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   pryProyectoFinal_.vcxproj -> E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.exe

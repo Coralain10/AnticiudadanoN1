@@ -16,19 +16,19 @@ private:
 	List<CAsesino^>^ asesinos;
 
 public:
-	CJuego(short ancho, short alto, short cant_aliados):cant_aliados(cant_aliados){
-		laberinto = gcnew CLaberinto(ancho, alto, 20);
+	CJuego(short ancho, short alto, short tamanho_celda, short cant_aliados) :cant_aliados(cant_aliados) {
+		laberinto = gcnew CLaberinto(ancho, alto, tamanho_celda);
 		/*for (int i = 0; i < cant_aliados; i++)
 			aliados->Add(gcnew CAliado());*/
 	}
 	~CJuego() {
 		delete laberinto;
-		for (short i = 0; i < aliados->Count; i++)
+		/*for (short i = 0; i < aliados->Count; i++)
 			delete aliados[i];
 		delete aliados;
 		for (short i = 0; i < corruptos->Count; i++)
 			delete corruptos[i];
-		delete aliados;
+		delete aliados;*/
 	}
 
 	void convencer_asesinos() {
