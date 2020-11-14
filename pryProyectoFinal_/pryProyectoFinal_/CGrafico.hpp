@@ -11,30 +11,36 @@ protected:
 	short x, y;
 	short ax, ay;
 	short ancho, alto;
+	Rectangle area_dibujo;
 	Bitmap^ imagen;
 
 public:
-	CGrafico();
+	CGrafico(){}
 	CGrafico(String^ ruta_imagen, short ancho, short alto)
-		:ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true) {}
+		:ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(0,0,this->ancho, this->alto)) {}
 	CGrafico(String^ ruta_imagen, short x, short y, short ancho, short alto)
-		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true) {}
+		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
 	CGrafico(String^ ruta_imagen, short x, short y, short ax, short ay, short ancho, short alto)
-		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true) {}
+		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(ancho), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+	CGrafico(Bitmap^ imagen, short ancho, short alto)
+		:ax(0), ay(0), ancho(ancho), alto(ancho), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(0, 0, this->ancho, this->alto)) {}
 	CGrafico(Bitmap^ imagen, short x, short y, short ancho, short alto)
-		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(ancho), imagen(imagen), imagen_propia(false) {}
+		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(ancho), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
 	CGrafico(Bitmap^ imagen, short x, short y, short ax, short ay, short ancho, short alto)
-		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(ancho), imagen(imagen), imagen_propia(false) {}
+		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(ancho), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
 	~CGrafico() { if(this->imagen_propia) delete this->imagen; }
 
-	void dibujar(Graphics^ graficador) {
-		graficador->DrawImage(this->imagen, x, y, ancho, alto);
+	virtual void dibujar(Graphics^ graficador) {
+		graficador->DrawImage(this->imagen, area_dibujo);
 	}
 
-	void dibujar(Graphics^ graficador, short x_pos_img, short y_pos_img, short ancho_img, short alto_img) {
+	virtual void dibujar(Graphics^ graficador, short x_pos_img, short y_pos_img, short ancho_img, short alto_img) {
 		System::Drawing::Rectangle area_recorte = Rectangle(x_pos_img, y_pos_img, ancho_img, alto_img);
-		System::Drawing::Rectangle area_dibujo = System::Drawing::Rectangle(x, y, this->ancho, this->alto);
-		graficador->DrawImage(this->imagen, area_dibujo, area_recorte, GraphicsUnit::Pixel);
+		graficador->DrawImage(this->imagen, this->area_dibujo, area_recorte, GraphicsUnit::Pixel);
+	}
+
+	bool hay_colision(CGrafico^ otro) {
+		return this->area_dibujo.IntersectsWith(otro->area_dibujo);
 	}
 
 	void hacerTransparente() {
@@ -60,12 +66,23 @@ public:
 		//TODO
 	}
 
-	short get_X() { return x; }
-	void set_x(short x) { this->x = x; }
+	short get_x() { return x; }
+	void set_x(short x) {
+		this->x = x;
+		this->area_dibujo.X = x;
+	}
 	short get_y() { return y; }
-	void set_y(short y) { this->y = y; }
+	void set_y(short y) {
+		this->y = y;
+		this->area_dibujo.Y = y;
+	}
 	short get_aX() { return ax; }
-	void set_ubicacion(short x, short y) { this->x = x; this->x = y; }
+	void set_ubicacion(short x, short y) {
+		this->x = x;
+		this->y = y;
+		this->area_dibujo.X = x;
+		this->area_dibujo.Y = y;
+	}
 	void set_ax(short ax) { this->ax = ax; }
 	short get_ay() { return ay; }
 	void set_ay(short ay) { this->ay = ay; }
@@ -73,6 +90,9 @@ public:
 	void set_ancho(short ancho) { this->ancho = ancho; }
 	short get_alto() { return alto; }
 	void set_alto(short alto) { this->alto = alto; }
+	System::Drawing::Rectangle get_area_dibujo() { return this->area_dibujo; }
+	/*System::Drawing::Rectangle set_area_dibujo(short x, short y, short ancho, short alto) { this->area_dibujo = System::Drawing::Rectangle(x, y, ancho, alto); }
+	System::Drawing::Rectangle set_area_dibujo(System::Drawing::Rectangle area) { this->area_dibujo = area; }*/
 };
 
 ref class CGraficoAnimado : public CGrafico {

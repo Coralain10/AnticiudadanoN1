@@ -92,6 +92,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,6 +135,11 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="CLaberinto.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmMenu.resx">
+      <DependentUpon>frmMenu.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

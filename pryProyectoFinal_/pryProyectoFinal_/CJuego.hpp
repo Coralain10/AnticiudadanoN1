@@ -16,8 +16,8 @@ private:
 	List<CAsesino^>^ asesinos;
 
 public:
-	CJuego(short cant_aliados):cant_aliados(cant_aliados){
-		laberinto = gcnew CLaberinto(96, 44, 20);
+	CJuego(short ancho, short alto, short cant_aliados):cant_aliados(cant_aliados){
+		laberinto = gcnew CLaberinto(ancho, alto, 20);
 		/*for (int i = 0; i < cant_aliados; i++)
 			aliados->Add(gcnew CAliado());*/
 	}
@@ -38,6 +38,8 @@ public:
 	void mover_personaje(bool accion, System::Windows::Forms::Keys key){
 		//TO DO
 	}
+
+	CLaberinto^ get_laberinto() { return this->laberinto; }
 };
 
 
@@ -47,8 +49,8 @@ private:
 	short c_aliados_rvision, c_asesinos_rvision, c_corruptos_rvision;
 	int c_aliados_tseguir, c_asesinos_tataque, c_corruptos_tcorrupcion;
 public:
-	CConfiguracion();
-	~CConfiguracion();
+	//CConfiguracion() {}
+	~CConfiguracion() {}
 
 	void actualizar_aliados(short cantidad, short radio_vision, short tiempo_seguir){
 		this->c_aliados_cant = cantidad;
@@ -65,8 +67,8 @@ public:
 		this->c_corruptos_rvision = radio_vision;
 		this->c_corruptos_tcorrupcion = tiempo_seguir;
 	}
-
+	/*
 	void iniciar_juego() {
 		//TO DO
-	}
+	}*/
 };
