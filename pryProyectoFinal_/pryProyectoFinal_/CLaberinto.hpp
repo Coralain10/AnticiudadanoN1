@@ -45,8 +45,8 @@ public:
 		pared_rest = gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
 		paredes_fijas = gcnew List<CGrafico^>;
 		paredes_mov = gcnew List<CGrafico^>;
-		entrada = gcnew CGrafico("Imagenes\\buttons.png", tamanho_celda, tamanho_celda);
-		salida = gcnew CGrafico("Imagenes\\buttons.png", tamanho_celda, tamanho_celda);
+		entrada = gcnew CGrafico(img_partes_lab, Rectangle(32, 0, 32, 32), tamanho_celda, tamanho_celda);
+		salida = gcnew CGrafico(img_partes_lab, Rectangle(32, 32, 32, 32), tamanho_celda, tamanho_celda);
 		balas = gcnew List<CGrafico^>;
 		prob_balas = 10;
 		factor_paredes = 1; //.75
@@ -101,10 +101,10 @@ public:
 		for each (CGrafico ^ pared in paredes_fijas)
 			pared->dibujar(graficador);
 		for each (CGrafico ^ pared in paredes_mov)
-			pared->dibujar(graficador);
+			pared->dibujar(graficador,0,0,32,32);
 
-		entrada->dibujar(graficador, 0, 0, 160, 160);
-		salida->dibujar(graficador, 0, 160, 160, 160);
+		entrada->dibujar(graficador);
+		salida->dibujar(graficador);
 	}
 
 	void colocar_balas() {
@@ -237,7 +237,7 @@ private:
 						paredes_fijas->Add(gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), j * tamanho_celda, i * tamanho_celda, tamanho_celda, tamanho_celda));
 						break;
 					case PAREDMOV:
-						paredes_mov->Add(gcnew CGrafico(img_partes_lab, Rectangle(32, 0, 32, 32), j * tamanho_celda, i * tamanho_celda, tamanho_celda, tamanho_celda));
+						paredes_mov->Add(gcnew CGrafico("Imagenes\\pared_mov.png", j * tamanho_celda, i * tamanho_celda, tamanho_celda, tamanho_celda));
 						break;
 				}
 			}

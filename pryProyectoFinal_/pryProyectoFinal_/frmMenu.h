@@ -20,7 +20,8 @@ namespace pryProyectoFinal {
 		Graphics^ graficador;
 		BufferedGraphics^ buffer;
 		CJuego^ juego;
-	
+	private: System::Windows::Forms::Timer^ tmrMenu;
+
 	private: System::Windows::Forms::Timer^ tmrAnimacion;
 
 	public:
@@ -30,7 +31,9 @@ namespace pryProyectoFinal {
 			srand(time(NULL));
 			this->graficador = this->CreateGraphics();
 			this->buffer = BufferedGraphicsManager::Current->Allocate(this->graficador, this->ClientRectangle);
-			this->juego = gcnew CJuego(this->Width/20,this->Height/20,20,10);
+			this->DoubleBuffered == true;
+			this->juego = gcnew CJuego(this->ClientRectangle.Width/32, this->ClientRectangle.Height/32,32);
+			Windows::Forms::Cursor::Hide();
 		}
 
 	protected:
@@ -48,47 +51,69 @@ namespace pryProyectoFinal {
 	protected:
 
 	private:
-		/// <summary>
-		/// Variable del diseñador necesaria.
-		/// </summary>
 
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Método necesario para admitir el Diseñador. No se puede modificar
-		/// el contenido de este método con el editor de código.
-		/// </summary>
+
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(frmMenu::typeid));
 			this->tmrAnimacion = (gcnew System::Windows::Forms::Timer(this->components));
+			this->tmrMenu = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// tmrAnimacion
 			// 
-			this->tmrAnimacion->Enabled = true;
 			this->tmrAnimacion->Tick += gcnew System::EventHandler(this, &frmMenu::animar);
+			// 
+			// tmrMenu
+			// 
+			this->tmrMenu->Enabled = true;
+			this->tmrMenu->Tick += gcnew System::EventHandler(this, &frmMenu::animar_menu);
 			// 
 			// frmMenu
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(624, 321);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"frmMenu";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"menu principal";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &frmMenu::frmMenu_Paint);
+			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::accion_form);
+			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::actualizar_mouse);
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 	private: System::Void animar(System::Object^ sender, System::EventArgs^ e) {
-		//this->juego->get_laberinto()->pintar_mapa(graficador);
+		//this->graficador->
+		this->juego->get_laberinto()->pintar_mapa(buffer->Graphics);
+		this->juego->pintar_ui(buffer->Graphics);
+		this->buffer->Render();
 	}
 	private: System::Void frmMenu_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-		this->juego->get_laberinto()->pintar_mapa(graficador);
-		//string posini = this->juego->get_laberinto()->get_entrada().X + ", ";
+		//this->juego->pintar_ui(graficador);
+	}
+
+	private: System::Void accion_form(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_cerrar()))
+			Application::Exit();
+		/*if (true)
+		{
+			this->tmrAnimacion->Enabled = true;
+		}*/
+	}
+	private: System::Void actualizar_mouse(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		this->juego->get_cursor()->set_ubicacion(e->X, e->Y);
+	}
+	private: System::Void animar_menu(System::Object^ sender, System::EventArgs^ e) {
+		this->juego->menu_principal(buffer->Graphics, this->ClientRectangle);
+		this->buffer->Render();
 	}
 	};
 }
