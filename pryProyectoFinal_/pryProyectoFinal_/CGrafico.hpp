@@ -27,27 +27,27 @@ public:
 		this->area_dibujo = Rectangle(0, 0, this->ancho, this->alto);
 	}
 	CGrafico(String^ ruta_imagen, short ancho, short alto)
-		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(0,0,this->ancho, this->alto)) {}
+		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(0,0,ancho, alto)) {}
 	CGrafico(String^ ruta_imagen, System::Drawing::Rectangle recorte, short ancho, short alto)
-		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(0, 0, this->ancho, this->alto)) {
+		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(0, 0, ancho, alto)) {
 		this->imagen = this->imagen->Clone(recorte, imagen->PixelFormat);
 	}
 	CGrafico(String^ ruta_imagen, short x, short y, short ancho, short alto)
-		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, ancho,alto)) {}
 	CGrafico(String^ ruta_imagen, short x, short y, short ax, short ay, short ancho, short alto)
-		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(alto), imagen(gcnew Bitmap(ruta_imagen)), imagen_propia(true), area_dibujo(System::Drawing::Rectangle(x, y, ancho, alto)) {}
 	CGrafico(Bitmap^ imagen, short ancho, short alto)
-		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(0, 0, this->ancho, this->alto)) {}
+		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(0, 0, ancho, alto)) {}
 	CGrafico(Bitmap^ imagen, System::Drawing::Rectangle recorte, short ancho, short alto)
-		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen->Clone(recorte,imagen->PixelFormat)), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(0, 0, this->ancho, this->alto)) {
+		:ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen->Clone(recorte,imagen->PixelFormat)), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(0, 0, ancho, alto)) {
 		//delete imagen;
 	}
 	CGrafico(Bitmap^ imagen, short x, short y, short ancho, short alto)
-		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, ancho, alto)) {}
 	CGrafico(Bitmap^ imagen, System::Drawing::Rectangle recorte, short x, short y, short ancho, short alto)
-		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen->Clone(recorte, imagen->PixelFormat)), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+		:x(x), y(y), ax(0), ay(0), ancho(ancho), alto(alto), imagen(imagen->Clone(recorte, imagen->PixelFormat)), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, ancho, alto)) {}
 	CGrafico(Bitmap^ imagen, short x, short y, short ax, short ay, short ancho, short alto)
-		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, this->ancho, this->alto)) {}
+		:x(x), y(y), ax(ax), ay(ay), ancho(ancho), alto(alto), imagen(imagen), imagen_propia(false), area_dibujo(System::Drawing::Rectangle(x, y, ancho, alto)) {}
 	~CGrafico() { if(this->imagen_propia) delete this->imagen; }
 
 	virtual void dibujar(Graphics^ graficador) {

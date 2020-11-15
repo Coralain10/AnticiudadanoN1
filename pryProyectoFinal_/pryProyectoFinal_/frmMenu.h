@@ -20,8 +20,9 @@ namespace pryProyectoFinal {
 		Graphics^ graficador;
 		BufferedGraphics^ buffer;
 		CJuego^ juego;
-	private: System::Windows::Forms::Timer^ tmrMenu;
+		short tc; //tamanho de celda
 
+	private: System::Windows::Forms::Timer^ tmrMenu;
 	private: System::Windows::Forms::Timer^ tmrAnimacion;
 
 	public:
@@ -29,10 +30,11 @@ namespace pryProyectoFinal {
 		{
 			InitializeComponent();
 			srand(time(NULL));
+			this->tc = 28;
 			this->graficador = this->CreateGraphics();
 			this->buffer = BufferedGraphicsManager::Current->Allocate(this->graficador, this->ClientRectangle);
 			this->DoubleBuffered == true;
-			this->juego = gcnew CJuego(this->ClientRectangle.Width / 28, this->ClientRectangle.Height / 28, 28);
+			this->juego = gcnew CJuego((short)(this->ClientRectangle.Width / tc), (short)(this->ClientRectangle.Height / tc), tc);
 			Windows::Forms::Cursor::Hide();
 		}
 
@@ -107,6 +109,13 @@ namespace pryProyectoFinal {
 		{
 			this->juego->iniciar_juego(buffer->Graphics);
 			this->tmrMenu->Enabled = false;
+			this->tmrAnimacion->Enabled = true;
+		}
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_reiniciar()))
+		{
+			this->juego->iniciar_juego(buffer->Graphics);
+			this->tmrAnimacion->Enabled = false;
+			this->juego->reiniciar_lab((short)(this->ClientRectangle.Width / tc), (short)(this->ClientRectangle.Height / tc), tc);
 			this->tmrAnimacion->Enabled = true;
 		}
 	}
