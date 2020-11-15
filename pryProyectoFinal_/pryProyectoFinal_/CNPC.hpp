@@ -51,10 +51,12 @@ public:
 
 	//podria resumirse en un string get_colision_tipoobj
 	bool colisiona_aliado() {
+		return false;
 		//TO DO
 	}
 	bool colisiona_prota() {
 		//TO DO
+		return false;
 	}
 
 	void seguir() override {
@@ -64,7 +66,7 @@ public:
 	void set_tiempo_ataque(int segundos) { this->tiempo_s_ataque; }
 	int get_tiempo_s_ataque() { return tiempo_s_ataque; }
 	void set_circulo_peligro(vector<vector<short>>* circulo_peligro) { this->circulo_peligro_map = circulo_peligro; }
-	void set_circulo_peligro(short radio_peligro) { circulo_peligro_map = get_circulo_map(radio_peligro); }
+	//void set_circulo_peligro(short radio_peligro) { circulo_peligro_map = get_circulo_map(radio_peligro); }
 	vector<vector<short>>* get_circulo_peligro() { return circulo_peligro_map; }
 };
 

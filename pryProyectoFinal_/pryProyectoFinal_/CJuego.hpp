@@ -42,6 +42,7 @@ private:
 	CGrafico^ btn_cerrar;
 	CGrafico^ btn_comenzar;
 	CGrafico^ btn_configurar;
+	CGrafico^ btn_reiniciar;
 	CGrafico^ cursor;
 	bool inicio_juego;
 	Font^ tipografia;
@@ -58,7 +59,8 @@ public:
 		this->logo->escalar(2);
 		this->img_aux = gcnew Bitmap("Imagenes\\zion_letrero.png");
 		this->ui_personaje = gcnew CGrafico("Imagenes\\protaUI.png", (ancho - 4) * tamanho_celda, 0, 1392, 1080);
-		this->btn_cerrar = gcnew CGrafico("Imagenes\\cerrar.png", (ancho-2.5)*tamanho_celda, tamanho_celda, tamanho_celda*1.5, tamanho_celda*1.5);
+		this->btn_cerrar = gcnew CGrafico("Imagenes\\cerrar.png", (short)((ancho - 2.5) * tamanho_celda), tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
+		this->btn_reiniciar = gcnew CGrafico("Imagenes\\reiniciar.png", (ancho - 5) * tamanho_celda, tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
 		this->btn_comenzar = gcnew CGrafico(bg_botones, Rectangle(0, 0, 160, 160), tamanho_celda *2, (alto-8)*tamanho_celda, tamanho_celda*10, tamanho_celda*2);
 		this->btn_configurar = gcnew CGrafico(bg_botones, Rectangle(0, 160, 160, 160), tamanho_celda * 2, (alto - 4) * tamanho_celda, tamanho_celda*14, tamanho_celda*2);
 		this->cursor = gcnew CGrafico("Imagenes\\mouse.png", 32, 32);
@@ -74,6 +76,7 @@ public:
 		delete btn_cerrar;
 		delete btn_comenzar;
 		delete btn_configurar;
+		delete btn_reiniciar;
 		delete img_aux;
 		delete cursor;
 		delete laberinto;
@@ -109,6 +112,7 @@ public:
 
 	void pintar_ui(Graphics^ graficador) {
 		this->btn_cerrar->dibujar(graficador);
+		this->btn_reiniciar->dibujar(graficador);
 		this->cursor->dibujar(graficador);
 	}
 
@@ -144,10 +148,16 @@ public:
 		//TO DO
 	}
 
+	void reiniciar_lab(short ancho, short alto, short tamanho_celda) {
+		delete this->laberinto;
+		this->laberinto = gcnew CLaberinto(ancho, alto, tamanho_celda);
+	}
+
 	CLaberinto^ get_laberinto() { return this->laberinto; }
 	CGrafico^ get_btn_cerrar() { return this->btn_cerrar; }
 	CGrafico^ get_btn_comenzar() { return this->btn_comenzar; }
 	CGrafico^ get_btn_configurar() { return this->btn_configurar; }
+	CGrafico^ get_btn_reiniciar() { return this->btn_reiniciar; }
 	CGrafico^ get_cursor() { return this->cursor; }
 	Font^ get_fuente() { return this->tipografia; }
 };

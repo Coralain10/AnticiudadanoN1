@@ -34,15 +34,17 @@ public:
 	void set_radio_vision(short radio_vision) { this->radio_vision = radio_vision; }
 	short get_radio_vision() { return radio_vision; }
 	void set_circulo_vision(vector<vector<short>>* circulo_vision) { this->circulo_vision_map = circulo_vision; }
-	void set_circulo_vision(short radio_vision) { circulo_vision_map = get_circulo_map(radio_vision); }
+	//void set_circulo_vision(short radio_vision) { circulo_vision_map = get_circulo_map(radio_vision); }
 	vector<vector<short>>* get_circulo_vision() { return circulo_vision_map; }
 
+	/*
 	vector<vector<short>>* get_circulo_map(short radio) {
 		//TO DO
-	}
+	}*/
 
 	bool buscar_radio_vision(vector<vector<short>>* circulo, string tipo_grafico){
 		//TO DO
+		return false;
 	}
 };
 

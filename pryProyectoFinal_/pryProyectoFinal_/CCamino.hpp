@@ -2,34 +2,35 @@
 #include <vector>
 
 using namespace System::Collections::Generic;
+using namespace System::Drawing;
 using namespace std;
 
 ref class CCamino {
 private:
 	short piso;
-	short pared;
-	vector<vector<CCelda^>*>* mapa;
+	//vector<vector<short>>* mapa;
+	List<List<CCelda^>^>^ mapa;
 	CCelda^ inicio;
 	CCelda^ fin;
 	List<CCelda^>^ openset; //celdas que estan siendo analizadas
 	List<CCelda^>^ closeset; //celdas recorridas / ya revisadas
 
 public:
-	CCamino() :piso(0), pared(1) {}
-	CCamino(short piso, short pared, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), pared(pared), inicio(inicio), fin(fin) { }
+	CCamino() :piso(0) {}
+	CCamino(short piso, CCelda^ inicio, CCelda^ fin)
+		:piso(piso), inicio(inicio), fin(fin) { }
 
-	CCamino(vector<vector<CCelda^>*>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(0), pared(1), mapa(mapa), inicio(inicio), fin(fin) { }
-	CCamino(short piso, short pared, vector<vector<CCelda^>*>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), pared(pared), mapa(mapa), inicio(inicio), fin(fin) { }
+	CCamino(List<List<CCelda^>^>^ mapa, CCelda^ inicio, CCelda^ fin)
+		:piso(0), mapa(mapa), inicio(inicio), fin(fin) { }
+	CCamino(short piso, short pared, List<List<CCelda^>^>^ mapa, CCelda^ inicio, CCelda^ fin)
+		:piso(piso), mapa(mapa), inicio(inicio), fin(fin) { }
 
 	CCamino(vector<vector<short>>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(0), pared(1), inicio(inicio), fin(fin) {
+		:piso(0), inicio(inicio), fin(fin) {
 		mapa_short_to_CCelda(mapa);
 	}
-	CCamino(short piso, short pared, vector<vector<short>>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), pared(pared), inicio(inicio), fin(fin) {
+	CCamino(short piso, vector<vector<short>>* mapa, CCelda^ inicio, CCelda^ fin)
+		:piso(piso), inicio(inicio), fin(fin) {
 		mapa_short_to_CCelda(mapa);
 	}
 
@@ -37,6 +38,7 @@ public:
 		delete inicio;
 		delete fin;
 
+		/*
 		for (int i = mapa->size(); i >=0; --i) {
 			for (int j = mapa->at(i)->size(); j>=0; --j)
 			{
@@ -46,20 +48,21 @@ public:
 			delete mapa->at(i);
 			mapa->erase(mapa->begin()+i);
 		}
+		*/
+		for each (List<CCelda^>^ fila in mapa)
+		{
+			for each (CCelda^ celda in fila)
+				delete celda;
+			delete fila;
+		}
 		delete mapa;
 
-		for (int i = openset->Count; i >= 0; --i)
-		{
-			delete openset[i];
-			openset->RemoveAt(i);
-		}
+		for each (CCelda^ celda in openset)
+			delete celda;
 		delete openset;
 
-		for (int i = closeset->Count; i >= 0; --i)
-		{
-			delete closeset[i];
-			openset->RemoveAt(i);
-		}
+		for each (CCelda^ celda in closeset)
+			delete celda;
 		delete closeset;
 	}
 
@@ -77,8 +80,10 @@ public:
 	}
 
 
-	void set_mapa(vector<vector<CCelda^>*>* mapa) { this->mapa = mapa; }
-	vector<vector<CCelda^>*>* get_mapa() { return mapa; }
+	//void set_mapa(vector<vector<CCelda^>*>* mapa) { this->mapa = mapa; }
+	//vector<vector<CCelda^>*>* get_mapa() { return mapa; }
+	void set_mapa(List<List<CCelda^>^>^ mapa) { this->mapa = mapa; }
+	List<List<CCelda^>^>^ get_mapa() { return mapa; }
 
 	CCelda^ get_inicio() { return inicio; }
 	void set_inicio(CCelda^ inicio) { this->inicio = inicio; }
@@ -87,15 +92,16 @@ public:
 	void set_fin(CCelda^ fin) { this->fin = fin; }
 
 private:
-	void mapa_short_to_CCelda(vector<vector<short>>* mapa){
-		for (int i = mapa->size(); i >= 0; --i)
+
+	void mapa_short_to_CCelda(vector<vector<short>>* mapaShort){
+		for (int i = mapaShort->size(); i >= 0; --i)
 		{
-			vector<CCelda^>* aux_fila;
+			List<CCelda^>^ aux_fila;
 
-			for (int j = mapa->at(i).size(); j >= 0; --j)
-				aux_fila->push_back(gcnew CCelda(i, j, mapa->at(i).at(j)));
+			for (int j = mapaShort->at(i).size(); j >= 0; --j)
+				aux_fila->Add(gcnew CCelda(i, j, mapaShort->at(i).at(j)));
 
-			this->mapa->at(i) = aux_fila;
+			this->mapa[i] = aux_fila;
 		}
 		delete mapa;
 
@@ -103,33 +109,46 @@ private:
 	}
 
 	void set_vecinos() {
-		for (int i = this->mapa->size(); i >= 0; --i) //por cada fila
+		/*
+		List<CCelda^>^ fila;
+		List<CCelda^>^ fila_aux;
+
+		for (short i = this->mapa->Count; i >= 0; --i) //por cada fila
 		{
-			for (int j = this->mapa->at(i)->size(); j >= 0; --j) //por cada columna
+			for (short j = this->mapa[i]->Count; j >= 0; --j) //por cada columna
 			{
+				fila = mapa[i];
 				//vecino izquierdo
-				if (this->mapa->at(i)->at(j)->get_x() > 0)
+				if (fila[j]->get_x() > 0)
 				{
-					this->mapa->at(i)->at(j)->addVecino(mapa->at(i)->at(j - 1));
+					fila[j]->addVecino(fila[j - 1]);
 				}
 				//vecino derecho
-				if (this->mapa->at(i)->at(j)->get_x() < (mapa->at(i)->size()-1) )
+				if (fila[j]->get_x() < (fila->Count - 1) )
 				{
-					this->mapa->at(i)->at(j)->addVecino(mapa->at(i)->at(j + 1));
+					fila[j]->addVecino(fila[j + 1]);
 				}
+
 				//vecino arriba
-				if (this->mapa->at(i)->at(j)->get_y() > 0)
+				fila_aux = mapa[i - 1];
+				if (fila[j]->get_y() > 0)
 				{
-					this->mapa->at(i)->at(j)->addVecino(mapa->at(i - 1)->at(j));
+					fila[j]->addVecino(fila_aux[j]);
 				}
-				if (this->mapa->at(i)->at(j)->get_y() < (mapa->size() - 1) ) //vecino abajo
+				//vecino abajo
+				fila_aux = mapa[i + 1];
+				if (fila[j]->get_y() < (mapa->Count - 1) )
 				{
-					this->mapa->at(i)->at(j)->addVecino(mapa->at(i + 1)->at(j));
+					fila[j]->addVecino(fila_aux[j]);
 				}
 			}
-		}
+		}*/
+
+		/*delete fila;
+		delete fila_aux;*/
 	}
 };
+
 
 ref class CCelda {
 private:
@@ -138,23 +157,24 @@ private:
 	int g, //pasos dados
 		h, //pasos que quedan en el caso ideal (sin obstaculos) - heuristica (estimacion de lo que queda)
 		f; // coste total / f = g+h
-	vector<CCelda^>* vecinos;
+	//vector<CCelda^>* vecinos;
 	CCelda^ padre;
 public:
-	CCelda() {}
+	CCelda() { valor = 1; x = 0; y = 0; g = 0; h = 0; f = 0; }
 	CCelda(short x, short y) : x(x), y(y) {}
 	CCelda(short x, short y, short valor) : x(x), y(y), valor(valor) {}
 	~CCelda() {
+		/*
 		for (short i = vecinos->size(); i >= 0; --i)
 		{
 			delete vecinos->at(i);
 			vecinos->erase(vecinos->begin() + i);
 		}
-		delete vecinos;
+		delete vecinos;*/
 		delete padre;
 	}
 
-	void addVecino(CCelda^ vecino) { this->vecinos->push_back(vecino); }
+	//void addVecino(CCelda^ vecino) { this->vecinos->push_back(vecino); }
 
 	void set_valor(short valor) { this->valor = valor; }
 	short get_valor() { return this->valor; }
