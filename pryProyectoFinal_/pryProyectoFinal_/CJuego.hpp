@@ -37,31 +37,37 @@ private:
 	List<CAliado^>^ aliados;
 	List<CCorrupto^>^ corruptos;
 	List<CAsesino^>^ asesinos;
+	CGrafico^ logo;
 	CGrafico^ ui_personaje;
 	CGrafico^ btn_cerrar;
 	CGrafico^ btn_comenzar;
 	CGrafico^ btn_configurar;
 	CGrafico^ cursor;
 	bool inicio_juego;
+	Font^ tipografia;
 
 public:
 	CJuego(short ancho, short alto, short tamanho_celda) {
 		this->inicio_juego = false;
+		this->tipografia = gcnew System::Drawing::Font("Courier new",tamanho_celda*0.75),
 		this->laberinto = gcnew CLaberinto(ancho, alto, tamanho_celda);
 		this->config = gcnew CConfiguracion();
 		this->bg_botones = gcnew Bitmap("Imagenes\\buttons.png");
 		this->fondo_inicio = gcnew Bitmap("Imagenes\\fondoUI.png");
+		this->logo = gcnew CGrafico("Imagenes\\logo.png",360*2,110*2);
+		this->logo->escalar(2);
 		this->img_aux = gcnew Bitmap("Imagenes\\zion_letrero.png");
-		this->ui_personaje = gcnew CGrafico("Imagenes\\protaUI.png", ancho * tamanho_celda, 0, 1392, 1080);
-		this->btn_cerrar = gcnew CGrafico("Imagenes\\cerrar.png", (ancho-4)*tamanho_celda, tamanho_celda, 32, 32);
-		this->btn_comenzar = gcnew CGrafico(bg_botones, Rectangle(0, 0, 160, 160), tamanho_celda *2, (alto-8)*tamanho_celda, tamanho_celda*4, tamanho_celda);
-		this->btn_configurar = gcnew CGrafico(bg_botones, Rectangle(0, 160, 160, 160), tamanho_celda * 2, (alto - 4) * tamanho_celda, tamanho_celda*4, tamanho_celda);
+		this->ui_personaje = gcnew CGrafico("Imagenes\\protaUI.png", (ancho - 4) * tamanho_celda, 0, 1392, 1080);
+		this->btn_cerrar = gcnew CGrafico("Imagenes\\cerrar.png", (ancho-2.5)*tamanho_celda, tamanho_celda, tamanho_celda*1.5, tamanho_celda*1.5);
+		this->btn_comenzar = gcnew CGrafico(bg_botones, Rectangle(0, 0, 160, 160), tamanho_celda *2, (alto-8)*tamanho_celda, tamanho_celda*10, tamanho_celda*2);
+		this->btn_configurar = gcnew CGrafico(bg_botones, Rectangle(0, 160, 160, 160), tamanho_celda * 2, (alto - 4) * tamanho_celda, tamanho_celda*14, tamanho_celda*2);
 		this->cursor = gcnew CGrafico("Imagenes\\mouse.png", 32, 32);
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
 	}
 	~CJuego() {
+		delete tipografia;
 		delete fondo_inicio;
 		delete ui_personaje;
 		delete bg_botones;
@@ -87,11 +93,17 @@ public:
 		graficador->DrawImage(fondo_inicio, tamanho_pantalla);
 		this->btn_cerrar->dibujar(graficador);
 		this->btn_comenzar->dibujar(graficador);
+		graficador->DrawString("¡Jugar!", this->tipografia, Brushes::White, btn_comenzar->get_x() + (btn_comenzar->get_ancho() / 4), btn_comenzar->get_y() + (btn_comenzar->get_alto() / 4));
 		this->btn_configurar->dibujar(graficador);
+		graficador->DrawString("Configurar", this->tipografia, Brushes::White, btn_configurar->get_x() + (btn_configurar->get_ancho() / 4), btn_configurar->get_y() + (btn_configurar->get_alto() / 4));
+		this->logo->dibujar(graficador);
 		bool parpadear = rand() % 2;
 		if (parpadear == 1)//hacer parpadear ZION
-			graficador->DrawImage(img_aux, tamanho_pantalla.Width / 2 - 52, tamanho_pantalla.Height - 320); 
-		this->ui_personaje->set_x(ui_personaje->get_x() - 20);
+			graficador->DrawImage(img_aux, tamanho_pantalla.Width / 2 - 16, tamanho_pantalla.Height - 180, 32, 120);
+		if (this->ui_personaje->get_x() - 40 >= 200) {
+			this->ui_personaje->set_x(ui_personaje->get_x() - 40);
+		}
+		this->ui_personaje->dibujar(graficador);
 		this->cursor->dibujar(graficador);
 	}
 
@@ -134,8 +146,9 @@ public:
 
 	CLaberinto^ get_laberinto() { return this->laberinto; }
 	CGrafico^ get_btn_cerrar() { return this->btn_cerrar; }
-	CGrafico^ get_btn_comenzar() { return this->btn_cerrar; }
-	CGrafico^ get_btn_configurar() { return this->btn_cerrar; }
+	CGrafico^ get_btn_comenzar() { return this->btn_comenzar; }
+	CGrafico^ get_btn_configurar() { return this->btn_configurar; }
 	CGrafico^ get_cursor() { return this->cursor; }
+	Font^ get_fuente() { return this->tipografia; }
 };
 

@@ -33,10 +33,10 @@ private:
 public:
 	CLaberinto(short ancho, short alto, short tamanho_celda) : tamanho_celda(tamanho_celda) {
 		this->espacio_paredes = 4;
-		this->ancho = ancho - (ancho % espacio_paredes) - espacio_paredes + 1;
-		this->alto = alto - (alto % espacio_paredes) - espacio_paredes + 1;
-		this->esp_rest_ancho = ancho - this->ancho;
-		this->esp_rest_alto = alto - this->alto;
+		this->ancho = ancho - (ancho % espacio_paredes);
+		this->alto = alto - (alto % espacio_paredes);
+		this->esp_rest_ancho = ancho - this->ancho + 1;
+		this->esp_rest_alto = alto - this->alto + 1;
 		this->mapa = new vector<vector<short>>();
 
 		img_partes_lab = gcnew Bitmap("Imagenes\\laberinto.png");
