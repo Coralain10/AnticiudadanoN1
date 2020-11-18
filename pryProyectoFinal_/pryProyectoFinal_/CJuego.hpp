@@ -44,6 +44,7 @@ private:
 	CGrafico^ btn_configurar;
 	CGrafico^ btn_reiniciar;
 	CGrafico^ cursor;
+	CProtagonista^ protagonista;
 	bool inicio_juego;
 	Font^ tipografia;
 
@@ -67,6 +68,7 @@ public:
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
+		this->protagonista = gcnew CProtagonista(this->laberinto->get_pos_entrada().X, this->laberinto->get_pos_entrada().Y, tamanho_celda, tamanho_celda);
 	}
 	~CJuego() {
 		delete tipografia;
@@ -78,6 +80,7 @@ public:
 		delete btn_configurar;
 		delete btn_reiniciar;
 		delete img_aux;
+		delete protagonista;
 		delete cursor;
 		delete laberinto;
 		delete config;
@@ -132,8 +135,9 @@ public:
 		}
 	}
 
-	void jugar() {
-		// movimiento de los aliados, asesinos y corruptos
+	void jugar(Graphics ^g) {
+		this->laberinto->pintar_mapa(g);
+		this->protagonista->dibujar(g);
 	}
 
 	void chat() {

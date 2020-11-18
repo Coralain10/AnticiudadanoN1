@@ -18,12 +18,12 @@ public:
 	CGrafico(){}
 	CGrafico(String^ ruta_imagen) :imagen(gcnew Bitmap(ruta_imagen)) {
 		this->ancho = this->imagen->Width;
-		this->alto = this->imagen->Width;
+		this->alto = this->imagen->Height;
 		this->area_dibujo = Rectangle(0,0,this->ancho, this->alto);
 	}
 	CGrafico(Bitmap^ imagen) :imagen(imagen) {
 		this->ancho = this->imagen->Width;
-		this->alto = this->imagen->Width;
+		this->alto = this->imagen->Height;
 		this->area_dibujo = Rectangle(0, 0, this->ancho, this->alto);
 	}
 	CGrafico(String^ ruta_imagen, short ancho, short alto)
@@ -125,6 +125,8 @@ public:
 	CGraficoAnimado() {}
 	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
 		CGrafico(ruta_imagen, x, y, ancho, alto), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
+	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas) :
+		CGrafico(ruta_imagen, x, y, ancho, alto), an_filas(nfilas), an_columnas(ncolumnas) {}
 	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ax, short ay, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
 		CGrafico(ruta_imagen, x, y, ax, ay, ancho, alto), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
 	CGraficoAnimado(Bitmap^ imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
@@ -137,7 +139,7 @@ public:
 		System::Drawing::Rectangle area_recorte = calcular_area_recorte();
 		System::Drawing::Rectangle area_dibujo = System::Drawing::Rectangle(x, y, this->ancho, this->alto);
 		graficador->DrawImage(this->imagen, area_dibujo, area_recorte, GraphicsUnit::Pixel);
-		++indice %= n_subimagenes;
+		//++indice %= n_subimagenes;
 	}
 
 private:
