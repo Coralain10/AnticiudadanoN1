@@ -19,6 +19,7 @@ namespace pryProyectoFinal {
 	{
 		Graphics^ graficador;
 		BufferedGraphics^ buffer;
+		BufferedGraphics^ buffer_aux;
 		CJuego^ juego;
 		short tc; //tamanho de celda
 
@@ -33,7 +34,8 @@ namespace pryProyectoFinal {
 			this->tc = 28;
 			this->graficador = this->CreateGraphics();
 			this->buffer = BufferedGraphicsManager::Current->Allocate(this->graficador, this->ClientRectangle);
-			this->DoubleBuffered == true;
+			this->buffer_aux = BufferedGraphicsManager::Current->Allocate(this->buffer->Graphics, this->ClientRectangle);
+			//this->DoubleBuffered == true;
 			this->juego = gcnew CJuego((short)(this->ClientRectangle.Width / tc), (short)(this->ClientRectangle.Height / tc), tc);
 			Windows::Forms::Cursor::Hide();
 		}
@@ -94,7 +96,7 @@ namespace pryProyectoFinal {
 #pragma endregion
 	private: System::Void animar(System::Object^ sender, System::EventArgs^ e) {
 		//this->graficador->
-		this->juego->get_laberinto()->pintar_mapa(buffer->Graphics);
+		buffer_aux->Render();
 		this->juego->pintar_ui(buffer->Graphics);
 		this->buffer->Render();
 	}
@@ -108,6 +110,8 @@ namespace pryProyectoFinal {
 		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_comenzar()))
 		{
 			this->juego->iniciar_juego(buffer->Graphics);
+			this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
+			buffer_aux->Render();
 			this->tmrMenu->Enabled = false;
 			this->tmrAnimacion->Enabled = true;
 		}
@@ -116,6 +120,8 @@ namespace pryProyectoFinal {
 			this->juego->iniciar_juego(buffer->Graphics);
 			this->tmrAnimacion->Enabled = false;
 			this->juego->reiniciar_lab((short)(this->ClientRectangle.Width / tc), (short)(this->ClientRectangle.Height / tc), tc);
+			this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
+			buffer_aux->Render();
 			this->tmrAnimacion->Enabled = true;
 		}
 	}

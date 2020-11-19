@@ -68,7 +68,7 @@ public:
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
-		this->protagonista = gcnew CProtagonista(this->laberinto->get_pos_entrada().X, this->laberinto->get_pos_entrada().Y, tamanho_celda, tamanho_celda);
+		//this->protagonista = gcnew CProtagonista(this->laberinto->get_pos_entrada().X, this->laberinto->get_pos_entrada().Y, tamanho_celda, tamanho_celda);
 	}
 	~CJuego() {
 		delete tipografia;
@@ -136,8 +136,7 @@ public:
 	}
 
 	void jugar(Graphics ^g) {
-		this->laberinto->pintar_mapa(g);
-		this->protagonista->dibujar(g);
+		//this->protagonista->dibujar(g);
 	}
 
 	void chat() {

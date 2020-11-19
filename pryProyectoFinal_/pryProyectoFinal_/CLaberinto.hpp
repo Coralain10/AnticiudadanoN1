@@ -21,13 +21,12 @@ private:
 	CGrafico^ salida;
 	Point pos_entrada;
 	Point pos_salida;
-	vector<vector<short>>* mapa;
+	short** mapa;
 	CGrafico^ piso;
-	CGrafico^ pared_rest;
+	CGrafico^ pared_mov;
+	CGrafico^ pared_fija;
 	Bitmap^ img_partes_lab;
 	Bitmap^ img_bala;
-	List<CGrafico^>^ paredes_fijas;
-	List<CGrafico^>^ paredes_mov;
 	List<CGrafico^>^ balas; //municiones
 
 public:
@@ -37,14 +36,12 @@ public:
 		this->alto = alto - (alto % espacio_paredes);
 		this->esp_rest_ancho = ancho - this->ancho + 1;
 		this->esp_rest_alto = alto - this->alto + 1;
-		this->mapa = new vector<vector<short>>();
 
 		img_partes_lab = gcnew Bitmap("Imagenes\\laberinto.png");
 		img_bala = gcnew Bitmap("Imagenes\\dialog.png");
 		piso = gcnew CGrafico(img_partes_lab, Rectangle(0, 32, 32, 32), tamanho_celda, tamanho_celda);
-		pared_rest = gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
-		paredes_fijas = gcnew List<CGrafico^>;
-		paredes_mov = gcnew List<CGrafico^>;
+		pared_mov = gcnew CGrafico("Imagenes\\pared_mov.png", Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
+		pared_fija = gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
 		entrada = gcnew CGrafico(img_partes_lab, Rectangle(32, 0, 32, 32), tamanho_celda, tamanho_celda);
 		salida = gcnew CGrafico(img_partes_lab, Rectangle(32, 32, 32, 32), tamanho_celda, tamanho_celda);
 		balas = gcnew List<CGrafico^>;
@@ -52,6 +49,8 @@ public:
 		factor_paredes = 1; //.75
 		densidad = 1; //.5
 		crear_mapa();
+		entrada->set_ubicacion(pos_entrada.X * tamanho_celda, pos_entrada.Y * tamanho_celda);
+		salida->set_ubicacion(pos_salida.X * tamanho_celda, pos_salida.Y * tamanho_celda);
 		colocar_balas();
 	}
 	~CLaberinto() {
@@ -59,14 +58,9 @@ public:
 		delete entrada;
 		delete salida;
 		delete piso;
-		delete pared_rest;
+		delete pared_mov;
 		delete img_partes_lab;
-		for each (CGrafico ^ pared in paredes_fijas)
-			delete pared;
-		delete paredes_fijas;
-		for each (CGrafico ^ pared in paredes_mov)
-			delete pared;
-		delete paredes_mov;
+		delete pared_fija;
 		for each (CGrafico ^ bala in balas)
 			delete bala;
 		delete balas;
@@ -85,23 +79,27 @@ public:
 			{
 				if (i < alto && j < ancho)
 				{
-					if (mapa->at(i).at(j) == PISO)
+					switch (mapa[i][j])
 					{
-						piso->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
-						piso->dibujar(graficador);
+						case PISO: piso->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+							piso->dibujar(graficador);
+							break;
+						case PAREDFIJA: pared_fija->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+							pared_fija->dibujar(graficador);
+							break;
+						case PAREDMOV: pared_mov->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+							pared_mov->dibujar(graficador);
+							break;
+						case ENTRADA: entrada->dibujar(graficador); break;
+						case SALIDA: salida->dibujar(graficador); break;
 					}
 				}
 				else if (i >= alto || j >= ancho) {
-					pared_rest->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
-					pared_rest->dibujar(graficador);
+					pared_fija->set_ubicacion(j * tamanho_celda, i * tamanho_celda);
+					pared_fija->dibujar(graficador);
 				}
 			}
 		}
-
-		for each (CGrafico ^ pared in paredes_fijas)
-			pared->dibujar(graficador);
-		for each (CGrafico ^ pared in paredes_mov)
-			pared->dibujar(graficador,0,0,32,32);
 
 		entrada->dibujar(graficador);
 		salida->dibujar(graficador);
@@ -110,11 +108,11 @@ public:
 	void colocar_balas() {
 		short aux = 0;
 
-		for (short i = 0; i < mapa->size(); i++)
+		for (short i = 0; i < alto; i++)
 		{
-			for (short j = 0; j < mapa->at(i).size(); j++)
+			for (short j = 0; j < ancho; j++)
 			{
-				if (mapa->at(i).at(j) == PISO)
+				if (mapa[i][j] == PISO)
 				{
 					aux = rand() % prob_balas;
 
@@ -138,19 +136,19 @@ private:
 		densidad = (short)(densidad*ancho*alto);
 
 		//LLENANDO EL VECTOR
+		this->mapa = new short* [this->alto];
 		for (short i = 0; i < alto; i++)
 		{
-			vector<short> aux_fila = vector<short>();
+			this->mapa[i] = new short[this->ancho];
 
 			for (short j = 0; j < ancho; j++)
 			{
 				//LLENANDO LOS BORDES
 				if (i == 0 || i == alto - 1 || j == 0 || j == ancho - 1)
-					aux_fila.push_back(PAREDFIJA);
+					mapa[i][j] = PAREDFIJA;
 				else
-					aux_fila.push_back(PISO); //POR DEFAULT EL RESTO SERA PISO
+					mapa[i][j] = PISO; //POR DEFAULT EL RESTO SERA PISO
 			}
-			this->mapa->push_back(aux_fila);
 		}
 
 		for (short i = 0; i < densidad; i++)
@@ -161,8 +159,8 @@ private:
 			//y += y % espacio_paredes;
 			//numero entre el 0 y (ancho o alto/espacio_paredes-1) - los 2 espacios de paredes hacia los bordes + desde el 1er borde
 
-			if (this->mapa->at(y).at(x) != PAREDFIJA)
-				this->mapa->at(y).at(x) = PAREDFIJA;
+			if (mapa[y][x] != PAREDFIJA)
+				this->mapa[y][x] = PAREDFIJA;
 
 			for (short j = 0; j < factor_paredes; j++)
 			{
@@ -174,9 +172,9 @@ private:
 
 				if (x_ >= 0 && y_ >= 0 && x_ < ancho && y_ < alto)
 				{
-					if (this->mapa->at(y_).at(x_) == PISO)
+					if (this->mapa[y_][x_] == PISO)
 					{
-						this->mapa->at(y_).at(x_) = PAREDMOV;
+						this->mapa[y_][x_] = PAREDMOV;
 						
 						//short pos_inter[2] = { x_ + (x - x_) / 2, y_ + (y - y_) / 2 };
 						
@@ -210,8 +208,7 @@ private:
 							else if (pos_vecino == ARRIBA || pos_vecino == ABAJO)
 								pos_inter[1] = k;
 
-							this->mapa->at(pos_inter[1]).at(pos_inter[0]) = PAREDMOV;
-							paredes_mov->Add(gcnew CGrafico(img_partes_lab, pos_inter[0] * tamanho_celda, (pos_inter[1]) * tamanho_celda, tamanho_celda, tamanho_celda));
+							this->mapa[pos_inter[1]][pos_inter[0]] = PAREDMOV;
 						}
 						//this->mapa->at(pos_inter[1]).at(pos_inter[0]) = PAREDMOV;
 
@@ -223,26 +220,8 @@ private:
 		}
 		set_pos_entrada();
 		set_pos_salida();
-		colocar_graficos();
-	}
-
-	void colocar_graficos() {
-		for (short i = 0; i < mapa->size(); i++)
-			for (short j = 0; j < mapa->at(i).size(); j++)
-			{
-				switch (mapa->at(i).at(j))
-				{
-					//Rectangle(0, 0, 32, 32)
-					case PAREDFIJA:
-						paredes_fijas->Add(gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), j * tamanho_celda, i * tamanho_celda, tamanho_celda, tamanho_celda));
-						break;
-					case PAREDMOV:
-						paredes_mov->Add(gcnew CGrafico("Imagenes\\pared_mov.png", j * tamanho_celda, i * tamanho_celda, tamanho_celda, tamanho_celda));
-						break;
-				}
-			}
-		entrada->set_ubicacion(pos_entrada.X * tamanho_celda, pos_entrada.Y * tamanho_celda);
-		salida->set_ubicacion(pos_salida.X * tamanho_celda, pos_salida.Y * tamanho_celda);
+		this->mapa[pos_entrada.Y][pos_entrada.X] = ENTRADA;
+		this->mapa[pos_salida.Y][pos_salida.X] = SALIDA;
 	}
 
 	Point celda_pared() { //Poner la entrada en una pared
