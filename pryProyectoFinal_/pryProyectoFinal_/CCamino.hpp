@@ -5,50 +5,83 @@ using namespace System::Collections::Generic;
 using namespace System::Drawing;
 using namespace std;
 
+ref class CCelda {
+private:
+	short valor;
+	short x, y; //posicion en la matriz
+	int g, //pasos dados
+		h, //pasos que quedan en el caso ideal (sin obstaculos) - heuristica (estimacion de lo que queda)
+		f; // coste total / f = g+h
+	List<CCelda^>^ vecinos;
+	CCelda^ padre;
+public:
+	CCelda() { valor = 1; x = 0; y = 0; g = 0; h = 0; f = 0; }
+	//CCelda(short x, short y) : x(x), y(y), padre(nullptr) {}
+	CCelda(short x, short y, short valor) : x(x), y(y), valor(valor), padre(nullptr) {}
+	~CCelda() {
+		for each (CCelda ^ vecino in vecinos)
+			delete vecino;
+		delete vecinos;
+		delete padre;
+	}
+
+	void addVecino(CCelda^ vecino) { this->vecinos->Add(vecino); }
+
+	void set_valor(short valor) { this->valor = valor; }
+	short get_valor() { return this->valor; }
+
+	short get_x() { return this->x; }
+	void set_x(short x) { this->x = x; }
+	short get_y() { return this->y; }
+	void set_y(short y) { this->y = y; }
+
+	int get_g() { return this->g; }
+	void set_g(int g) { this->g = g; }
+
+	int get_h() { return this->h; }
+	void set_h(int h) { this->h = h; }
+
+	int get_f() { return this->f; }
+	void update_f() { this->f = g + h; }
+};
+
 ref class CCamino {
 private:
 	short piso;
-	//vector<vector<short>>* mapa;
 	List<List<CCelda^>^>^ mapa;
 	CCelda^ inicio;
 	CCelda^ fin;
+	short hx, hy;
 	List<CCelda^>^ openset; //celdas que estan siendo analizadas
 	List<CCelda^>^ closeset; //celdas recorridas / ya revisadas
 
 public:
 	CCamino() :piso(0) {}
-	CCamino(short piso, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), inicio(inicio), fin(fin) { }
+	CCamino(short piso, System::Drawing::Point pos_inicio, System::Drawing::Point pos_fin)
+		:piso(piso), inicio(pos_to_celda(pos_inicio.X,pos_inicio.Y,piso)), fin(pos_to_celda(pos_fin.X, pos_fin.Y, piso)),
+		hx(abs(pos_fin.X-pos_inicio.X)), hy(abs(pos_fin.Y - pos_inicio.Y)) { }
 
-	CCamino(List<List<CCelda^>^>^ mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(0), mapa(mapa), inicio(inicio), fin(fin) { }
-	CCamino(short piso, short pared, List<List<CCelda^>^>^ mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), mapa(mapa), inicio(inicio), fin(fin) { }
+	CCamino(List<List<CCelda^>^>^ mapa, System::Drawing::Point pos_inicio, System::Drawing::Point pos_fin)
+		:piso(0), mapa(mapa), inicio(pos_to_celda(pos_inicio.X, pos_inicio.Y, piso)), fin(pos_to_celda(pos_fin.X, pos_fin.Y, piso)),
+		hx(abs(pos_fin.X - pos_inicio.X)), hy(abs(pos_fin.Y - pos_inicio.Y)) { }
+	CCamino(short piso, short pared, List<List<CCelda^>^>^ mapa, System::Drawing::Point pos_inicio, System::Drawing::Point pos_fin)
+		:piso(piso), mapa(mapa), inicio(pos_to_celda(pos_inicio.X, pos_inicio.Y, piso)), fin(pos_to_celda(pos_fin.X, pos_fin.Y, piso)),
+		hx(abs(pos_fin.X - pos_inicio.X)), hy(abs(pos_fin.Y - pos_inicio.Y)) { }
 
-	CCamino(vector<vector<short>>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(0), inicio(inicio), fin(fin) {
+	CCamino(short** mapa, System::Drawing::Point pos_inicio, System::Drawing::Point pos_fin)
+		:piso(0), inicio(pos_to_celda(pos_inicio.X, pos_inicio.Y, piso)), fin(pos_to_celda(pos_fin.X, pos_fin.Y, piso)),
+		hx(abs(pos_fin.X - pos_inicio.X)), hy(abs(pos_fin.Y - pos_inicio.Y)) {
 		mapa_short_to_CCelda(mapa);
 	}
-	CCamino(short piso, vector<vector<short>>* mapa, CCelda^ inicio, CCelda^ fin)
-		:piso(piso), inicio(inicio), fin(fin) {
+	CCamino(short piso, short** mapa, System::Drawing::Point pos_inicio, System::Drawing::Point pos_fin)
+		:piso(piso), inicio(pos_to_celda(pos_inicio.X, pos_inicio.Y, piso)), fin(pos_to_celda(pos_fin.X, pos_fin.Y, piso)),
+		hx(abs(pos_fin.X - pos_inicio.X)), hy(abs(pos_fin.Y - pos_inicio.Y)) {
 		mapa_short_to_CCelda(mapa);
 	}
 
 	~CCamino() {
 		delete inicio;
 		delete fin;
-
-		/*
-		for (int i = mapa->size(); i >=0; --i) {
-			for (int j = mapa->at(i)->size(); j>=0; --j)
-			{
-				delete mapa->at(i)->at(j);
-				mapa->at(i)->erase(mapa->at(i)->begin() + j);
-			}
-			delete mapa->at(i);
-			mapa->erase(mapa->begin()+i);
-		}
-		*/
 		for each (List<CCelda^>^ fila in mapa)
 		{
 			for each (CCelda^ celda in fila)
@@ -66,10 +99,6 @@ public:
 		delete closeset;
 	}
 
-	bool existe_camino() {
-		//TO DO
-	}
-
 	void camino_corto() {//algoritmo a*
 		//1ero actual casilla (entrada) dentro de openset (se modificara hasta que sea la de destino)
 		openset->Add(inicio);
@@ -80,8 +109,6 @@ public:
 	}
 
 
-	//void set_mapa(vector<vector<CCelda^>*>* mapa) { this->mapa = mapa; }
-	//vector<vector<CCelda^>*>* get_mapa() { return mapa; }
 	void set_mapa(List<List<CCelda^>^>^ mapa) { this->mapa = mapa; }
 	List<List<CCelda^>^>^ get_mapa() { return mapa; }
 
@@ -92,32 +119,36 @@ public:
 	void set_fin(CCelda^ fin) { this->fin = fin; }
 
 private:
+	CCelda^ pos_to_celda(short x, short y, short valor){
+		CCelda^ celda = gcnew CCelda(x, y, valor);
+		return celda;
+	}
 
-	void mapa_short_to_CCelda(vector<vector<short>>* mapaShort){
-		for (int i = mapaShort->size(); i >= 0; --i)
+	void mapa_short_to_CCelda(short** map){
+		for (int i = hx; i >= 0; --i)
 		{
 			List<CCelda^>^ aux_fila;
 
-			for (int j = mapaShort->at(i).size(); j >= 0; --j)
-				aux_fila->Add(gcnew CCelda(i, j, mapaShort->at(i).at(j)));
+			for (int j = hy; j >= 0; --j)
+				aux_fila->Add(gcnew CCelda(i, j, map[i][j]));
 
 			this->mapa[i] = aux_fila;
+			delete map[i];
 		}
-		delete mapa;
+		delete map;
 
 		set_vecinos();
 	}
 
 	void set_vecinos() {
-		/*
 		List<CCelda^>^ fila;
 		List<CCelda^>^ fila_aux;
 
 		for (short i = this->mapa->Count; i >= 0; --i) //por cada fila
 		{
+			fila = mapa[i];
 			for (short j = this->mapa[i]->Count; j >= 0; --j) //por cada columna
 			{
-				fila = mapa[i];
 				//vecino izquierdo
 				if (fila[j]->get_x() > 0)
 				{
@@ -142,54 +173,10 @@ private:
 					fila[j]->addVecino(fila_aux[j]);
 				}
 			}
-		}*/
-
-		/*delete fila;
-		delete fila_aux;*/
-	}
-};
-
-
-ref class CCelda {
-private:
-	short valor;
-	short x, y; //posicion en la matriz
-	int g, //pasos dados
-		h, //pasos que quedan en el caso ideal (sin obstaculos) - heuristica (estimacion de lo que queda)
-		f; // coste total / f = g+h
-	//vector<CCelda^>* vecinos;
-	CCelda^ padre;
-public:
-	CCelda() { valor = 1; x = 0; y = 0; g = 0; h = 0; f = 0; }
-	CCelda(short x, short y) : x(x), y(y) {}
-	CCelda(short x, short y, short valor) : x(x), y(y), valor(valor) {}
-	~CCelda() {
-		/*
-		for (short i = vecinos->size(); i >= 0; --i)
-		{
-			delete vecinos->at(i);
-			vecinos->erase(vecinos->begin() + i);
+			mapa[i] = fila;
 		}
-		delete vecinos;*/
-		delete padre;
+
+		//delete fila;
+		//delete fila_aux;
 	}
-
-	//void addVecino(CCelda^ vecino) { this->vecinos->push_back(vecino); }
-
-	void set_valor(short valor) { this->valor = valor; }
-	short get_valor() { return this->valor; }
-
-	short get_x() { return this->x; }
-	void set_x(short x) { this->x = x; }
-	short get_y() { return this->y; }
-	void set_y(short y) { this->y = y; }
-
-	int get_g() { return this->g; }
-	void set_g(int g) { this->g = g; }
-
-	int get_h() { return this->h; }
-	void set_h(int h) { this->h = h; }
-
-	int get_f() { return this->f; }
-	void update_f() { this->f = g + h; }
 };
