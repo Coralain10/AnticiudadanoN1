@@ -68,6 +68,7 @@ public:
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
+		this->protagonista = gcnew CProtagonista("Imagenes\\Protagonista.png",this->laberinto->get_pos_entrada().X*tamanho_celda, this->laberinto->get_pos_entrada().Y * tamanho_celda,System::Drawing::Rectangle(tamanho_celda, tamanho_celda, tamanho_celda, tamanho_celda),System::Drawing::Rectangle(0, 0, 0, 0),4,4);
 		//this->protagonista = gcnew CProtagonista(this->laberinto->get_pos_entrada().X, this->laberinto->get_pos_entrada().Y, tamanho_celda, tamanho_celda);
 	}
 	~CJuego() {
@@ -134,9 +135,11 @@ public:
 			// crear corruptos
 		}
 	}
-
+	void interactuar(Direccion direccion) {
+		this->protagonista->mover(direccion,this->laberinto->get_mapa());
+	}
 	void jugar(Graphics ^g) {
-		//this->protagonista->dibujar(g);
+		this->protagonista->dibujarSprite(g);
 	}
 
 	void chat() {

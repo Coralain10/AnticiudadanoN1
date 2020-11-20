@@ -71,6 +71,7 @@ public:
 	Point get_pos_salida() { return this->pos_salida; }
 	CGrafico^ get_entrada() { return this->entrada; }
 	CGrafico^ get_salida() { return this->salida; }
+	short** get_mapa() { return this->mapa; }
 
 	void pintar_mapa(Graphics^ graficador) {
 		for (short i = 0; i < alto + esp_rest_alto; i++)
