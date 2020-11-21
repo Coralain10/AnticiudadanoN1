@@ -1,15 +1,15 @@
 ﻿  main.cpp
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(74,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(75,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(77,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(78,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(81,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(82,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(54,77): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(102,151): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(102,94): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(104,159): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(104,98): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\frmMenu.h(33,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(75,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(76,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(78,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(79,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(82,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(83,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(61,77): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(128,151): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(128,94): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(130,159): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(130,98): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\frmMenu.h(43,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
   main.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  pryProyectoFinal_.vcxproj -> E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.exe
+  pryProyectoFinal_.vcxproj -> D:\AN\AnticiudadanoN1\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.exe

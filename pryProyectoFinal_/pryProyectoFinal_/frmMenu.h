@@ -12,6 +12,7 @@ namespace pryProyectoFinal {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Media;
 	using namespace std;
 
 
@@ -35,6 +36,7 @@ namespace pryProyectoFinal {
 
 
 	public:
+		SoundPlayer^ intro = gcnew SoundPlayer("Imagenes\\intro.wav ");
 		frmMenu(void)
 		{
 			InitializeComponent();
@@ -110,6 +112,7 @@ namespace pryProyectoFinal {
 			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &frmMenu::frmMenu_Paint);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::accion_form);
 			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::actualizar_mouse);
+			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &frmMenu::interactuar);
 			this->ResumeLayout(false);
 
 		}
@@ -123,6 +126,7 @@ namespace pryProyectoFinal {
 		//this->juego->pintar_ui(graficador);
 	}
 	private: System::Void anim_intro(System::Object^ sender, System::EventArgs^ e) {
+		
 		if (this->juego->get_pos_dialog_act() <= 3) {
 			this->juego->intro(this->buffer->Graphics);
 			this->buffer->Render();
@@ -131,6 +135,7 @@ namespace pryProyectoFinal {
 			this->tmrIntro->Enabled = false;
 			this->tmrMenu->Enabled = true;
 		}
+		
 	}
 
 	private: System::Void accion_form(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -153,6 +158,7 @@ namespace pryProyectoFinal {
 			{
 				this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 					buffer_aux->Render();
+					
 					this->tmrIntroJugar->Enabled = false;
 					this->tmrJuegoP1->Enabled = true;
 			}
@@ -184,6 +190,7 @@ namespace pryProyectoFinal {
 	}
 
 	private: System::Void animar_menu(System::Object^ sender, System::EventArgs^ e) {
+		intro->PlayLooping();
 		this->juego->menu_principal(buffer->Graphics);
 		this->buffer->Render();
 	}
@@ -194,10 +201,20 @@ namespace pryProyectoFinal {
 		buffer->Render();
 	}
 	private: System::Void animar_juegoP1(System::Object^ sender, System::EventArgs^ e) {
+		intro->Stop();
 		buffer_aux->Render();
 		this->juego->pintar_ui(buffer->Graphics);
+		this->juego->jugar(buffer->Graphics);
 		this->buffer->Render();
 	}
+	 private: System::Void interactuar(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+			   switch (e->KeyCode) {
+			   case Keys::Up: this->juego->interactuar(Arriba); break;
+			   case Keys::Down: this->juego->interactuar(Abajo); break;
+			   case Keys::Left: this->juego->interactuar(Izquierda); break;
+			   case Keys::Right: this->juego->interactuar(Derecha); break;
+			   }
+		   }
 
 };
 }
