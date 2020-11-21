@@ -1,7 +1,6 @@
-/.NETFramework
-/x64
-/Debuf
-Browse.VC.db*
+**/.NETFramework
+**/x64
+Browse.VC.*
 *.log
 *.tlog
 *.cache
