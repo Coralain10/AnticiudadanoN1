@@ -38,14 +38,14 @@ public:
 		this->esp_rest_alto = alto - this->alto < 0 ? 0 : ancho - this->alto + 1;
 
 		img_partes_lab = gcnew Bitmap("Imagenes\\laberinto.png");
-		img_bala = gcnew Bitmap("Imagenes\\dialog.png");
+		img_bala = gcnew Bitmap("Imagenes\\municion.png");
 		piso = gcnew CGrafico(img_partes_lab, Rectangle(0, 32, 32, 32), tamanho_celda, tamanho_celda);
 		pared_mov = gcnew CGrafico("Imagenes\\pared_mov.png", Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
 		pared_fija = gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
 		entrada = gcnew CGrafico(img_partes_lab, Rectangle(32, 0, 32, 32), tamanho_celda, tamanho_celda);
 		salida = gcnew CGrafico(img_partes_lab, Rectangle(32, 32, 32, 32), tamanho_celda, tamanho_celda);
 		balas = gcnew List<CGrafico^>;
-		prob_balas = 10;
+		prob_balas = 100; //1(siempre)-100(1 de 100 oportunidades)
 		factor_paredes = 1; //.75
 		densidad = 1; //.5
 		crear_mapa();
@@ -104,6 +104,9 @@ public:
 
 		entrada->dibujar(graficador);
 		salida->dibujar(graficador);
+
+		for each (CGrafico ^ bala in balas)
+			bala->dibujar(graficador);
 	}
 
 	void colocar_balas() {
