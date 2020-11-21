@@ -41,21 +41,21 @@ public:
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)
 		{
-		case DERECHA:	x1 = x2 = (area.X + alto - 1 + 2);
-			y1 = (area.Y) ;
-			y2 = (area.Y + alto - 1); break;
-		case IZQUIERDA: x1 = x2 = (area.X - 2);
-			y1 = (area.Y);
-			y2 = (area.Y + alto - 1); break;
-		case ABAJO: y1 = y2 = (area.Y + ancho - 1 + 2);
-			x1 = (area.X);
-			x2 = (area.X + ancho - 1) ; break;
-		case ARRIBA: y1 = y2 = (area.Y - 2);
-			x1 = (area.X) / alto;
-			x2 = (area.X + ancho - 1); break;
+		case DERECHA:	x1 = x2 = (area.X + 28 - 1 + 5) / 28;
+			y1 = (area.Y) / 28;
+			y2 = (area.Y + 28 - 1) / 28; break;
+		case IZQUIERDA: x1 = x2 = (area.X - 5) / 28;
+			y1 = (area.Y) / 28;
+			y2 = (area.Y + 28 - 1) / 28; break;
+		case ABAJO: y1 = y2 = (area.Y + 28 - 1 + 5) / 28;
+			x1 = (area.X) / 28;
+			x2 = (area.X + 28 - 1) / 28; break;
+		case ARRIBA: y1 = y2 = (area.Y - 5) / 28;
+			x1 = (area.X) / 28;
+			x2 = (area.X + 28 - 1) / 28; break;
 		}
 		if ((escenario[y1][x1] == PISO||ENTRADA) && (escenario[y2][x2] == PISO || ENTRADA)) {
-			switch (dire)
+			switch ((Direccion)dire)
 			{
 			case Arriba:
 				this->area.Y -= this->dy;

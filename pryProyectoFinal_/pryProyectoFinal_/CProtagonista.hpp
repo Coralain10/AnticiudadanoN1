@@ -12,7 +12,7 @@ public:
 		this->imagen = gcnew Bitmap(ruta);
 		this->recorte.Width = this->imagen->Width / this->n_columnas;
 		this->recorte.Height = this->imagen->Height / this->n_filas;
-		dx = dy = 3;
+		dx = dy = 5;
 	}
 	~CProtagonista() {}
 
