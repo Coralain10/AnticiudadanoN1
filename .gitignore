@@ -1,11 +1,11 @@
 /.NETFramework
 /x64
 /Debuf
-/Browse
+Browse.VC.db*
 *.log
+*.tlog
+*.cache
 *.suo
-*.db
-*.VC.
 *.ipch
 *.obj
 *.vcxproj.*
