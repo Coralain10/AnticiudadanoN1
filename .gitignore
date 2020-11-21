@@ -1,0 +1,8 @@
+*.suo
+*.db
+*.VC.
+*.ipch
+**/.NETFramework
+/x64
+*.vcxproj
+*.pdb
