@@ -1,8 +1,12 @@
+/.NETFramework
+/x64
+/Debuf
+/Browse
+*.log
 *.suo
 *.db
 *.VC.
 *.ipch
-**/.NETFramework
-/x64
-*.vcxproj
+*.obj
+*.vcxproj.*
 *.pdb
