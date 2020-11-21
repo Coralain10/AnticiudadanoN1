@@ -13,7 +13,7 @@ enum posiciones { ARRIBA, ABAJO, IZQUIERDA, DERECHA };
 ref class CLaberinto {
 private:
 	unsigned short ancho, alto;
-	unsigned short esp_rest_ancho, esp_rest_alto;
+	short esp_rest_ancho, esp_rest_alto;
 	unsigned short tamanho_celda;
 	float factor_paredes, densidad; //probabilidad que aparezcan
 	short prob_balas, espacio_paredes;
@@ -32,10 +32,10 @@ private:
 public:
 	CLaberinto(short ancho, short alto, short tamanho_celda) : tamanho_celda(tamanho_celda) {
 		this->espacio_paredes = 4;
-		this->ancho = ancho - (ancho % espacio_paredes);
-		this->alto = alto - (alto % espacio_paredes);
-		this->esp_rest_ancho = ancho - this->ancho + 1;
-		this->esp_rest_alto = alto - this->alto + 1;
+		this->ancho = ancho - (ancho % espacio_paredes) +1;
+		this->alto = alto - (alto % espacio_paredes) +1;
+		this->esp_rest_ancho = ancho - this->ancho < 0 ? 0 : ancho - this->ancho + 1;
+		this->esp_rest_alto = alto - this->alto < 0 ? 0 : ancho - this->alto + 1;
 
 		img_partes_lab = gcnew Bitmap("Imagenes\\laberinto.png");
 		img_bala = gcnew Bitmap("Imagenes\\dialog.png");

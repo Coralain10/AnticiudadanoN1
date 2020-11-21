@@ -72,7 +72,7 @@ public:
 			}
 		}
 	}
-	void dibujarSprite(Graphics^ graficador) override {
+	void dibujarSprite(Graphics^ graficador) {
 		this->recorte.Location = Point(this->indice * this->recorte.Width, this->direccion * this->recorte.Height);
 		graficador->DrawImage(this->imagen, this->area, this->recorte, GraphicsUnit::Pixel);
 		++this->indice %= this->n_columnas;

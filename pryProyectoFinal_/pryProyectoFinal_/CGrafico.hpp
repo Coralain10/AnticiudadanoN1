@@ -10,7 +10,7 @@ private:
 protected:
 	short x, y;
 	short ax, ay;
-	short n_columnas, n_filas;
+	//short n_columnas, n_filas;
 	short ancho, alto;
 	Rectangle area_dibujo;
 	Bitmap^ imagen;
@@ -112,6 +112,18 @@ public:
 	short get_alto() { return alto; }
 	void set_alto(short alto) { this->alto = alto; }
 	System::Drawing::Rectangle get_area_dibujo() { return this->area_dibujo; }
+	void edit_imagen(String^ ruta_imagen, short ancho, short alto) {
+		delete this->imagen;
+		this->imagen = gcnew Bitmap(ruta_imagen);
+		this->area_dibujo.Width = this->ancho = ancho;
+		this->area_dibujo.Height = this->alto = alto;
+	}
+	void edit_imagen(Bitmap^ imagen, short ancho, short alto) {
+		//delete this->imagen;
+		this->imagen = imagen;
+		this->area_dibujo.Width = this->ancho = ancho;
+		this->area_dibujo.Height = this->alto = alto;
+	}
 	/*System::Drawing::Rectangle set_area_dibujo(short x, short y, short ancho, short alto) { this->area_dibujo = System::Drawing::Rectangle(x, y, ancho, alto); }
 	System::Drawing::Rectangle set_area_dibujo(System::Drawing::Rectangle area) { this->area_dibujo = area; }*/
 };
