@@ -1,6 +1,0 @@
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal.frmMenu.resources
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.vcxproj.GenerateResource.cache
-E:\UPC-SW\Programacion II\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.vcxprojAssemblyReference.cache
-D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.vcxprojAssemblyReference.cache
-D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal.frmMenu.resources
-D:\AN\AnticiudadanoN1\pryProyectoFinal_\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.vcxproj.GenerateResource.cache
