@@ -39,7 +39,7 @@ public:
 
 	void mover(short dire, short** escenario) {
 		short x1, y1, x2, y2;
-		switch (dire)
+		switch ((Direccion)dire)
 		{
 		case DERECHA:	x1 = x2 = (area.X + alto - 1 + 2);
 			y1 = (area.Y) ;
