@@ -1,0 +1,11 @@
+**/.NETFramework
+**/x64
+Browse.VC.*
+*.log
+*.tlog
+*.cache
+*.suo
+*.ipch
+*.obj
+*.vcxproj.*
+*.pdb
