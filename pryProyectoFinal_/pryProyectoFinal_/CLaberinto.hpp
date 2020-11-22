@@ -72,6 +72,9 @@ public:
 	CGrafico^ get_entrada() { return this->entrada; }
 	CGrafico^ get_salida() { return this->salida; }
 	short** get_mapa() { return this->mapa; }
+	short get_ancho() { return this->ancho; }
+	short get_alto() { return this->alto; }
+	short get_tam_celda() { return this->tamanho_celda; }
 
 	void pintar_mapa(Graphics^ graficador) {
 		for (short i = 0; i < alto + esp_rest_alto; i++)
@@ -127,8 +130,8 @@ public:
 		}
 	}
 
-	void quitar_bala() {
-		//TO DO
+	void quitar_bala(CGrafico^ municion) {
+		this->balas->Remove(municion);
 	}
 
 	
@@ -254,7 +257,8 @@ private:
 			y += y % espacio_paredes + 1; //evade posicion peligrosa
 			break;
 		}
-
+		x = x > ancho - 1 ? ancho : x;
+		y = y > alto - 1 ? alto : y;
 		return Point(x,y);
 	}
 	void set_pos_entrada() { this->pos_entrada = celda_pared(); }
@@ -276,6 +280,8 @@ private:
 				aux_pos.X != 0 ? aux_pos.X += aux_pos.X % espacio_paredes + 1 : aux_pos.X;
 				aux_pos.Y != 0 ? aux_pos.Y += aux_pos.Y % espacio_paredes + 1 : aux_pos.Y;
 			}
+			aux_pos.X = aux_pos.X > ancho - 1 ? ancho - 2 : aux_pos.X;
+			aux_pos.Y = aux_pos.Y > alto - 1 ? alto - 2 : aux_pos.Y;
 
 			this->pos_salida = aux_pos;
 		}

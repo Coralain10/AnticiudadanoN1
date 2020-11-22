@@ -26,14 +26,10 @@ namespace pryProyectoFinal {
 		short ancho, alto; //Client size varia cuando recien inicia a cuando carga
 
 	private: System::Windows::Forms::Timer^ tmrMenu;
-
 	private: System::Windows::Forms::Timer^ tmrChat;
 	private: System::Windows::Forms::Timer^ tmrIntroJugar;
 	private: System::Windows::Forms::Timer^ tmrIntro;
-
 	private: System::Windows::Forms::Timer^ tmrJuegoP1;
-
-
 
 	public:
 		SoundPlayer^ intro = gcnew SoundPlayer("Imagenes\\intro.wav ");
@@ -61,8 +57,6 @@ namespace pryProyectoFinal {
 		}
 	private: System::ComponentModel::IContainer^ components;
 	protected:
-
-	private:
 
 
 #pragma region Windows Form Designer generated code
@@ -93,7 +87,6 @@ namespace pryProyectoFinal {
 			// tmrIntro
 			// 
 			this->tmrIntro->Enabled = true;
-			this->tmrIntro->Interval = 2000;
 			this->tmrIntro->Tick += gcnew System::EventHandler(this, &frmMenu::anim_intro);
 			// 
 			// frmMenu
@@ -110,9 +103,9 @@ namespace pryProyectoFinal {
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &frmMenu::inicializar);
 			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &frmMenu::frmMenu_Paint);
+			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &frmMenu::interactuar);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::accion_form);
 			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::actualizar_mouse);
-			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &frmMenu::interactuar);
 			this->ResumeLayout(false);
 
 		}
@@ -127,10 +120,9 @@ namespace pryProyectoFinal {
 	}
 	private: System::Void anim_intro(System::Object^ sender, System::EventArgs^ e) {
 		
-		if (this->juego->get_pos_dialog_act() <= 3) {
-			this->juego->intro(this->buffer->Graphics);
+		if (this->juego->get_intro0()->anim_auto(this->buffer->Graphics))
 			this->buffer->Render();
-		}
+
 		else {
 			this->tmrIntro->Enabled = false;
 			this->tmrMenu->Enabled = true;
@@ -142,35 +134,33 @@ namespace pryProyectoFinal {
 		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_cerrar()))
 			Application::Exit();
 
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_comenzar()))
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_comenzar()))
 		{
-			//this->juego->iniciar_juego(buffer->Graphics);
 			this->tmrMenu->Enabled = false;
-			this->juego->iniciar_entrada_juego(buffer->Graphics);
-			buffer->Render();
 			this->tmrIntroJugar->Enabled = true;
 		}
 
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_dsiguiente()))
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_dsiguiente()))
 		{
-			this->juego->set_pos_dialog_act(this->juego->get_pos_dialog_act() + 1);
-			if (this->juego->anim_entrada_juego(buffer->Graphics) == false)
-			{
+			if (this->juego->get_introjuego()->avanzar(this->buffer->Graphics))
+				buffer->Render();
+			else {
+				this->tmrIntroJugar->Enabled = false;
+				this->juego->get_introjuego()->set_pos_dialog_act(0);
 				this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
-					buffer_aux->Render();
-					
-					this->tmrIntroJugar->Enabled = false;
-					this->tmrJuegoP1->Enabled = true;
+				buffer_aux->Render();
+				this->tmrJuegoP1->Enabled = true;
 			}
 		}
 
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_danterior()))
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_danterior()))
 		{
-			this->juego->set_pos_dialog_act(this->juego->get_pos_dialog_act() - 1);
-			if (this->juego->anim_entrada_juego(buffer->Graphics)==false)
-			{
-				this->tmrMenu->Enabled = true;
+			if (this->juego->get_introjuego()->retroceder(this->buffer->Graphics))
+				buffer->Render();
+			else {
 				this->tmrIntroJugar->Enabled = false;
+				this->juego->get_introjuego()->set_pos_dialog_act(0);
+				this->tmrMenu->Enabled = true;
 			}
 		}
 
@@ -191,13 +181,14 @@ namespace pryProyectoFinal {
 
 	private: System::Void animar_menu(System::Object^ sender, System::EventArgs^ e) {
 		intro->PlayLooping();
-		this->juego->menu_principal(buffer->Graphics);
+		this->juego->get_menu()->menu_principal(buffer->Graphics);
+		this->juego->pintar_ui(this->buffer->Graphics);
 		this->buffer->Render();
 	}
 
 	private: System::Void anim_intro_jugar(System::Object^ sender, System::EventArgs^ e) {
-		this->juego->anim_entrada_juego(buffer->Graphics);
-		this->juego->get_cursor()->dibujar(buffer->Graphics);
+		this->juego->get_introjuego()->anim(this->buffer->Graphics);
+		this->juego->pintar_ui(this->buffer->Graphics);
 		buffer->Render();
 	}
 	private: System::Void animar_juegoP1(System::Object^ sender, System::EventArgs^ e) {
@@ -207,14 +198,14 @@ namespace pryProyectoFinal {
 		this->juego->jugar(buffer->Graphics);
 		this->buffer->Render();
 	}
-	 private: System::Void interactuar(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-			   switch (e->KeyCode) {
-			   case Keys::Up: this->juego->interactuar(Arriba); break;
-			   case Keys::Down: this->juego->interactuar(Abajo); break;
-			   case Keys::Left: this->juego->interactuar(Izquierda); break;
-			   case Keys::Right: this->juego->interactuar(Derecha); break;
-			   }
-		   }
+	private: System::Void interactuar(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		switch (e->KeyCode) {
+		case Keys::Up: this->juego->interactuar(Arriba); break;
+		case Keys::Down: this->juego->interactuar(Abajo); break;
+		case Keys::Left: this->juego->interactuar(Izquierda); break;
+		case Keys::Right: this->juego->interactuar(Derecha); break;
+		}
+	}
 
 };
 }

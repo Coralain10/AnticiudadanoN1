@@ -7,29 +7,24 @@ private:
 	short cant_vidas;
 	short cant_balas;
 public:
-	CProtagonista(String^ ruta, short x, short y ,System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c)
-		: CEntidad(ruta,x,y, area, recorte, n_f, n_c, 2) {
-		this->imagen = gcnew Bitmap(ruta);
-		this->recorte.Width = this->imagen->Width / this->n_columnas;
-		this->recorte.Height = this->imagen->Height / this->n_filas;
+	CProtagonista(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c)
+		: CEntidad(ruta,area, recorte, n_f, n_c, 2,"PROTAGONISTA") {
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 5;
 	}
 	~CProtagonista() {}
 
-	void caminar() {
-		//TO DO
-	}
-
-	void correr() {
-		//TO DO
-	}
+	void to_caminar() { this->dx = this->dy = 5; }
+	void to_correr() { this->dx = this->dy = 8; }
 
 	void hacer_portales() {
 		//TO DO
 	}
 
-	void recoger_municiones() {
-		//TO DO
+	void recoger_municiones(CGrafico^ municion) {
+		if (hay_colision(municion))
+			this->cant_balas += 4;
 	}
 
 	void disparar() {

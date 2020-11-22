@@ -1,8 +1,9 @@
 #pragma once
 #include "CGrafico.hpp"
+#include "CLaberinto.hpp"
 #include <vector>
 #include <string>
-
+#include <math.h>
 
 using namespace System::Collections::Generic;
 using namespace std;
@@ -14,22 +15,20 @@ ref class CEntidad : public CGraficoAnimado
 {
 protected:
 	short dx, dy;
-	System::Drawing::Rectangle area, recorte;
-	short indice; 
-	short n_filas, n_columnas, direccion;
+	System::Drawing::Rectangle recorte;
+	short direccion;
 	enum acciones;
 	short radio_vision;
 	//vector<vector<short>>* circulo_vision_map;
-	string* tipo_grafico;
+	String^ tipo_grafico;
 
 public:
 	CEntidad() {}
-	CEntidad(String^ ruta_imagen, short x, short y ,System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short  n_f, short n_c,short direccion):
-		area(area), recorte(recorte), n_filas(n_f), n_columnas(n_c), indice(0), direccion(direccion) {
-		this->imagen = gcnew Bitmap(ruta_imagen);
-		this->recorte.Width = this->imagen->Width / this->n_columnas;
-		this->recorte.Height = this->imagen->Height / this->n_filas;
-		this->imagen->MakeTransparent(this->imagen->GetPixel(0, 0));
+	CEntidad(String^ ruta_imagen, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short  n_f, short n_c,short direccion, String^ tipo_entidad):
+		CGraficoAnimado(ruta_imagen, area, n_f, n_c), recorte(recorte), direccion(direccion), tipo_grafico(tipo_entidad) {
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
+		//this->imagen->MakeTransparent(this->imagen->GetPixel(0, 0));
 	}
 	~CEntidad() {
 		//delete circulo_vision_map;
@@ -37,45 +36,51 @@ public:
 	}
 
 
-	void mover(short dire, short** escenario) {
+	virtual void mover(short dire, CLaberinto^ escenario) {
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)
 		{
-		case DERECHA:	x1 = x2 = (area.X + 28 - 1 + 5) / 28;
-			y1 = (area.Y) / 28;
-			y2 = (area.Y + 28 - 1) / 28; break;
-		case IZQUIERDA: x1 = x2 = (area.X - 5) / 28;
-			y1 = (area.Y) / 28;
-			y2 = (area.Y + 28 - 1) / 28; break;
-		case ABAJO: y1 = y2 = (area.Y + 28 - 1 + 5) / 28;
-			x1 = (area.X) / 28;
-			x2 = (area.X + 28 - 1) / 28; break;
-		case ARRIBA: y1 = y2 = (area.Y - 5) / 28;
-			x1 = (area.X) / 28;
-			x2 = (area.X + 28 - 1) / 28; break;
+		case IZQUIERDA:	x1 = x2 = (this->area_dibujo.X + this->ancho - 1 + 5) / this->ancho;
+			y1 = (this->area_dibujo.Y) / this->alto;
+			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
+		case DERECHA: x1 = x2 = (this->area_dibujo.X - 5) / this->ancho;
+			y1 = (this->area_dibujo.Y) / this->alto;
+			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
+		case ABAJO:		y1 = y2 = (this->area_dibujo.Y + this->alto - 1 + 5) / this->alto;
+			x1 = (this->area_dibujo.X) / this->ancho;
+			x2 = (short)((this->area_dibujo.X + this->ancho - 1) / this->ancho); break;
+		case ARRIBA:	y1 = y2 = (this->area_dibujo.Y - 5) / this->alto;
+			x1 = (this->area_dibujo.X) / this->ancho;
+			x2 = (this->area_dibujo.X + this->ancho - 1) / this->ancho; break;
 		}
-		if ((escenario[y1][x1] == PISO||ENTRADA) && (escenario[y2][x2] == PISO || ENTRADA)) {
+		if ((escenario->get_mapa()[y1][x1] == PISO && escenario->get_mapa()[y2][x2] == PISO)
+		 || (escenario->get_mapa()[y1][x1] == ENTRADA || escenario->get_mapa()[y1][x1] == SALIDA)
+		 || (escenario->get_mapa()[y2][x2] == ENTRADA || escenario->get_mapa()[y2][x2] == SALIDA)) {
 			switch ((Direccion)dire)
 			{
 			case Arriba:
-				this->area.Y -= this->dy;
+				if (this->area_dibujo.Y - this->dy > 1)
+					this->area_dibujo.Y -= this->dy;
 				break;
 			case Abajo:
-				this->area.Y += this->dy;
+				if (this->area_dibujo.Y + this->dy < escenario->get_alto() * escenario->get_tam_celda())
+					this->area_dibujo.Y += this->dy;
 				break;
 			case Derecha:
-				this->area.X += this->dx;
+				if (this->area_dibujo.X + this->dx < escenario->get_ancho() * escenario->get_tam_celda())
+					this->area_dibujo.X += this->dx;
 				break;
 			case Izquierda:
-				this->area.X -= this->dx;
+				if (this->area_dibujo.X - this->dx > 1)
+					this->area_dibujo.X -= this->dx;
 				break;
 			}
 		}
 	}
 	void dibujarSprite(Graphics^ graficador) {
 		this->recorte.Location = Point(this->indice * this->recorte.Width, this->direccion * this->recorte.Height);
-		graficador->DrawImage(this->imagen, this->area, this->recorte, GraphicsUnit::Pixel);
-		++this->indice %= this->n_columnas;
+		graficador->DrawImage(this->imagen, this->area_dibujo, this->recorte, GraphicsUnit::Pixel);
+		++this->indice %= this->an_columnas;
 	}
 	void set_dx(short dx) { this->dx = dx; }
 	short get_dx() { return dx; }
