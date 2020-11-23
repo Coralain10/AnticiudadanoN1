@@ -149,6 +149,9 @@ public:
 		delete this->portal_salida;
 		this->portal_salida = nullptr;
 	}
+
+	CGraficoAnimado^ get_portal_entrada(){ return this->portal_entrada; }
+	CGraficoAnimado^ get_portal_salida() { return this->portal_salida; }
 	
 private:
 
