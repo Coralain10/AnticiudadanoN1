@@ -5,8 +5,10 @@
 #include "CEntidad.hpp"
 #include "CProtagonista.hpp"
 #include "CNPC.hpp"
+#include <string>
 
 using namespace System::Collections::Generic;
+using namespace std;
 
 ref class CConfiguracion {
 private:
@@ -134,8 +136,8 @@ public:
 		set_intro0();
 		this->cursor = gcnew CGrafico("Imagenes\\mouse.png", 32, 32);
 		this->btn_cerrar = gcnew CGrafico("Imagenes\\cerrar.png", (short)(area.Width - 2.5 * tamanho_celda), tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
-		this->btn_creditos = gcnew CGrafico("Imagenes\\buttons.png", System::Drawing::Rectangle(160, 160, 160, 160), tamanho_celda * 4, tamanho_celda);
-		this->btn_creditos->set_ubicacion(50, area.Height - (3*tamanho_celda));
+		this->btn_creditos = gcnew CGrafico("Imagenes\\buttons.png", System::Drawing::Rectangle(160, 160, 160, 160), tamanho_celda * 8, tamanho_celda*2);
+		this->btn_creditos->set_ubicacion(area.Width/2 - tamanho_celda*2, area.Height - (4*tamanho_celda));
 		this->btn_reiniciar = gcnew CGrafico("Imagenes\\reiniciar.png", (area.Width - 5 * tamanho_celda), tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
 		this->laberinto = gcnew CLaberinto((short)(area.Width / tamanho_celda), (short)(area.Height / tamanho_celda), tamanho_celda);
 		this->aliados = gcnew List<CAliado^>();
@@ -178,13 +180,16 @@ public:
 	}
 
 	void iniciar_juego() {
+		this->config->ts_actual = 0;
 		this->inicio_juego = true;
 		for (short i = 0; i < this->config->get_aliados_cant(); i++)
 			this->aliados->Add(gcnew CAliado);
-		/*for (short i = 0; i < this->config->asesinos_cant; i++)
-			this->asesinos->Add(gcnew CAsesinos);
+		/*for (short i = 0; i < this->config->corruptos_cant; i++)
+			this->corruptos->Add(gcnew CCorruptos);*/
+		/*
+		* //OTRA FX
 		for (short i = 0; i < this->config->asesinos_cant; i++)
-			this->asesinos->Add(gcnew CCorruptos);*/
+			this->asesinos->Add(gcnew CAsesinos);*/
 	}
 	void interactuar(Direccion direccion) {
 		this->ha_ganado = this->protagonista->gano(direccion, this->laberinto);
@@ -195,14 +200,6 @@ public:
 		this->protagonista->dibujarSprite(g);
 	}
 
-	void convencer_asesinos() {
-		//TO DO
-	}
-
-	void mover_personaje(bool accion, System::Windows::Forms::Keys key){
-		//TO DO
-	}
-
 	void reiniciar_lab() {
 		delete this->laberinto;
 		this->laberinto = gcnew CLaberinto((short)(area_juego.Width / tamanho_celda), (short)(area_juego.Height / tamanho_celda), tamanho_celda);
@@ -210,7 +207,9 @@ public:
 			remove_ganar();
 		if (this->gameover != nullptr)
 			remove_ganar();
-		this->config->ts_actual = 0;
+		if (this->creditos != nullptr)
+			remove_creditos();
+		iniciar_juego();
 	}
 
 	bool aumentar_dificultad() {
@@ -278,16 +277,23 @@ public:
 		this->btn_creditos->dibujar(graficador);
 		graficador->DrawString("Creditos", this->tipografia, Brushes::White, btn_creditos->get_x() + (btn_creditos->get_ancho() / 4), btn_creditos->get_y() + (btn_creditos->get_alto() / 4));
 	}
+	void dibujar_creditos(Graphics^ graficador) {
+		graficador->Clear(System::Drawing::Color::Black);
+		//this->creditos->dibujar_fondo(graficador);
+		this->creditos->dibujar_dialogo(graficador);
+		this->btn_reiniciar->dibujar(graficador);
+		pintar_ui(graficador);
+	}
 	void set_creditos() {
-		String^ creditos_txt = "CRÉDITOS:\n\nDesarrollado por:\n";
-		creditos_txt->Concat("Arte & Programación | Carolain Anto Chávez\n");
-		creditos_txt->Concat("Arte & Programación | Julio Arturo Morón Campos\n");
-		creditos_txt->Concat("Producción & Programación | Santiago Sebastian Heredia Orejuela\n");
-		creditos_txt->Concat("Producción & Programación | Gabriel Omar Quispe Kobashikawa\n");
-		creditos_txt->Concat("\nMÚSICA UTILIZADA : \n1.\n2.\n3.\n");
-		creditos_txt->Concat("\nCURSO:\nProgramación II\n");
-		creditos_txt->Concat("\nGracias especiales al profesor Ricardo Gonzales Valenzuela");
-		creditos = gcnew CDialogo(creditos_txt, this->area_juego);
+		std::string creditos_txt = "CRÉDITOS:\n\nDesarrollado por:\n";
+		creditos_txt+= "Arte & Programación | Carolain Anto Chávez\n";
+		creditos_txt += "Arte & Programación | Julio Arturo Morón Campos\n";
+		creditos_txt += "Producción & Programación | Santiago Sebastian Heredia Orejuela\n";
+		creditos_txt += "Producción & Programación | Gabriel Omar Quispe Kobashikawa\n";
+		creditos_txt += "\nMÚSICA UTILIZADA : \n1.\n2.\n3.\n";
+		creditos_txt += "\nCURSO:\nProgramación II\n";
+		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
+		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego);
 	}
 
 	void remove_intro0() { delete this->intro0; this->intro0 = nullptr; }

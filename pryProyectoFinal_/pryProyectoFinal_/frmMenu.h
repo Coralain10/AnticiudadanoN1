@@ -148,7 +148,6 @@ namespace pryProyectoFinal {
 			this->tmrIntro->Enabled = false;
 			this->tmrMenu->Enabled = true;
 		}
-		
 	}
 
 	private: System::Void accion_form(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -162,6 +161,9 @@ namespace pryProyectoFinal {
 				this->juego->set_introjuego();
 				this->tmrIntroJugar->Enabled = true;
 			}
+			/*else if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_configurar())) {
+				//
+			}*/
 		}
 
 		if (this->juego->get_introjuego() != nullptr)
@@ -174,6 +176,7 @@ namespace pryProyectoFinal {
 					this->tmrIntroJugar->Enabled = false;
 					this->juego->remove_introjuego();
 					this->buffer->Graphics->Clear(System::Drawing::Color::Black);
+					intro->Stop();
 					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 					buffer_aux->Render();
 					this->tmrJuegoP1->Enabled = true;
@@ -200,12 +203,12 @@ namespace pryProyectoFinal {
 			this->juego->reiniciar_lab();
 			this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 			buffer_aux->Render();
-			intro->Stop();
 			this->tmrJuegoP1->Enabled = true;
 		}
 
 		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_creditos()))
 		{
+			this->juego->set_creditos();
 			this->tmrJuegoP1->Enabled = false;
 			this->tmrJuegoP2->Enabled = false;
 			this->tmrfin->Enabled = false;
@@ -268,6 +271,7 @@ namespace pryProyectoFinal {
 		buffer_aux->Render();
 		this->juego->pintar_ui(buffer->Graphics);
 		this->juego->jugar(buffer->Graphics);
+		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
 		this->buffer->Render();
 		if (this->juego->get_config()->ts_actual == this->juego->get_config()->ts_alianza)
 		{
@@ -290,6 +294,7 @@ namespace pryProyectoFinal {
 			this->buffer_aux->Render();
 			this->juego->jugar(buffer->Graphics);
 			this->juego->pintar_ui(buffer->Graphics);
+			this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
 			this->buffer->Render();
 			if (this->juego->get_ha_ganado()) {
 				this->juego->set_ganar();
@@ -305,6 +310,7 @@ namespace pryProyectoFinal {
 	}
 	private: System::Void mostrar_mensaje(System::Object^ sender, System::EventArgs^ e) {
 		this->buffer->Graphics->Clear(System::Drawing::Color::Black);
+
 		if (this->juego->get_ha_ganado())
 			this->juego->get_ganar()->dibujar_dialogo(this->buffer->Graphics);
 		else
@@ -317,7 +323,7 @@ namespace pryProyectoFinal {
 	}
 	private: System::Void mostrar_creditos(System::Object^ sender, System::EventArgs^ e) {
 		//this->juego->get_creditos()->dibujar_fondo(this->buffer->Graphics);
-		this->juego->get_creditos()->dibujar_dialogo(this->buffer->Graphics);
+		this->juego->dibujar_creditos(this->buffer->Graphics);
 		this->buffer->Render();
 	}
 };

@@ -45,8 +45,8 @@ public:
 		delete fondo;
 	}
 	bool avanzar() {
-		this->pos_chat_act % 2 == 0 ? this->pos_chat_usu1++ : this->pos_chat_usu2++;
 		this->pos_chat_act++;
+		this->pos_chat_act % 2 == 0 ? this->pos_chat_usu2++ : this->pos_chat_usu1++;
 
 		if (this->pos_chat_act < (this->chat_usu1->Count + this->chat_usu2->Count))
 			return true;
@@ -54,8 +54,8 @@ public:
 			return false;
 	}
 	bool retroceder() {
-		this->pos_chat_act % 2 == 0 ? this->pos_chat_usu1-- : this->pos_chat_usu2--;
 		this->pos_chat_act--;
+		this->pos_chat_act % 2 == 0 ? this->pos_chat_usu2-- : this->pos_chat_usu1--;
 
 		if (this->pos_chat_act >= 0)
 			return true;
@@ -105,7 +105,7 @@ public:
 		this->grafico_central->set_ubicacion(this->area.Width / 2 - this->grafico_central->get_ancho() / 2, this->area.Height - this->grafico_central->get_alto());
 	}
 	CDialogo(String^ dialogo, System::Drawing::Rectangle area) :
-		tipografia(tipografia), dialogo(dialogo), area(area) {
+		dialogo(dialogo), area(area) {
 		this->tipografia = gcnew System::Drawing::Font("Courier new", 20);
 	}
 
