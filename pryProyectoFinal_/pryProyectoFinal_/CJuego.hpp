@@ -21,9 +21,9 @@ public:
 
 	CConfiguracion() {
 		//cargando valores por default
-		this->ts_total = 200;
+		this->ts_total = 200; //Son 20 segundos
 		this->ts_actual = 0;
-		this->ts_alianza = 100;
+		this->ts_alianza = 100; //son 10 segundos
 		this->aliados_cant = 10;
 		this->asesinos_cant = (short)(aliados_cant * 0.6);
 		this->corruptos_cant = (short)(aliados_cant * 0.4);
@@ -40,6 +40,7 @@ public:
 	short get_aliados_cant() { return this->aliados_cant; }
 	short get_corruptos_cant() { return this->corruptos_cant; }
 	short get_asesinos_cant() { return this->asesinos_cant; }
+	short set_t_to_s(unsigned int t) { return t * 10; }
 };
 
 ref class CMenu {
