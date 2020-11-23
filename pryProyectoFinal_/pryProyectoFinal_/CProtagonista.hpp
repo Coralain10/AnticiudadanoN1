@@ -18,6 +18,13 @@ public:
 	void to_caminar() { this->dx = this->dy = 5; }
 	void to_correr() { this->dx = this->dy = 8; }
 
+	bool gano(short dire, CLaberinto^ escenario) {
+		if (mover(dire, escenario) == SALIDA)
+			return true;
+		else
+			return false;
+	}
+
 	void hacer_portales() {
 		//TO DO
 	}

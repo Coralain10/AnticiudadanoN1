@@ -1,6 +1,8 @@
 #pragma once
 #include <stdlib.h>
 #include <time.h>
+#include <Windows.h>
+#include <MMSystem.h>
 #include "CJuego.hpp"
 #include <string>
 
@@ -30,6 +32,9 @@ namespace pryProyectoFinal {
 	private: System::Windows::Forms::Timer^ tmrIntroJugar;
 	private: System::Windows::Forms::Timer^ tmrIntro;
 	private: System::Windows::Forms::Timer^ tmrJuegoP1;
+	private: System::Windows::Forms::Timer^ tmrJuegoP2;
+	private: System::Windows::Forms::Timer^ tmrfin;
+	private: System::Windows::Forms::Timer^ tmrCreditos;
 
 	public:
 		SoundPlayer^ intro = gcnew SoundPlayer("Imagenes\\intro.wav ");
@@ -70,6 +75,9 @@ namespace pryProyectoFinal {
 			this->tmrChat = (gcnew System::Windows::Forms::Timer(this->components));
 			this->tmrIntroJugar = (gcnew System::Windows::Forms::Timer(this->components));
 			this->tmrIntro = (gcnew System::Windows::Forms::Timer(this->components));
+			this->tmrJuegoP2 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->tmrfin = (gcnew System::Windows::Forms::Timer(this->components));
+			this->tmrCreditos = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// tmrJuegoP1
@@ -80,6 +88,10 @@ namespace pryProyectoFinal {
 			// 
 			this->tmrMenu->Tick += gcnew System::EventHandler(this, &frmMenu::animar_menu);
 			// 
+			// tmrChat
+			// 
+			this->tmrChat->Tick += gcnew System::EventHandler(this, &frmMenu::chat_conspiracion);
+			// 
 			// tmrIntroJugar
 			// 
 			this->tmrIntroJugar->Tick += gcnew System::EventHandler(this, &frmMenu::anim_intro_jugar);
@@ -88,6 +100,18 @@ namespace pryProyectoFinal {
 			// 
 			this->tmrIntro->Enabled = true;
 			this->tmrIntro->Tick += gcnew System::EventHandler(this, &frmMenu::anim_intro);
+			// 
+			// tmrJuegoP2
+			// 
+			this->tmrJuegoP2->Tick += gcnew System::EventHandler(this, &frmMenu::animar_juegoP2);
+			// 
+			// tmrfin
+			// 
+			this->tmrfin->Tick += gcnew System::EventHandler(this, &frmMenu::mostrar_mensaje);
+			// 
+			// tmrCreditos
+			// 
+			this->tmrCreditos->Tick += gcnew System::EventHandler(this, &frmMenu::mostrar_creditos);
 			// 
 			// frmMenu
 			// 
@@ -102,7 +126,6 @@ namespace pryProyectoFinal {
 			this->Text = L"menu principal";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &frmMenu::inicializar);
-			this->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &frmMenu::frmMenu_Paint);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &frmMenu::interactuar);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::accion_form);
 			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::actualizar_mouse);
@@ -115,15 +138,13 @@ namespace pryProyectoFinal {
 		this->tc = 28;
 		this->juego = gcnew CJuego(tc, this->ClientRectangle);
 	}
-	private: System::Void frmMenu_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-		//this->juego->pintar_ui(graficador);
-	}
+
 	private: System::Void anim_intro(System::Object^ sender, System::EventArgs^ e) {
-		
 		if (this->juego->get_intro0()->anim_auto(this->buffer->Graphics))
 			this->buffer->Render();
 
 		else {
+			this->juego->remove_intro0();
 			this->tmrIntro->Enabled = false;
 			this->tmrMenu->Enabled = true;
 		}
@@ -134,45 +155,84 @@ namespace pryProyectoFinal {
 		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_cerrar()))
 			Application::Exit();
 
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_comenzar()))
+		if (this->juego->get_menu() != nullptr)
 		{
-			this->tmrMenu->Enabled = false;
-			this->tmrIntroJugar->Enabled = true;
-		}
-
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_dsiguiente()))
-		{
-			if (this->juego->get_introjuego()->avanzar(this->buffer->Graphics))
-				buffer->Render();
-			else {
-				this->tmrIntroJugar->Enabled = false;
-				this->juego->get_introjuego()->set_pos_dialog_act(0);
-				this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
-				buffer_aux->Render();
-				this->tmrJuegoP1->Enabled = true;
+			if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_comenzar())) {
+				this->tmrMenu->Enabled = false;
+				this->juego->set_introjuego();
+				this->tmrIntroJugar->Enabled = true;
 			}
 		}
 
-		if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_danterior()))
+		if (this->juego->get_introjuego() != nullptr)
 		{
-			if (this->juego->get_introjuego()->retroceder(this->buffer->Graphics))
-				buffer->Render();
-			else {
-				this->tmrIntroJugar->Enabled = false;
-				this->juego->get_introjuego()->set_pos_dialog_act(0);
-				this->tmrMenu->Enabled = true;
+			if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_dsiguiente()))
+			{
+				if (this->juego->get_introjuego()->avanzar(this->buffer->Graphics))
+					buffer->Render();
+				else {
+					this->tmrIntroJugar->Enabled = false;
+					this->juego->remove_introjuego();
+					this->buffer->Graphics->Clear(System::Drawing::Color::Black);
+					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
+					buffer_aux->Render();
+					this->tmrJuegoP1->Enabled = true;
+				}
+			}
+			else if (this->juego->get_cursor()->hay_colision(this->juego->get_introjuego()->get_btn_danterior()))
+			{
+				if (this->juego->get_introjuego()->retroceder(this->buffer->Graphics))
+					buffer->Render();
+				else {
+					this->tmrIntroJugar->Enabled = false;
+					this->juego->remove_introjuego();
+					this->tmrMenu->Enabled = true;
+				}
 			}
 		}
-
+		
 		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_reiniciar()))
 		{
-			//this->juego->iniciar_juego();
 			this->tmrJuegoP1->Enabled = false;
+			this->tmrJuegoP2->Enabled = false;
+			this->tmrfin->Enabled = false;
+			this->tmrCreditos->Enabled = false;
 			this->juego->reiniciar_lab();
 			this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 			buffer_aux->Render();
+			intro->Stop();
 			this->tmrJuegoP1->Enabled = true;
 		}
+
+		if (this->juego->get_cursor()->hay_colision(this->juego->get_btn_creditos()))
+		{
+			this->tmrJuegoP1->Enabled = false;
+			this->tmrJuegoP2->Enabled = false;
+			this->tmrfin->Enabled = false;
+			this->tmrCreditos->Enabled = true;
+		}
+
+		if (this->juego->get_chat_alianza()!= nullptr)
+		{
+			if (this->juego->get_cursor()->hay_colision(this->juego->get_chat_alianza()->get_btn_dsiguiente()))
+			{
+				if (this->juego->get_chat_alianza()->avanzar() == false)
+				{
+					this->tmrChat->Enabled = false;
+					this->juego->remove_chat();
+					this->juego->set_splash_conspiracion(this->buffer->Graphics);
+					buffer->Render();
+					System::Threading::Thread::Sleep(1000);
+					this->juego->remove_splash_conspiracion();
+					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
+					buffer_aux->Render();
+					this->tmrJuegoP2->Enabled = true;
+				}
+			}
+			else if (this->juego->get_cursor()->hay_colision(this->juego->get_chat_alianza()->get_btn_danterior()))
+				this->juego->get_chat_alianza()->retroceder();
+		}
+		
 	}
 
 	private: System::Void actualizar_mouse(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -191,21 +251,74 @@ namespace pryProyectoFinal {
 		this->juego->pintar_ui(this->buffer->Graphics);
 		buffer->Render();
 	}
+
+	private: System::Void interactuar(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		if (tmrJuegoP1->Enabled || tmrJuegoP2->Enabled)
+		{
+			switch (e->KeyCode) {
+			case Keys::Up: this->juego->interactuar(Arriba); break;
+			case Keys::Down: this->juego->interactuar(Abajo); break;
+			case Keys::Left: this->juego->interactuar(Izquierda); break;
+			case Keys::Right: this->juego->interactuar(Derecha); break;
+			}
+		}
+	}
+
 	private: System::Void animar_juegoP1(System::Object^ sender, System::EventArgs^ e) {
-		intro->Stop();
 		buffer_aux->Render();
 		this->juego->pintar_ui(buffer->Graphics);
 		this->juego->jugar(buffer->Graphics);
 		this->buffer->Render();
-	}
-	private: System::Void interactuar(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-		switch (e->KeyCode) {
-		case Keys::Up: this->juego->interactuar(Arriba); break;
-		case Keys::Down: this->juego->interactuar(Abajo); break;
-		case Keys::Left: this->juego->interactuar(Izquierda); break;
-		case Keys::Right: this->juego->interactuar(Derecha); break;
+		if (this->juego->get_config()->ts_actual == this->juego->get_config()->ts_alianza)
+		{
+			this->tmrJuegoP1->Enabled = false;
+			this->juego->set_chat();
+			this->juego->get_chat_alianza()->chat(this->buffer->Graphics);
+			this->tmrChat->Enabled = true;
 		}
 	}
 
+	private: System::Void chat_conspiracion(System::Object^ sender, System::EventArgs^ e) {
+		this->juego->get_chat_alianza()->chat(this->buffer->Graphics);
+		this->juego->pintar_ui(this->buffer->Graphics);
+		buffer->Render();
+	}
+
+	private: System::Void animar_juegoP2(System::Object^ sender, System::EventArgs^ e) {
+		if (this->juego->get_config()->ts_actual <= this->juego->get_config()->ts_total)
+		{
+			this->buffer_aux->Render();
+			this->juego->jugar(buffer->Graphics);
+			this->juego->pintar_ui(buffer->Graphics);
+			this->buffer->Render();
+			if (this->juego->get_ha_ganado()) {
+				this->juego->set_ganar();
+				this->tmrJuegoP2->Enabled = false;
+				this->tmrfin->Enabled = true;
+			}
+		}
+		else {
+			this->juego->set_gameover();
+			this->tmrJuegoP2->Enabled = false;
+			this->tmrfin->Enabled = true;
+		}
+	}
+	private: System::Void mostrar_mensaje(System::Object^ sender, System::EventArgs^ e) {
+		this->buffer->Graphics->Clear(System::Drawing::Color::Black);
+		if (this->juego->get_ha_ganado())
+			this->juego->get_ganar()->dibujar_dialogo(this->buffer->Graphics);
+		else
+			this->juego->get_gameover()->dibujar_dialogo(this->buffer->Graphics);
+
+		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
+		this->juego->dibujar_btn_creditos(this->buffer->Graphics);
+		this->juego->pintar_ui(this->buffer->Graphics);
+		this->buffer->Render();
+	}
+	private: System::Void mostrar_creditos(System::Object^ sender, System::EventArgs^ e) {
+		//this->juego->get_creditos()->dibujar_fondo(this->buffer->Graphics);
+		this->juego->get_creditos()->dibujar_dialogo(this->buffer->Graphics);
+		this->buffer->Render();
+	}
 };
 }

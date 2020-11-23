@@ -39,11 +39,11 @@ public:
 
 		img_partes_lab = gcnew Bitmap("Imagenes\\laberinto.png");
 		img_bala = gcnew Bitmap("Imagenes\\municion.png");
-		piso = gcnew CGrafico(img_partes_lab, Rectangle(0, 32, 32, 32), tamanho_celda, tamanho_celda);
-		pared_mov = gcnew CGrafico("Imagenes\\pared_mov.png", Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
-		pared_fija = gcnew CGrafico(img_partes_lab, Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
-		entrada = gcnew CGrafico(img_partes_lab, Rectangle(32, 0, 32, 32), tamanho_celda, tamanho_celda);
-		salida = gcnew CGrafico(img_partes_lab, Rectangle(32, 32, 32, 32), tamanho_celda, tamanho_celda);
+		piso = gcnew CGrafico(img_partes_lab, System::Drawing::Rectangle(0, 32, 32, 32), tamanho_celda, tamanho_celda);
+		pared_mov = gcnew CGrafico("Imagenes\\pared_mov.png", System::Drawing::Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
+		pared_fija = gcnew CGrafico(img_partes_lab, System::Drawing::Rectangle(0, 0, 32, 32), tamanho_celda, tamanho_celda);
+		entrada = gcnew CGrafico(img_partes_lab, System::Drawing::Rectangle(32, 0, 32, 32), tamanho_celda, tamanho_celda);
+		salida = gcnew CGrafico(img_partes_lab, System::Drawing::Rectangle(32, 32, 32, 32), tamanho_celda, tamanho_celda);
 		balas = gcnew List<CGrafico^>;
 		prob_balas = 100; //1(siempre)-100(1 de 100 oportunidades)
 		factor_paredes = 1; //.75
@@ -257,8 +257,10 @@ private:
 			y += y % espacio_paredes + 1; //evade posicion peligrosa
 			break;
 		}
-		x = x > ancho - 1 ? ancho : x;
-		y = y > alto - 1 ? alto : y;
+		x = x > ancho - 1 ? ancho - 1 : x;
+		y = y > alto - 1 ? alto - 1 : y;
+		(x == ancho - 1 && y == alto - 1) ? x-- : x;
+
 		return Point(x,y);
 	}
 	void set_pos_entrada() { this->pos_entrada = celda_pared(); }
@@ -280,8 +282,9 @@ private:
 				aux_pos.X != 0 ? aux_pos.X += aux_pos.X % espacio_paredes + 1 : aux_pos.X;
 				aux_pos.Y != 0 ? aux_pos.Y += aux_pos.Y % espacio_paredes + 1 : aux_pos.Y;
 			}
-			aux_pos.X = aux_pos.X > ancho - 1 ? ancho - 2 : aux_pos.X;
-			aux_pos.Y = aux_pos.Y > alto - 1 ? alto - 2 : aux_pos.Y;
+			aux_pos.X = aux_pos.X > ancho - 1 ? ancho - 1 : aux_pos.X;
+			aux_pos.Y = aux_pos.Y > alto - 1 ? alto - 1 : aux_pos.Y;
+			(aux_pos.X == ancho - 1 && aux_pos.Y == alto - 1) ? aux_pos.X-- : aux_pos.X;
 
 			this->pos_salida = aux_pos;
 		}

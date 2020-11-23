@@ -36,7 +36,7 @@ public:
 	}
 
 
-	virtual void mover(short dire, CLaberinto^ escenario) {
+	virtual short mover(short dire, CLaberinto^ escenario) {
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)
 		{
@@ -53,29 +53,37 @@ public:
 			x1 = (this->area_dibujo.X) / this->ancho;
 			x2 = (this->area_dibujo.X + this->ancho - 1) / this->ancho; break;
 		}
-		if ((escenario->get_mapa()[y1][x1] == PISO && escenario->get_mapa()[y2][x2] == PISO)
-		 || (escenario->get_mapa()[y1][x1] == ENTRADA || escenario->get_mapa()[y1][x1] == SALIDA)
-		 || (escenario->get_mapa()[y2][x2] == ENTRADA || escenario->get_mapa()[y2][x2] == SALIDA)) {
-			switch ((Direccion)dire)
-			{
-			case Arriba:
-				if (this->area_dibujo.Y - this->dy > 1)
-					this->area_dibujo.Y -= this->dy;
-				break;
-			case Abajo:
-				if (this->area_dibujo.Y + this->dy < escenario->get_alto() * escenario->get_tam_celda())
-					this->area_dibujo.Y += this->dy;
-				break;
-			case Derecha:
-				if (this->area_dibujo.X + this->dx < escenario->get_ancho() * escenario->get_tam_celda())
-					this->area_dibujo.X += this->dx;
-				break;
-			case Izquierda:
-				if (this->area_dibujo.X - this->dx > 1)
-					this->area_dibujo.X -= this->dx;
-				break;
+		if (y1 >= 0 && y1 < escenario->get_alto() && y2 >= 0 && y2 < escenario->get_alto() &&
+			x1 >= 0 && x1 < escenario->get_ancho() && x2 >= 0 && x2 < escenario->get_ancho()) {
+			if ((escenario->get_mapa()[y1][x1] == PISO && escenario->get_mapa()[y2][x2] == PISO)
+				|| (escenario->get_mapa()[y1][x1] == ENTRADA || escenario->get_mapa()[y1][x1] == SALIDA)
+				|| (escenario->get_mapa()[y2][x2] == ENTRADA || escenario->get_mapa()[y2][x2] == SALIDA)) {
+				switch ((Direccion)dire)
+				{
+				case Arriba:
+					if (this->area_dibujo.Y - this->dy > 1)
+						this->area_dibujo.Y -= this->dy;
+					break;
+				case Abajo:
+					if (this->area_dibujo.Y + this->dy < escenario->get_alto() * escenario->get_tam_celda())
+						this->area_dibujo.Y += this->dy;
+					break;
+				case Derecha:
+					if (this->area_dibujo.X + this->dx < escenario->get_ancho() * escenario->get_tam_celda())
+						this->area_dibujo.X += this->dx;
+					break;
+				case Izquierda:
+					if (this->area_dibujo.X - this->dx > 1)
+						this->area_dibujo.X -= this->dx;
+					break;
+				}
+				if (escenario->get_mapa()[y1][x1] == SALIDA || escenario->get_mapa()[y1][x1] == SALIDA)
+					return SALIDA;
+				else
+					return PISO;
 			}
 		}
+		return PAREDMOV;
 	}
 	void dibujarSprite(Graphics^ graficador) {
 		this->recorte.Location = Point(this->indice * this->recorte.Width, this->direccion * this->recorte.Height);
