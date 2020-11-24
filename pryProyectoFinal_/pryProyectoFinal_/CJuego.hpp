@@ -24,7 +24,7 @@ public:
 		this->ts_total = 200; //Son 20 segundos
 		this->ts_actual = 0;
 		this->ts_alianza = 100; //son 10 segundos
-		this->aliados_cant = 2;
+		this->aliados_cant = 8;
 		this->asesinos_cant = (short)(aliados_cant * 0.6);
 		this->corruptos_cant = (short)(aliados_cant * 0.4);
 		this->aliados_rvision = this->asesinos_rvision = this->corruptos_rvision = 2;
@@ -183,8 +183,20 @@ public:
 	void iniciar_juego() {
 		this->config->ts_actual = 0;
 		this->inicio_juego = true;
-		for (short i = 0; i < this->config->get_aliados_cant(); i++)
-			this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_M.png", System::Drawing::Rectangle(this->protagonista->get_x(), this->protagonista->get_y(), tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0),4, 4));
+		for (short i = 0; i < this->config->get_aliados_cant(); i++) {
+			short r=rand()%3;
+			Point aux;
+			if (r % 2 == 0) {
+				aux= this->laberinto->pos_cerca(Point(this->protagonista->get_x(), this->protagonista->get_y()), 5);
+			}
+			else{
+				aux = this->laberinto->pos_lejos(Point(this->protagonista->get_x(), this->protagonista->get_y()), 5);
+			}
+			aux.X *= tamanho_celda ;
+			aux.Y *= tamanho_celda ;
+
+			this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_M.png", System::Drawing::Rectangle(aux.X,aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
+		}
 		/*for (short i = 0; i < this->config->corruptos_cant; i++)
 			this->corruptos->Add(gcnew CCorruptos);*/
 		/*
@@ -202,6 +214,7 @@ public:
 		for each (CAliado ^ aliado in aliados) {
 			aliado->dibujarSprite(g);
 		}
+		mover_aliados();
 	}
 
 	void reiniciar_lab() {
@@ -221,7 +234,7 @@ public:
 		if (this->config->ts_actual == this->config->ts_alianza)
 			return true;
 	}
-	void mover_aliados(Direccion direccion,CLaberinto^ l) {
+	void mover_aliados() {
 		for each (CAliado ^ aliado in aliados) {
 			if (aliado->get_x() > protagonista->get_x())
 			     aliado->mover(Direccion::Izquierda,laberinto);
@@ -229,9 +242,9 @@ public:
 				aliado->mover(Direccion::Derecha, laberinto);
 
 			if (aliado->get_y() > protagonista->get_y())
-				aliado->mover(Direccion::Arriba, laberinto);
-			else if (aliado->get_y() < protagonista->get_y())
 				aliado->mover(Direccion::Abajo, laberinto);
+			else if (aliado->get_y() < protagonista->get_y())
+				aliado->mover(Direccion::Arriba, laberinto);
 		}
 	}
 	bool es_fin_juego() {

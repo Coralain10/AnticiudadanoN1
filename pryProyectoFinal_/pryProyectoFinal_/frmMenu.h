@@ -180,6 +180,7 @@ namespace pryProyectoFinal {
 					this->juego->iniciar_juego();
 					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 					buffer_aux->Render();
+					this->juego->mover_aliados();
 					this->tmrJuegoP1->Enabled = true;
 				}
 			}
@@ -274,6 +275,7 @@ namespace pryProyectoFinal {
 		this->juego->jugar(buffer->Graphics);
 		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
 		this->buffer->Render();
+	
 		if (this->juego->get_config()->ts_actual == this->juego->get_config()->ts_alianza)
 		{
 			this->tmrJuegoP1->Enabled = false;
