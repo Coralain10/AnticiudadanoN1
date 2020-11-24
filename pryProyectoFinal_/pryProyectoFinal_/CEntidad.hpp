@@ -25,7 +25,7 @@ protected:
 public:
 	CEntidad() {}
 	CEntidad(String^ ruta_imagen, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short  n_f, short n_c,short direccion, String^ tipo_entidad):
-		CGraficoAnimado(ruta_imagen, area, n_f, n_c), recorte(recorte), direccion(direccion), tipo_grafico(tipo_entidad) {
+		CGraficoAnimado(ruta_imagen, area, n_f, n_c), recorte(recorte), tipo_grafico(tipo_entidad) {
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		//this->imagen->MakeTransparent(this->imagen->GetPixel(0, 0));
@@ -40,16 +40,16 @@ public:
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)
 		{
-		case IZQUIERDA:	x1 = x2 = (this->area_dibujo.X + this->ancho - 1 + 5) / this->ancho;
+		case IZQUIERDA:	x1 = x2 = (this->area_dibujo.X + this->ancho - 1 + dx) / this->ancho;
 			y1 = (this->area_dibujo.Y) / this->alto;
 			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
-		case DERECHA: x1 = x2 = (this->area_dibujo.X - 5) / this->ancho;
+		case DERECHA: x1 = x2 = (this->area_dibujo.X - dx) / this->ancho;
 			y1 = (this->area_dibujo.Y) / this->alto;
 			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
-		case ABAJO:		y1 = y2 = (this->area_dibujo.Y + this->alto - 1 + 5) / this->alto;
+		case ABAJO:		y1 = y2 = (this->area_dibujo.Y + this->alto - 1 + dx) / this->alto;
 			x1 = (this->area_dibujo.X) / this->ancho;
 			x2 = (short)((this->area_dibujo.X + this->ancho - 1) / this->ancho); break;
-		case ARRIBA:	y1 = y2 = (this->area_dibujo.Y - 5) / this->alto;
+		case ARRIBA:	y1 = y2 = (this->area_dibujo.Y - dx) / this->alto;
 			x1 = (this->area_dibujo.X) / this->ancho;
 			x2 = (this->area_dibujo.X + this->ancho - 1) / this->ancho; break;
 		}
@@ -63,18 +63,22 @@ public:
 				case Arriba:
 					if (this->area_dibujo.Y - this->dy > 1)
 						this->area_dibujo.Y -= this->dy;
+					this->direccion = 3;
 					break;
 				case Abajo:
 					if (this->area_dibujo.Y + this->dy < escenario->get_alto() * escenario->get_tam_celda())
 						this->area_dibujo.Y += this->dy;
+					this->direccion = 2;
 					break;
 				case Derecha:
 					if (this->area_dibujo.X + this->dx < escenario->get_ancho() * escenario->get_tam_celda())
 						this->area_dibujo.X += this->dx;
+					this->direccion = 0;
 					break;
 				case Izquierda:
 					if (this->area_dibujo.X - this->dx > 1)
 						this->area_dibujo.X -= this->dx;
+					this->direccion = 1;
 					break;
 				}
 				if (escenario->get_mapa()[y1][x1] == SALIDA || escenario->get_mapa()[y1][x1] == SALIDA)

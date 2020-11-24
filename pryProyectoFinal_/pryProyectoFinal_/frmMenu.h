@@ -177,6 +177,7 @@ namespace pryProyectoFinal {
 					this->juego->remove_introjuego();
 					this->buffer->Graphics->Clear(System::Drawing::Color::Black);
 					intro->Stop();
+					this->juego->iniciar_juego();
 					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 					buffer_aux->Render();
 					this->tmrJuegoP1->Enabled = true;

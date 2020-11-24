@@ -133,7 +133,34 @@ public:
 	void quitar_bala(CGrafico^ municion) {
 		this->balas->Remove(municion);
 	}
+	Point pos_cerca(Point pos_actual, short dist_max) {
+		return pos_rand_but_pos(pos_actual, 0, dist_max, dist_max);
+	}
 
+	Point pos_lejos(Point pos_actual, short dist_min) {
+		return pos_rand_but_pos(pos_actual, dist_min, this->ancho, this->alto);
+	}
+
+	Point pos_rand_but_pos(Point pos_actual, short dist_min, short dist_max_x, short dist_max_y) {
+		Point pos_aux = Point();
+		short dist_aux;
+
+		dist_aux = rand() % (dist_max_x - dist_min) + dist_min;
+		pos_aux.X = rand() % (ancho - dist_aux) + dist_aux;
+
+		dist_aux = rand() % (dist_max_y - dist_min) + dist_min;
+		pos_aux.Y = rand() % (alto - dist_aux) + dist_aux;
+
+		if (this->mapa[pos_aux.Y][pos_aux.X] != -1 && //este definido
+			this->mapa[pos_aux.Y][pos_aux.X] == PISO /*&& //sea piso
+			abs(pos_aux.X - pos_actual.X) >= dist_min && //esté lejos min dist_min celdas
+			abs(pos_aux.Y - pos_actual.Y) >= dist_min &&
+			abs(pos_aux.X - pos_actual.X) <= dist_max && //esté cerca max dist_max celdas
+			abs(pos_aux.Y - pos_actual.Y) <= dist_max*/)
+			return pos_aux;
+		else
+			return pos_rand_but_pos(pos_actual, dist_min, dist_max_x, dist_max_y);
+	}
 	
 private:
 
