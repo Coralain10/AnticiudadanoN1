@@ -7,7 +7,7 @@ using namespace std;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
-enum tipo_celdas { PISO, PAREDMOV, PAREDFIJA, ENTRADA, SALIDA, PORTALENT, PORTALSAL};
+enum tipo_celdas { PISO, PAREDMOV, PAREDFIJA, ENTRADA, SALIDA };
 enum posiciones { ARRIBA, ABAJO, IZQUIERDA, DERECHA };
 
 ref class CLaberinto {
@@ -19,8 +19,6 @@ private:
 	short prob_balas, espacio_paredes;
 	CGrafico^ entrada;
 	CGrafico^ salida;
-	CGraficoAnimado^ portal_entrada;
-	CGraficoAnimado^ portal_salida;
 	Point pos_entrada;
 	Point pos_salida;
 	short** mapa;
@@ -135,55 +133,36 @@ public:
 	void quitar_bala(CGrafico^ municion) {
 		this->balas->Remove(municion);
 	}
-
-	void colocar_portales(Point pos_actual) {
-		colocar_portal_entrada(pos_actual);
-		colocar_portal_salida(pos_actual);
+	Point pos_cerca(Point pos_actual, short dist_max) {
+		return pos_rand_but_pos(pos_actual, 0, dist_max, dist_max);
 	}
 
-	void quitar_portal_entrada() {
-		delete this->portal_entrada;
-		this->portal_entrada = nullptr;
-	}
-	void quitar_portal_salida() {
-		delete this->portal_salida;
-		this->portal_salida = nullptr;
+	Point pos_lejos(Point pos_actual, short dist_min) {
+		return pos_rand_but_pos(pos_actual, dist_min, this->ancho, this->alto);
 	}
 
-	CGraficoAnimado^ get_portal_entrada(){ return this->portal_entrada; }
-	CGraficoAnimado^ get_portal_salida() { return this->portal_salida; }
+	Point pos_rand_but_pos(Point pos_actual, short dist_min, short dist_max_x, short dist_max_y) {
+		Point pos_aux = Point();
+		short dist_aux;
+
+		dist_aux = rand() % (dist_max_x - dist_min) + dist_min;
+		pos_aux.X = rand() % (ancho - dist_aux) + dist_aux;
+
+		dist_aux = rand() % (dist_max_y - dist_min) + dist_min;
+		pos_aux.Y = rand() % (alto - dist_aux) + dist_aux;
+
+		if (this->mapa[pos_aux.Y][pos_aux.X] != -1 && //este definido
+			this->mapa[pos_aux.Y][pos_aux.X] == PISO /*&& //sea piso
+			abs(pos_aux.X - pos_actual.X) >= dist_min && //esté lejos min dist_min celdas
+			abs(pos_aux.Y - pos_actual.Y) >= dist_min &&
+			abs(pos_aux.X - pos_actual.X) <= dist_max && //esté cerca max dist_max celdas
+			abs(pos_aux.Y - pos_actual.Y) <= dist_max*/)
+			return pos_aux;
+		else
+			return pos_rand_but_pos(pos_actual, dist_min, dist_max_x, dist_max_y);
+	}
 	
 private:
-
-	void colocar_portal_entrada(Point pos_actual) {
-		Point pos_aux = pos_actual;
-		pos_aux.X = rand() % 2 == 0 ? pos_actual.X - 1 : pos_actual.X + 1;
-		pos_aux.Y = rand() % 2 == 0 ? pos_actual.Y - 1 : pos_actual.Y + 1;
-
-		if (this->mapa[pos_aux.Y][pos_aux.X] != -1 && this->mapa[pos_aux.Y][pos_aux.X] == PISO)
-		{
-			portal_salida = gcnew CGraficoAnimado("Imagenes\\portal_sprites.png", System::Drawing::Rectangle(0, 32, 128, 32),
-				pos_aux.X, pos_aux.Y, this->tamanho_celda, this->tamanho_celda, 1, 4);
-		}
-		else
-			return colocar_portal_entrada(pos_actual);
-	}
-
-	void colocar_portal_salida(Point pos_actual) {
-		Point pos_aux = pos_actual;
-		pos_aux.X = rand() % (ancho - 1 - 2 - 8); //[0-(a-1)]-2paredes -8celdas cerca a la pos_actual
-		pos_aux.Y = rand() % (alto - 1 - 2 - 8);
-		if (this->mapa[pos_aux.Y][pos_aux.X] != -1 && //este definido
-			this->mapa[pos_aux.Y][pos_aux.X] == PISO && //sea piso
-			abs(pos_aux.X - pos_actual.X) >= 8 && //esté lejos min 8 celdas
-			abs(pos_aux.Y - pos_actual.Y) >= 8 )
-		{
-			portal_entrada = gcnew CGraficoAnimado("Imagenes\\portal_sprites.png", System::Drawing::Rectangle(0, 0, 128, 32),
-				pos_aux.X, pos_aux.Y, this->tamanho_celda, this->tamanho_celda, 1, 4);
-		}
-		else
-			return colocar_portal_salida(pos_actual);
-	}
 
 	void crear_mapa() {
 		//AJUSTE DE COMPLEJIDAD

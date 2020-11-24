@@ -6,7 +6,12 @@ using namespace std;
 ref class CNPC : public CEntidad
 {
 public:
-	CNPC() {}
+	CNPC(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short direccion)
+		: CEntidad(ruta, area, recorte, n_f, n_c, direccion,"NPC") {
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
+		dx = dy = 3;
+	}
 	~CNPC() {}
 
 	void mover_auto() {
@@ -24,11 +29,12 @@ private:
 	short porc_vida; //porcentaje de vida, inicia en 100%
 	short porc_corrupcion; //porcentaje de corrupción, inicia en 0%
 public:
-	CAliado() {}
+	CAliado(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c):
+	      CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
 	~CAliado() {}
 
 	void seguir() override {
-		//TO DO
+		
 	}
 
 	void set_tiempo_seguir(short segundos) { this->tiempo_s_seguir; }
@@ -44,7 +50,8 @@ private:
 	short radio_peligro;
 	vector<vector<short>>* circulo_peligro_map;
 public:
-	CAsesino() {}
+	CAsesino(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c) :
+		CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
 	~CAsesino() {
 		delete circulo_peligro_map;
 	}
@@ -75,7 +82,8 @@ private:
 	int tiempo_s_corrupcion;
 
 public:
-	CCorrupto(){}
+	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c) :
+		CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
 	~CCorrupto() {}
 
 	void seguir() override {
