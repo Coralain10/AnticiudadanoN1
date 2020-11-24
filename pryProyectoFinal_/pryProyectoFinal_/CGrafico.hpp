@@ -10,7 +10,6 @@ private:
 protected:
 	short x, y;
 	short ax, ay;
-	//short n_columnas, n_filas;
 	short ancho, alto;
 	System::Drawing::Rectangle area_dibujo;
 	Bitmap^ imagen;
@@ -134,22 +133,32 @@ protected:
 	short an_filas, an_columnas;
 	short n_subimagenes;
 	short indice;
+	short pos_anim_x, pos_anim_y;
 
 public:
 	CGraficoAnimado() {}
 	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
-		CGrafico(ruta_imagen, x, y, ancho, alto), indice(0), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
+		CGrafico(ruta_imagen, x, y, ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes), pos_anim_x(0), pos_anim_y(0){}
 	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas) :
-		CGrafico(ruta_imagen, x, y, ancho, alto), indice(0), an_filas(nfilas), an_columnas(ncolumnas){}
+		CGrafico(ruta_imagen, x, y, ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), pos_anim_x(0), pos_anim_y(0) {}
 	CGraficoAnimado(String^ ruta_imagen, System::Drawing::Rectangle area_dibujo, short nfilas, short ncolumnas) :
-		CGrafico(ruta_imagen, area_dibujo.X, area_dibujo.Y, area_dibujo.Width, area_dibujo.Height), 
-		indice(0), an_filas(nfilas), an_columnas(ncolumnas) {}
+		CGrafico(ruta_imagen, area_dibujo.X, area_dibujo.Y, area_dibujo.Width, area_dibujo.Height), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), pos_anim_x(0), pos_anim_y(0) {}
 	CGraficoAnimado(String^ ruta_imagen, short x, short y, short ax, short ay, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
-		CGrafico(ruta_imagen, x, y, ax, ay, ancho, alto), indice(0), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
+		CGrafico(ruta_imagen, x, y, ax, ay, ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes), pos_anim_x(0), pos_anim_y(0) {}
 	CGraficoAnimado(Bitmap^ imagen, short x, short y, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
-		CGrafico(imagen, x, y, ancho, alto), indice(0), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
+		CGrafico(imagen, x, y, ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes), pos_anim_x(0), pos_anim_y(0) {}
 	CGraficoAnimado(Bitmap^ imagen, short x, short y, short ax, short ay, short ancho, short alto, short nfilas, short ncolumnas, short nsubimagenes) :
-		CGrafico(imagen, x, y, ax, ay, ancho, alto), indice(0), an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes) {}
+		CGrafico(imagen, x, y, ax, ay, ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), n_subimagenes(nsubimagenes), pos_anim_x(0), pos_anim_y(0) {}
+	CGraficoAnimado(String^ ruta_imagen, System::Drawing::Rectangle recorte_graf, short x,short y, short ancho, short alto, short nfilas, short ncolumnas):
+		CGrafico(ruta_imagen, recorte_graf,ancho, alto), indice(0),
+		an_filas(nfilas), an_columnas(ncolumnas), pos_anim_x(0), pos_anim_y(0) {}
+
 	~CGraficoAnimado() {}
 
 	void dibujar(Graphics^ graficador) override {
@@ -159,12 +168,17 @@ public:
 		//++indice %= n_subimagenes;
 	}
 
+	void set_animacion(short pos_animacion_x, short pos_animacion_y) {
+		this->pos_anim_x = pos_animacion_x;
+		this->pos_anim_y = pos_animacion_y;
+	}
+
 private:
 	System::Drawing::Rectangle calcular_area_recorte() {
 		short ancho_subimagen = this->imagen->Width / this->an_columnas;
 		short alto_subimagen = this->imagen->Height / this->an_filas;
-		short x = this->indice % this->an_columnas * ancho_subimagen;
-		short y = this->indice / this->an_columnas * alto_subimagen;
+		short x = this->indice % this->an_columnas * ancho_subimagen + pos_anim_x;
+		short y = this->indice / this->an_columnas * alto_subimagen + pos_anim_y;
 		return System::Drawing::Rectangle(x, y, ancho_subimagen, alto_subimagen);
 	}
 
