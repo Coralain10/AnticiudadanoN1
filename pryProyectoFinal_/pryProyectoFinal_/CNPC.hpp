@@ -5,17 +5,43 @@ using namespace std;
 
 ref class CNPC : public CEntidad
 {
+protected:
+	bool dire_invX, dire_invY;
 public:
 	CNPC(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short direccion,short lado)
 		: CEntidad(ruta, area, recorte, n_f, n_c, direccion,"NPC",lado) {
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
+		dx = dy = 3;	
+	}
+	CNPC(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c, short direccion, short lado,bool esinvx,bool esinvy)
+		: CEntidad(ruta, area, recorte, n_f, n_c, direccion, "NPC", lado) , dire_invX(esinvx), dire_invY(esinvy){
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 3;
 	}
 	~CNPC() {}
+	void set_dire_invX(bool esinvdirex) { this->dire_invX = esinvdirex; }
+	void set_dire_invY(bool esinvdirey) { this->dire_invY = esinvdirey; }
+	void mover_auto(short dire,CLaberinto^ escenario) {
 
-	void mover_auto() {
-		//TO DO
+		short dire_aux=dire;
+
+		if (dire_invY == true) {
+			if (dire == Arriba)
+				dire_aux = Abajo;
+			else if (dire == Abajo)
+				dire_aux = Arriba;
+		}
+		if (dire_invX == true) {
+			if (dire == Derecha)
+				dire_aux = Izquierda;
+			else if (dire == Izquierda)
+				dire_aux = Derecha;
+		}
+		
+		mover(dire_aux, escenario);
+		
 	}
 
 	virtual void seguir() {
@@ -27,7 +53,7 @@ ref class CAliado : public CNPC {
 private:
 	short tiempo_s_seguir;
 	short porc_vida; //porcentaje de vida, inicia en 100%
-	short porc_corrupcion; //porcentaje de corrupción, inicia en 0%
+	short porc_corrupcion; //porcentaje de corrupciÃ³n, inicia en 0%
 public:
 	CAliado(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado):
 	      CNPC("Imagenes\\ciudadano_M.png",area, recorte, n_f, n_c, direccion,lado) {
@@ -89,12 +115,14 @@ private:
 	int tiempo_s_corrupcion;
 
 public:
-	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado) :
-		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado) {}
-	~CCorrupto() {}
+	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado,bool esinvx,bool esinvy) :
+		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado,esinvx,esinvy) {
 
+	}
+	~CCorrupto() {}
+	
 	void seguir() override {
-		//TO DO
+		
 	}
 	void set_tiempo_corrup(int segundos) { this->tiempo_s_corrupcion; }
 	int get_tiempo_s_corrup() { return tiempo_s_corrupcion; }
