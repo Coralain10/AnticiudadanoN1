@@ -26,7 +26,7 @@ public:
 		this->ts_alianza = 1000; //son 10 segundos
 		this->aliados_cant = 5;
 		this->asesinos_cant = (short)(aliados_cant * 0.6);
-		this->corruptos_cant = (short)(aliados_cant * 0.4);
+		this->corruptos_cant = 5;
 		this->aliados_rvision = this->asesinos_rvision = this->corruptos_rvision = 2;
 		this->t_aliados_seguir = t_asesinos_ataque = t_corruptos_corrupcion;
 	}
@@ -195,11 +195,11 @@ public:
 			aux.Y *= tamanho_celda ;
 			this->aliados->Add(gcnew CAliado(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda));
 			
-			
-			
 		}
-		/*for (short i = 0; i < this->config->corruptos_cant; i++)
-			this->corruptos->Add(gcnew CCorruptos);*/
+		for (short i = 0; i < this->config->get_corruptos_cant(); i++) {
+			this->corruptos->Add(gcnew CCorrupto("Imagenes\\policia.png", System::Drawing::Rectangle(rand()%500, rand()%500, tamanho_celda, tamanho_celda), 
+				System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda, rand() % 2, rand() % 2));
+		}
 		/*
 		* //OTRA FX
 		for (short i = 0; i < this->config->asesinos_cant; i++)
@@ -216,18 +216,30 @@ public:
 		for each (CAliado ^ aliado in aliados) {
 			aliado->dibujarSprite(g);
 		}
+		for each (CCorrupto ^ corrupt in corruptos) {
+			corrupt->mover_auto((short)this->config->ts_actual % 35 / 10, this->laberinto);
+			corrupt->dibujarSprite(g);
+		}
 		
 	}
 
 	void reiniciar_lab() {
 		delete this->laberinto;
 		this->laberinto = gcnew CLaberinto((short)(area_juego.Width / tamanho_celda), (short)(area_juego.Height / tamanho_celda), tamanho_celda);
+
 		if (this->ganar != nullptr)
 			remove_ganar();
 		if (this->gameover != nullptr)
 			remove_ganar();
 		if (this->creditos != nullptr)
 			remove_creditos();
+		for (short i = this->config->get_aliados_cant()-1; i > 0; i--){
+			aliados->RemoveAt(i);
+		}
+		for (short i = this->config->get_corruptos_cant() - 1; i > 0; i--) {
+			corruptos->RemoveAt(i);
+		}	
+		
 		iniciar_juego();
 
 	}
