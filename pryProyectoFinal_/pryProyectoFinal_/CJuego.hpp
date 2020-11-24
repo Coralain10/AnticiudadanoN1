@@ -211,10 +211,11 @@ public:
 	void jugar(Graphics ^g) {
 		this->config->ts_actual++;
 		this->protagonista->dibujarSprite(g);
+		mover_aliados();
 		for each (CAliado ^ aliado in aliados) {
 			aliado->dibujarSprite(g);
 		}
-		mover_aliados();
+		
 	}
 
 	void reiniciar_lab() {
@@ -242,9 +243,9 @@ public:
 				aliado->mover(Direccion::Derecha, laberinto);
 
 			if (aliado->get_y() > protagonista->get_y())
-				aliado->mover(Direccion::Abajo, laberinto);
-			else if (aliado->get_y() < protagonista->get_y())
 				aliado->mover(Direccion::Arriba, laberinto);
+			else if (aliado->get_y() < protagonista->get_y())
+				aliado->mover(Direccion::Abajo, laberinto);
 		}
 	}
 	bool es_fin_juego() {
@@ -321,7 +322,7 @@ public:
 		creditos_txt += "Arte & Programación | Julio Arturo Morón Campos\n";
 		creditos_txt += "Producción & Programación | Santiago Sebastian Heredia Orejuela\n";
 		creditos_txt += "Producción & Programación | Gabriel Omar Quispe Kobashikawa\n";
-		creditos_txt += "\nMÚSICA UTILIZADA : \n1.\n2.\n3.\n";
+		creditos_txt += "\nMÚSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
 		creditos_txt += "\nCURSO:\nProgramación II\n";
 		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
 		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego);

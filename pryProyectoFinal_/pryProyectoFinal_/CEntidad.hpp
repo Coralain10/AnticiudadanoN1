@@ -62,22 +62,22 @@ public:
 				{
 				case Arriba:
 					if (this->area_dibujo.Y - this->dy > 1)
-						this->area_dibujo.Y -= this->dy;
+						set_y(this->area_dibujo.Y - this->dy);
 					this->direccion = 3;
 					break;
 				case Abajo:
 					if (this->area_dibujo.Y + this->dy < escenario->get_alto() * escenario->get_tam_celda())
-						this->area_dibujo.Y += this->dy;
+						set_y(this->area_dibujo.Y + this->dy);
 					this->direccion = 2;
 					break;
 				case Derecha:
 					if (this->area_dibujo.X + this->dx < escenario->get_ancho() * escenario->get_tam_celda())
-						this->area_dibujo.X += this->dx;
+						set_x(this->area_dibujo.X + this->dx);
 					this->direccion = 0;
 					break;
 				case Izquierda:
 					if (this->area_dibujo.X - this->dx > 1)
-						this->area_dibujo.X -= this->dx;
+						set_x(this->area_dibujo.X - this->dx);
 					this->direccion = 1;
 					break;
 				}
