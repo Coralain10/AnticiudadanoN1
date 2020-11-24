@@ -12,6 +12,7 @@ public:
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 2;
+		this->cant_vidas = 5;
 	}
 	~CProtagonista() {}
 
