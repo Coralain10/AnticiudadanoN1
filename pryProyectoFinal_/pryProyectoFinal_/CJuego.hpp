@@ -24,7 +24,7 @@ public:
 		this->ts_total = 200; //Son 20 segundos
 		this->ts_actual = 0;
 		this->ts_alianza = 100; //son 10 segundos
-		this->aliados_cant = 8;
+		this->aliados_cant = 5;
 		this->asesinos_cant = (short)(aliados_cant * 0.6);
 		this->corruptos_cant = (short)(aliados_cant * 0.4);
 		this->aliados_rvision = this->asesinos_rvision = this->corruptos_rvision = 2;
@@ -184,18 +184,23 @@ public:
 		this->config->ts_actual = 0;
 		this->inicio_juego = true;
 		for (short i = 0; i < this->config->get_aliados_cant(); i++) {
-			short r=rand()%3;
 			Point aux;
-			if (r % 2 == 0) {
-				aux= this->laberinto->pos_cerca(Point(this->protagonista->get_x(), this->protagonista->get_y()), 5);
+			short a = rand() % 2;
+			if (i < 2) {
+				aux= this->laberinto->pos_cerca(Point(this->protagonista->get_x()/tamanho_celda, this->protagonista->get_y() / tamanho_celda), 5);
 			}
 			else{
-				aux = this->laberinto->pos_lejos(Point(this->protagonista->get_x(), this->protagonista->get_y()), 5);
+				aux = this->laberinto->pos_lejos(Point(this->protagonista->get_x() / tamanho_celda, this->protagonista->get_y() / tamanho_celda), 5);
 			}
 			aux.X *= tamanho_celda ;
 			aux.Y *= tamanho_celda ;
-
-			this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_M.png", System::Drawing::Rectangle(aux.X,aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
+			if (a % 2 == 0) {
+				this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_M.png", System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
+			}
+			else {
+				this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_F.png", System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
+			}
+			
 		}
 		/*for (short i = 0; i < this->config->corruptos_cant; i++)
 			this->corruptos->Add(gcnew CCorruptos);*/

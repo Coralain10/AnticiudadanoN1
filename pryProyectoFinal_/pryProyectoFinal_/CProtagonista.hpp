@@ -31,7 +31,7 @@ public:
 
 	void recoger_municiones(CGrafico^ municion) {
 		if (hay_colision(municion))
-			this->cant_balas += 4;
+			this->cant_balas += 2;
 	}
 
 	void disparar() {

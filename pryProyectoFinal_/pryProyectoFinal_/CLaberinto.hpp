@@ -143,15 +143,16 @@ public:
 
 	Point pos_rand_but_pos(Point pos_actual, short dist_min, short dist_max_x, short dist_max_y) {
 		Point pos_aux = Point();
-		short dist_aux;
+		int dist_aux;
 
-		dist_aux = rand() % (dist_max_x - dist_min) + dist_min;
-		pos_aux.X = rand() % (ancho - dist_aux) + dist_aux;
+		dist_aux = rand() % abs(dist_max_x - dist_min);
+		pos_aux.X = dist_aux % 2 == 0 ? pos_actual.X + dist_aux : abs(pos_actual.X - dist_aux);
 
-		dist_aux = rand() % (dist_max_y - dist_min) + dist_min;
-		pos_aux.Y = rand() % (alto - dist_aux) + dist_aux;
+		dist_aux = rand() % abs(dist_max_y - dist_min);
+		pos_aux.Y = dist_aux % 2 == 0 ? pos_actual.Y + dist_aux : abs(pos_actual.Y - dist_aux);
 
-		if (this->mapa[pos_aux.Y][pos_aux.X] != -1 && //este definido
+		if ( pos_aux.Y < alto - 1 && pos_aux.Y > 0 &&
+			pos_aux.X < ancho - 1 && pos_aux.X > 0 &&//este definido
 			this->mapa[pos_aux.Y][pos_aux.X] == PISO /*&& //sea piso
 			abs(pos_aux.X - pos_actual.X) >= dist_min && //esté lejos min dist_min celdas
 			abs(pos_aux.Y - pos_actual.Y) >= dist_min &&

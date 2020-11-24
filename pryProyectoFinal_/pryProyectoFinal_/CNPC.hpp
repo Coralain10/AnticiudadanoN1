@@ -30,7 +30,9 @@ private:
 	short porc_corrupcion; //porcentaje de corrupción, inicia en 0%
 public:
 	CAliado(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c):
-	      CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
+	      CNPC(ruta, area, recorte, n_f, n_c, direccion) {
+		dx = dy = rand()%3+1;
+	}
 	~CAliado() {}
 
 	void seguir() override {
