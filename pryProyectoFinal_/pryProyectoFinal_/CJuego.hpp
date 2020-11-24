@@ -21,9 +21,9 @@ public:
 
 	CConfiguracion() {
 		//cargando valores por default
-		this->ts_total = 200; //Son 20 segundos
+		this->ts_total = 20000; //Son 20 segundos
 		this->ts_actual = 0;
-		this->ts_alianza = 100; //son 10 segundos
+		this->ts_alianza = 1000; //son 10 segundos
 		this->aliados_cant = 5;
 		this->asesinos_cant = (short)(aliados_cant * 0.6);
 		this->corruptos_cant = (short)(aliados_cant * 0.4);
@@ -144,7 +144,7 @@ public:
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
-		this->protagonista = gcnew CProtagonista("Imagenes\\Protagonista.png", System::Drawing::Rectangle(this->laberinto->get_pos_entrada().X * tamanho_celda, this->laberinto->get_pos_entrada().Y * tamanho_celda, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4);
+		this->protagonista = gcnew CProtagonista(System::Drawing::Rectangle(this->laberinto->get_pos_entrada().X * tamanho_celda, this->laberinto->get_pos_entrada().Y * tamanho_celda, tamanho_celda*0.75, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda);
 		this->inicio_juego = false;
 	}
 	~CJuego() {
@@ -185,7 +185,6 @@ public:
 		this->inicio_juego = true;
 		for (short i = 0; i < this->config->get_aliados_cant(); i++) {
 			Point aux;
-			short a = rand() % 2;
 			if (i < 2) {
 				aux= this->laberinto->pos_cerca(Point(this->protagonista->get_x()/tamanho_celda, this->protagonista->get_y() / tamanho_celda), 5);
 			}
@@ -194,12 +193,9 @@ public:
 			}
 			aux.X *= tamanho_celda ;
 			aux.Y *= tamanho_celda ;
-			if (a % 2 == 0) {
-				this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_M.png", System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
-			}
-			else {
-				this->aliados->Add(gcnew CAliado("Imagenes\\ciudadano_F.png", System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4));
-			}
+			this->aliados->Add(gcnew CAliado(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda));
+			
+			
 			
 		}
 		/*for (short i = 0; i < this->config->corruptos_cant; i++)

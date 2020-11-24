@@ -274,6 +274,11 @@ namespace pryProyectoFinal {
 		this->juego->pintar_ui(buffer->Graphics);
 		this->juego->jugar(buffer->Graphics);
 		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
+		if (this->juego->get_ha_ganado()) {
+			this->juego->set_ganar();
+			this->tmrJuegoP2->Enabled = false;
+			this->tmrfin->Enabled = true;
+		}
 		this->buffer->Render();
 	
 		if (this->juego->get_config()->ts_actual == this->juego->get_config()->ts_alianza)

@@ -111,6 +111,11 @@ public:
 	void set_ancho(short ancho) { this->ancho = ancho; }
 	short get_alto() { return alto; }
 	void set_alto(short alto) { this->alto = alto; }
+	void set_imagen (String^ ruta_imagen){ 
+		if (this->imagen != nullptr)
+			delete this->imagen;
+		this->imagen = gcnew Bitmap(ruta_imagen);
+	}
 	System::Drawing::Rectangle get_area_dibujo() { return this->area_dibujo; }
 	void edit_imagen(String^ ruta_imagen, short ancho, short alto) {
 		delete this->imagen;

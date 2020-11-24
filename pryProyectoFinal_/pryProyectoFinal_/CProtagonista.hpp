@@ -7,8 +7,8 @@ private:
 	short cant_vidas;
 	short cant_balas;
 public:
-	CProtagonista(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c)
-		: CEntidad(ruta,area, recorte, n_f, n_c, direccion,"PROTAGONISTA") {
+	CProtagonista( System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado)
+		: CEntidad("Imagenes\\Protagonista.png",area, recorte, n_f, n_c, direccion,"PROTAGONISTA",lado) {
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 2;

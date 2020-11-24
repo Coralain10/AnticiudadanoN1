@@ -6,8 +6,8 @@ using namespace std;
 ref class CNPC : public CEntidad
 {
 public:
-	CNPC(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short direccion)
-		: CEntidad(ruta, area, recorte, n_f, n_c, direccion,"NPC") {
+	CNPC(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short direccion,short lado)
+		: CEntidad(ruta, area, recorte, n_f, n_c, direccion,"NPC",lado) {
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 3;
@@ -29,9 +29,14 @@ private:
 	short porc_vida; //porcentaje de vida, inicia en 100%
 	short porc_corrupcion; //porcentaje de corrupción, inicia en 0%
 public:
-	CAliado(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c):
-	      CNPC(ruta, area, recorte, n_f, n_c, direccion) {
+	CAliado(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado):
+	      CNPC("Imagenes\\ciudadano_M.png",area, recorte, n_f, n_c, direccion,lado) {
 		dx = dy = rand()%3+1;
+		short a = rand() % 2;
+		if (a % 2 == 0)
+			edit_imagen("Imagenes\\ciudadano_F.png",this->ancho, this->alto);
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
 	}
 	~CAliado() {}
 
@@ -52,8 +57,8 @@ private:
 	short radio_peligro;
 	vector<vector<short>>* circulo_peligro_map;
 public:
-	CAsesino(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c) :
-		CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
+	CAsesino(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado) :
+		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado) {}
 	~CAsesino() {
 		delete circulo_peligro_map;
 	}
@@ -84,8 +89,8 @@ private:
 	int tiempo_s_corrupcion;
 
 public:
-	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c) :
-		CNPC(ruta, area, recorte, n_f, n_c, direccion) {}
+	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado) :
+		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado) {}
 	~CCorrupto() {}
 
 	void seguir() override {

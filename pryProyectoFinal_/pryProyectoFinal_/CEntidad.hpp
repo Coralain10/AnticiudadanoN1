@@ -19,13 +19,14 @@ protected:
 	short direccion;
 	enum acciones;
 	short radio_vision;
+	short lado;
 	//vector<vector<short>>* circulo_vision_map;
 	String^ tipo_grafico;
 
 public:
 	CEntidad() {}
-	CEntidad(String^ ruta_imagen, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short  n_f, short n_c,short direccion, String^ tipo_entidad):
-		CGraficoAnimado(ruta_imagen, area, n_f, n_c), recorte(recorte), tipo_grafico(tipo_entidad) {
+	CEntidad(String^ ruta_imagen, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short  n_f, short n_c,short direccion, String^ tipo_entidad,short  lado):
+		CGraficoAnimado(ruta_imagen, area, n_f, n_c), recorte(recorte), tipo_grafico(tipo_entidad), lado(lado) {
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		//this->imagen->MakeTransparent(this->imagen->GetPixel(0, 0));
@@ -40,18 +41,18 @@ public:
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)
 		{
-		case IZQUIERDA:	x1 = x2 = (this->area_dibujo.X + this->ancho - 1 + dx) / this->ancho;
-			y1 = (this->area_dibujo.Y) / this->alto;
-			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
-		case DERECHA: x1 = x2 = (this->area_dibujo.X - dx) / this->ancho;
-			y1 = (this->area_dibujo.Y) / this->alto;
-			y2 = (this->area_dibujo.Y + this->alto - 1) / this->alto; break;
-		case ABAJO:		y1 = y2 = (this->area_dibujo.Y + this->alto - 1 + dx) / this->alto;
-			x1 = (this->area_dibujo.X) / this->ancho;
-			x2 = (short)((this->area_dibujo.X + this->ancho - 1) / this->ancho); break;
-		case ARRIBA:	y1 = y2 = (this->area_dibujo.Y - dx) / this->alto;
-			x1 = (this->area_dibujo.X) / this->ancho;
-			x2 = (this->area_dibujo.X + this->ancho - 1) / this->ancho; break;
+		case IZQUIERDA:	x1 = x2 = (this->area_dibujo.X + this->lado - 1 + dx) / this->lado;
+			y1 = (this->area_dibujo.Y) / this->lado;
+			y2 = (this->area_dibujo.Y + this->lado - 1) / this->lado; break;
+		case DERECHA: x1 = x2 = (this->area_dibujo.X - dx) / this->lado;
+			y1 = (this->area_dibujo.Y) / this->lado;
+			y2 = (this->area_dibujo.Y + this->lado - 1) / this->lado; break;
+		case ABAJO:		y1 = y2 = (this->area_dibujo.Y + this->lado - 1 + dx) / this->lado;
+			x1 = (this->area_dibujo.X) / this->lado;
+			x2 = (short)((this->area_dibujo.X + this->lado - 1) / this->lado); break;
+		case ARRIBA:	y1 = y2 = (this->area_dibujo.Y - dx) / this->lado;
+			x1 = (this->area_dibujo.X) / this->lado;
+			x2 = (this->area_dibujo.X + this->lado - 1) / this->lado; break;
 		}
 		if (y1 >= 0 && y1 < escenario->get_alto() && y2 >= 0 && y2 < escenario->get_alto() &&
 			x1 >= 0 && x1 < escenario->get_ancho() && x2 >= 0 && x2 < escenario->get_ancho()) {
