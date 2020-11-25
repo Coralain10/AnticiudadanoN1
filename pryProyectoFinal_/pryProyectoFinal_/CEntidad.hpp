@@ -36,7 +36,8 @@ public:
 		delete tipo_grafico;
 	}
 
-
+	short get_dire() { return this->direccion; }
+	void ubicar(Direccion dire) { this->direccion = dire; }
 	virtual short mover(short dire, CLaberinto^ escenario) {
 		short x1, y1, x2, y2;
 		switch ((Direccion)dire)

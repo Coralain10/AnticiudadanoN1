@@ -75,7 +75,7 @@ public:
 	short get_ancho() { return this->ancho; }
 	short get_alto() { return this->alto; }
 	short get_tam_celda() { return this->tamanho_celda; }
-
+	List<CGrafico^>^ get_municion() { return this->balas; }
 	void pintar_mapa(Graphics^ graficador) {
 		for (short i = 0; i < alto + esp_rest_alto; i++)
 		{
@@ -108,8 +108,6 @@ public:
 		entrada->dibujar(graficador);
 		salida->dibujar(graficador);
 
-		for each (CGrafico ^ bala in balas)
-			bala->dibujar(graficador);
 	}
 
 	void colocar_balas() {
@@ -130,8 +128,8 @@ public:
 		}
 	}
 
-	void quitar_bala(CGrafico^ municion) {
-		this->balas->Remove(municion);
+	void quitar_bala_pos(short i) {
+		this->balas->RemoveAt(i);
 	}
 	Point pos_cerca(Point pos_actual, short dist_max) {
 		return pos_rand_but_pos(pos_actual, 0, dist_max, dist_max);

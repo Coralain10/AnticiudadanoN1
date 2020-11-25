@@ -1,0 +1,28 @@
+﻿  main.cpp
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(74,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(75,33): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(77,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(78,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(81,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CGrafico.hpp(82,1): warning C4244: '*=': conversión de 'float' a 'short'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CDialogos.hpp(73,104): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CDialogos.hpp(77,114): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CDialogos.hpp(77,89): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(89,151): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(89,94): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(91,159): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(91,98): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(478,19): warning C4129: '/': secuencia de escape de carácter no reconocida
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(143,79): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(157,192): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(206,92): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(210,106): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(224,94): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(281,127): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(463,151): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(463,94): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\frmMenu.h(44,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(347): warning C4715: 'CJuego::aumentar_dificultad': no todas las rutas de acceso de control devuelven un valor
+C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\pryProyectoFinal_\CJuego.hpp(407): warning C4715: 'CJuego::es_fin_juego': no todas las rutas de acceso de control devuelven un valor
+  frm_configuracion.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
+  pryProyectoFinal_.vcxproj -> C:\Users\SANTIAGO\Desktop\AnticiudadanoN1-main\pryProyectoFinal_\x64\Debug\pryProyectoFinal_.exe

@@ -133,8 +133,6 @@ private:
 	List<CPortal^>^ portales;
 	CProtagonista^ protagonista;
 
-	Bitmap^ img_conspiracion;
-
 	bool inicio_juego;
 	bool ha_ganado;
 	bool ha_perdido;
@@ -151,7 +149,6 @@ public:
 		this->btn_creditos = gcnew CGrafico("Imagenes\\buttons.png", System::Drawing::Rectangle(160, 160, 160, 160), tamanho_celda * 8, tamanho_celda*2);
 		this->btn_creditos->set_ubicacion(area.Width/2 - tamanho_celda*2, area.Height - (4*tamanho_celda));
 		this->btn_reiniciar = gcnew CGrafico("Imagenes\\reiniciar.png", (area.Width - 5 * tamanho_celda), tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
-		this->img_conspiracion = gcnew Bitmap("Imagenes\\corrupt_assasinUI.png");
 		this->laberinto = gcnew CLaberinto((short)(area.Width / tamanho_celda), (short)(area.Height / tamanho_celda), tamanho_celda);
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
@@ -233,9 +230,35 @@ public:
 	}
 	void interactuar(Direccion direccion) {
 		this->ha_ganado = this->protagonista->gano(direccion, this->laberinto);
+		if(this->protagonista->get_balas_disparadas()->Count>0)
+		this->protagonista->get_balas_disparadas()[this->protagonista->get_balas_disparadas()->Count-1]->ubicar(direccion);
+	}
+	void disparar() {
+		this->protagonista->iniciar_disparo(this->tamanho_celda);
 	}
 	void jugar(Graphics ^g) {
 		this->config->ts_actual++;
+		this->protagonista->MostrarMunicion(g);
+		for each (CGrafico ^ balas in this->laberinto->get_municion())
+			balas->dibujar(g);
+
+		if (this->aumentar_dificultad() == true) {
+			mover_asesinos();
+			for each (CAsesino ^ asesino in asesinos) {
+				asesino->dibujarSprite(g);
+				if (protagonista->hay_colision(asesino) && clock() - cooldown >= 2000) {
+					this->config->set_cant_vidas(-1);
+					cooldown = clock();
+				}
+			}
+			for each (CPortal ^ portal in portales) {
+				portal->dibujarSprite(g);
+				if (protagonista->hay_colision(portal)) {
+					protagonista->set_x(rand() % 500);
+					protagonista->set_y(rand() % 500);
+				}
+			}
+		}
 		this->protagonista->MostrarVidas(this->config->get_cant_vidas(),g);
 		this->protagonista->dibujarSprite(g);
 		mover_aliados();
@@ -263,32 +286,36 @@ public:
 			}
 		}
 
-		if (this->aumentar_dificultad() == true) {
-			mover_asesinos();
-			for (short j = asesinos->Count - 1; j >= 0; j--) {
-				asesinos[j]->dibujarSprite(g);
-				if (protagonista->hay_colision(asesinos[j]) && clock() - cooldown >= 2000) {
-					this->config->set_cant_vidas(-1);
-					this->asesinos->RemoveAt(j);
-					cooldown = clock();
-				}
-				for (short i = aliados->Count - 1; i >= 0; i--) {
-					if (aliados[i]->hay_colision(asesinos[j])) {
-						this->aliados->RemoveAt(i);
+		for (short i = this->laberinto->get_municion()->Count - 1; i >= 0;i--) {
+			if (protagonista->hay_colision(this->laberinto->get_municion()[i])) {
+				this->laberinto->quitar_bala_pos(i);
+				this->protagonista->recoger_municiones();
+			}
+		}
+		
+		for (short i = this->protagonista->get_balas_disparadas()->Count-1; i >= 0; i--) {
+			
+			if (this->aumentar_dificultad() == true && this->protagonista->get_balas_disparadas()->Count>0) {
+				for (short j = this->asesinos->Count-1; j >= 0; j--) {
+					if (asesinos[j]->hay_colision(this->protagonista->get_balas_disparadas()[i])) {
+						asesinos->RemoveAt(j);
+						this->protagonista->eliminar_bala(i);
+						break;
 					}
 				}
 			}
-			for each (CPortal ^ portal in portales) {
-				portal->dibujarSprite(g);
-				if (protagonista->hay_colision(portal)) {
-					protagonista->set_x(rand()%500);
-					protagonista->set_y(rand() % 500);
+			if (this->protagonista->get_balas_disparadas()->Count > 0) {
+				for (short j = this->corruptos->Count - 1; j >= 0; j--) {
+					if (corruptos[j]->hay_colision(this->protagonista->get_balas_disparadas()[i])) {
+						corruptos->RemoveAt(j);
+						this->protagonista->eliminar_bala(i);
+						break;
+					}
 				}
 			}
 		}
-		if (this->config->get_cant_vidas() == 0) {
-			this->config->ts_actual = this->config->ts_total;
-		}
+		this->protagonista->mostrar_disparo(g,this->laberinto);
+		
 	}
 	
 	void reiniciar_lab() {
@@ -413,19 +440,19 @@ public:
 		chat_assassin->Add("Assassin:\nEsta bien, aniquilaré al rebelde,\npero les saldrá caro.");
 		chat_corrupt->Add("Corrupt:\nTodo sea para eliminar a esa escoria.");
 		chat_assassin->Add("Assassin:\nHecho.");
-		chat_alianza = gcnew CChat(gcnew CGrafico(img_conspiracion, System::Drawing::Rectangle(80, 24, 100, 100), this->tamanho_celda * 2, this->tamanho_celda * 2),
-			gcnew CGrafico(img_conspiracion, System::Drawing::Rectangle(256, 10, 100, 100), this->tamanho_celda * 2, this->tamanho_celda * 2),
+		chat_alianza = gcnew CChat(gcnew CGrafico("Imagenes\\policia.png", System::Drawing::Rectangle(10, 36, 40, 40), this->tamanho_celda, this->tamanho_celda),
+			gcnew CGrafico("Imagenes\\asesino.png", System::Drawing::Rectangle(10, 50, 40, 40), this->tamanho_celda, this->tamanho_celda),
 			chat_corrupt, chat_assassin, this->area_juego, this->tamanho_celda);
 	}
 	void set_splash_conspiracion(Graphics^ graficador) {
-		splash_conspiracion = gcnew CDialogo("Conspiracion realizada", this->area_juego, gcnew CGrafico(img_conspiracion, 416 * 2, 259 * 2));
+		CGrafico^ img_conspiracion = gcnew CGrafico("Imagenes\\corrupt_assasinUI.png", 416 * 2, 259 * 2);
+		splash_conspiracion = gcnew CDialogo("Conspiracion realizada", this->area_juego, img_conspiracion);
 		this->splash_conspiracion->dibujar_fondo(graficador);
 		this->splash_conspiracion->dibujar_dialogo(graficador);
 	}
 
 	void set_gameover() {
-		CGrafico^ dictator_img = gcnew CGrafico("Imagenes\\dictador.png", 200 * 5, 132 * 5);
-		gameover = gcnew CDialogo("No nos privaran de la libertad\nVAMOS OTRA VEZ", this->area_juego,dictator_img);
+		gameover = gcnew CDialogo("No nos privaran de la libertad\nVAMOS OTRA VEZ", this->area_juego);
 	}
 
 	void set_ganar() {
@@ -436,8 +463,8 @@ public:
 		graficador->DrawString("Creditos", this->tipografia, Brushes::White, btn_creditos->get_x() + (btn_creditos->get_ancho() / 4), btn_creditos->get_y() + (btn_creditos->get_alto() / 4));
 	}
 	void dibujar_creditos(Graphics^ graficador) {
-		//graficador->Clear(System::Drawing::Color::Black);
-		this->creditos->dibujar_fondo(graficador);
+		graficador->Clear(System::Drawing::Color::Black);
+		//this->creditos->dibujar_fondo(graficador);
 		this->creditos->dibujar_dialogo(graficador);
 		this->btn_reiniciar->dibujar(graficador);
 		pintar_ui(graficador);
@@ -451,7 +478,7 @@ public:
 		creditos_txt += "\nMÚSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
 		creditos_txt += "\nCURSO:\nProgramación II\n";
 		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
-		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego, gcnew CGrafico("Imagenes\\creditos.png", 256 * 2, 196 * 2));
+		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego);
 	}
 
 	void remove_intro0() { delete this->intro0; this->intro0 = nullptr; }
