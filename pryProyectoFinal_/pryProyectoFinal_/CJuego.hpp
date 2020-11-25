@@ -137,7 +137,7 @@ private:
 	bool ha_ganado;
 	bool ha_perdido;
 
-	
+	int cooldown;
 public:
 	CJuego(short tamanho_celda, System::Drawing::Rectangle area): tamanho_celda(tamanho_celda), area_juego(area) {
 		this->tipografia = gcnew System::Drawing::Font("Courier new", tamanho_celda * 0.75);
@@ -243,8 +243,9 @@ public:
 		for each (CCorrupto ^ corrupt in corruptos) {
 			corrupt->mover_auto((short)this->config->ts_actual % 35 / 10, this->laberinto);
 			corrupt->dibujarSprite(g);
-			if (protagonista->hay_colision(corrupt)) {
+			if (protagonista->hay_colision(corrupt)&&clock()-cooldown>=2000) {
 						this->config->set_cant_vidas(-1);
+						cooldown = clock();
 			}
 		}
 
