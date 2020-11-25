@@ -337,7 +337,6 @@ namespace pryProyectoFinal {
 		this->buffer->Render();
 	}
 	private: System::Void mostrar_creditos(System::Object^ sender, System::EventArgs^ e) {
-		//this->juego->get_creditos()->dibujar_fondo(this->buffer->Graphics);
 		this->juego->dibujar_creditos(this->buffer->Graphics);
 		this->buffer->Render();
 	}
