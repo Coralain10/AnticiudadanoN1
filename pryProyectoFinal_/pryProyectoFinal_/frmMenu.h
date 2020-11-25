@@ -5,7 +5,7 @@
 #include <MMSystem.h>
 #include "CJuego.hpp"
 #include <string>
-
+#include "frm_configuracion.h"
 namespace pryProyectoFinal {
 
 	using namespace System;
@@ -38,6 +38,8 @@ namespace pryProyectoFinal {
 
 	public:
 		SoundPlayer^ intro = gcnew SoundPlayer("Imagenes\\intro.wav ");
+		SoundPlayer^  jugar = gcnew SoundPlayer("Imagenes\\jugando.wav ");
+		SoundPlayer^ perder = gcnew SoundPlayer("Imagenes\\historia.wav ");
 		frmMenu(void)
 		{
 			InitializeComponent();
@@ -107,6 +109,8 @@ namespace pryProyectoFinal {
 			// 
 			// tmrfin
 			// 
+			jugar->Stop();
+			perder->PlayLooping();
 			this->tmrfin->Tick += gcnew System::EventHandler(this, &frmMenu::mostrar_mensaje);
 			// 
 			// tmrCreditos
@@ -125,6 +129,7 @@ namespace pryProyectoFinal {
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"menu principal";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
+			this->Activated += gcnew System::EventHandler(this, &frmMenu::frmMenu_Activated);
 			this->Load += gcnew System::EventHandler(this, &frmMenu::inicializar);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &frmMenu::interactuar);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMenu::accion_form);
@@ -161,9 +166,16 @@ namespace pryProyectoFinal {
 				this->juego->set_introjuego();
 				this->tmrIntroJugar->Enabled = true;
 			}
-			/*else if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_configurar())) {
-				//
-			}*/
+			else if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_configurar())) {
+				frm_configuracion^ frm = gcnew frm_configuracion();
+				frm->ShowDialog();
+				
+				this->juego->get_cursor()->dibujar(this->buffer->Graphics);
+				this->buffer->Render();
+				this->juego->get_config()->set_aliados_cant(frm->get_cantaliados());
+				this->juego->get_config()->set_vidas(frm->get_cantvidas());
+				this->juego->get_config()->set_t_to_s(frm->get_cantTiempo());
+			}
 		}
 
 		if (this->juego->get_introjuego() != nullptr)
@@ -177,6 +189,7 @@ namespace pryProyectoFinal {
 					this->juego->remove_introjuego();
 					this->buffer->Graphics->Clear(System::Drawing::Color::Black);
 					intro->Stop();
+					jugar->PlayLooping();
 					this->juego->iniciar_juego();
 					this->juego->get_laberinto()->pintar_mapa(this->buffer_aux->Graphics);
 					buffer_aux->Render();
@@ -245,7 +258,6 @@ namespace pryProyectoFinal {
 	}
 
 	private: System::Void animar_menu(System::Object^ sender, System::EventArgs^ e) {
-		intro->PlayLooping();
 		this->juego->get_menu()->menu_principal(buffer->Graphics);
 		this->juego->pintar_ui(this->buffer->Graphics);
 		this->buffer->Render();
@@ -318,11 +330,12 @@ namespace pryProyectoFinal {
 	}
 	private: System::Void mostrar_mensaje(System::Object^ sender, System::EventArgs^ e) {
 		this->buffer->Graphics->Clear(System::Drawing::Color::Black);
-
 		if (this->juego->get_ha_ganado())
 			this->juego->get_ganar()->dibujar_dialogo(this->buffer->Graphics);
 		else
+			this->juego->get_gameover()->dibujar_fondo(this->buffer->Graphics);
 			this->juego->get_gameover()->dibujar_dialogo(this->buffer->Graphics);
+
 
 		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
 		this->juego->dibujar_btn_creditos(this->buffer->Graphics);
@@ -330,9 +343,11 @@ namespace pryProyectoFinal {
 		this->buffer->Render();
 	}
 	private: System::Void mostrar_creditos(System::Object^ sender, System::EventArgs^ e) {
-		//this->juego->get_creditos()->dibujar_fondo(this->buffer->Graphics);
 		this->juego->dibujar_creditos(this->buffer->Graphics);
 		this->buffer->Render();
 	}
+private: System::Void frmMenu_Activated(System::Object^ sender, System::EventArgs^ e) {
+	intro->PlayLooping();
+}
 };
 }
