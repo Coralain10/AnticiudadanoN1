@@ -5,7 +5,7 @@
 #include <MMSystem.h>
 #include "CJuego.hpp"
 #include <string>
-
+#include "frm_configuracion.h"
 namespace pryProyectoFinal {
 
 	using namespace System;
@@ -161,9 +161,16 @@ namespace pryProyectoFinal {
 				this->juego->set_introjuego();
 				this->tmrIntroJugar->Enabled = true;
 			}
-			/*else if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_configurar())) {
-				//
-			}*/
+			else if (this->juego->get_cursor()->hay_colision(this->juego->get_menu()->get_btn_configurar())) {
+				frm_configuracion^ frm = gcnew frm_configuracion();
+				frm->ShowDialog();
+				
+				this->juego->get_cursor()->dibujar(this->buffer->Graphics);
+				this->buffer->Render();
+				this->juego->get_config()->set_aliados_cant(frm->get_cantaliados());
+				this->juego->get_config()->set_vidas(frm->get_cantvidas());
+				this->juego->get_config()->set_t_to_s(frm->get_cantTiempo());
+			}
 		}
 
 		if (this->juego->get_introjuego() != nullptr)
@@ -336,3 +343,4 @@ namespace pryProyectoFinal {
 	}
 };
 }
+
