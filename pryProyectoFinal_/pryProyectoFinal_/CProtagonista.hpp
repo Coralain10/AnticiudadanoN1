@@ -12,7 +12,7 @@ public:
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
 		dx = dy = 2;
-		this->cant_vidas = 5;
+		this->cant_vidas;
 	}
 	~CProtagonista() {}
 
@@ -38,10 +38,14 @@ public:
 	void disparar() {
 		//TO DO
 	}
-	
-	void set_cant_vidas(short cant_vidas) { this->cant_vidas = cant_vidas; }
+	void MostrarVidas(int cantV,Graphics^ g) {
+		this->cant_vidas = cantV;
+		g->DrawString("Vidas: " + cantV, gcnew Font("Courier new", 20), Brushes::LightYellow, 0, 0);
+	}
+	void set_cant_vidas(short value) { this->cant_vidas += value; }
 	short get_cant_vidas() { return cant_vidas; }
 	void set_balas(short cant_balas) { this->cant_balas = cant_balas; }
 	short get_cant_balas() { return cant_balas; }
 };
+
 
