@@ -265,11 +265,17 @@ public:
 
 		if (this->aumentar_dificultad() == true) {
 			mover_asesinos();
-			for each (CAsesino ^ asesino in asesinos) {
-				asesino->dibujarSprite(g);
-				if (protagonista->hay_colision(asesino) && clock() - cooldown >= 2000) {
+			for (short j = asesinos->Count - 1; j >= 0; j--) {
+				asesinos[j]->dibujarSprite(g);
+				if (protagonista->hay_colision(asesinos[j]) && clock() - cooldown >= 2000) {
 					this->config->set_cant_vidas(-1);
+					this->asesinos->RemoveAt(j);
 					cooldown = clock();
+				}
+				for (short i = aliados->Count - 1; i >= 0; i--) {
+					if (aliados[i]->hay_colision(asesinos[j])) {
+						this->aliados->RemoveAt(i);
+					}
 				}
 			}
 			for each (CPortal ^ portal in portales) {
@@ -280,7 +286,9 @@ public:
 				}
 			}
 		}
-		
+		if (this->config->get_cant_vidas() == 0) {
+			this->config->ts_actual = this->config->ts_total;
+		}
 	}
 	
 	void reiniciar_lab() {
@@ -416,7 +424,8 @@ public:
 	}
 
 	void set_gameover() {
-		gameover = gcnew CDialogo("No nos privaran de la libertad\nVAMOS OTRA VEZ", this->area_juego);
+		CGrafico^ dictator_img = gcnew CGrafico("Imagenes\\dictador.png", 200 * 5, 132 * 5);
+		gameover = gcnew CDialogo("No nos privaran de la libertad\nVAMOS OTRA VEZ", this->area_juego,dictator_img);
 	}
 
 	void set_ganar() {
