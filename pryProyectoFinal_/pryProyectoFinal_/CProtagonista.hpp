@@ -48,4 +48,3 @@ public:
 	short get_cant_balas() { return cant_balas; }
 };
 
-

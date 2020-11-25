@@ -86,7 +86,7 @@ public:
 	void menu_principal(Graphics^ graficador) {
 		graficador->DrawImage(fondo, this->area);
 		this->btn_comenzar->dibujar(graficador);
-		graficador->DrawString("Â¡Jugar!", this->tipografia, Brushes::White, btn_comenzar->get_x() + (btn_comenzar->get_ancho() / 4), btn_comenzar->get_y() + (btn_comenzar->get_alto() / 4));
+		graficador->DrawString("¡Jugar!", this->tipografia, Brushes::White, btn_comenzar->get_x() + (btn_comenzar->get_ancho() / 4), btn_comenzar->get_y() + (btn_comenzar->get_alto() / 4));
 		this->btn_configurar->dibujar(graficador);
 		graficador->DrawString("Configurar", this->tipografia, Brushes::White, btn_configurar->get_x() + (btn_configurar->get_ancho() / 4), btn_configurar->get_y() + (btn_configurar->get_alto() / 4));
 		this->logo->dibujar(graficador);
@@ -203,12 +203,12 @@ public:
 			}
 			aux.X *= tamanho_celda ;
 			aux.Y *= tamanho_celda ;
-			this->aliados->Add(gcnew CAliado(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda));
+			this->aliados->Add(gcnew CAliado(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda * 0.75, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda));
 			
 		}
 		for (short i = 0; i < this->config->get_corruptos_cant(); i++) {
-			this->corruptos->Add(gcnew CCorrupto("Imagenes\\policia.png", System::Drawing::Rectangle(rand()%500, rand()%500, tamanho_celda, tamanho_celda), 
-				System::Drawing::Rectangle(0, 0, 0, 0), 4, 4,tamanho_celda, rand() % 2, rand() % 2));
+			this->corruptos->Add(gcnew CCorrupto(System::Drawing::Rectangle(rand()%500, rand()%500, tamanho_celda * 0.75, tamanho_celda)
+				,tamanho_celda, rand() % 2, rand() % 2));
 		}
 
 		for (short i = 0; i < this->config->get_asesinos_cant(); i++) {
@@ -221,11 +221,11 @@ public:
 			}
 			aux.X *= tamanho_celda;
 			aux.Y *= tamanho_celda;
-			this->asesinos->Add(gcnew CAsesino(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4, tamanho_celda));
+			this->asesinos->Add(gcnew CAsesino(System::Drawing::Rectangle(aux.X, aux.Y, tamanho_celda * 0.75, tamanho_celda), tamanho_celda));
 
 		}
 		for (short i = 0; i < this->config->get_portales_cant(); i++) {
-			this->portales->Add(gcnew CPortal(System::Drawing::Rectangle(rand() % 500, rand() % 500, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 4, tamanho_celda));
+			this->portales->Add(gcnew CPortal(System::Drawing::Rectangle(rand() % (this->laberinto->get_ancho()-2)* tamanho_celda, rand() % (this->laberinto->get_alto() - 2) * tamanho_celda, tamanho_celda, tamanho_celda), tamanho_celda));
 		}
 	}
 	void interactuar(Direccion direccion) {
@@ -240,12 +240,23 @@ public:
 			aliado->dibujarSprite(g);
 		}
 
-		for each (CCorrupto ^ corrupt in corruptos) {
-			corrupt->mover_auto((short)this->config->ts_actual % 35 / 10, this->laberinto);
-			corrupt->dibujarSprite(g);
-			if (protagonista->hay_colision(corrupt)&&clock()-cooldown>=2000) {
+		mover_corruptos();
+		for (short i = corruptos->Count - 1; i >= 0; i--) {
+			//corrupt->mover_auto((short)this->config->ts_actual % 35 / 10, this->laberinto);
+			corruptos[i]->dibujarSprite(g);
+			if (protagonista->hay_colision(corruptos[i])&&clock()-cooldown>=2000) {
 						this->config->set_cant_vidas(-1);
 						cooldown = clock();
+			}
+			for (short j = aliados->Count-1; j >= 0;j--) {
+				if (aliados[j]->hay_colision(corruptos[i])) {
+				//	CCorrupto^ corrupto = (CCorrupto^)(CNPC^)aliado;
+				//corrupto->edit_imagen("Imagenes\\policia.png",tamanho_celda*0.75, tamanho_celda);
+					CCorrupto^ corrupto = gcnew CCorrupto(System::Drawing::Rectangle(aliados[j]->get_x(), aliados[j]->get_y(), tamanho_celda * 0.75, tamanho_celda),tamanho_celda, rand() % 2, rand() % 2);
+					delete this->aliados[j];
+					this->aliados->RemoveAt(j);
+					this->corruptos->Add(corrupto);
+				}
 			}
 		}
 
@@ -253,9 +264,17 @@ public:
 			mover_asesinos();
 			for each (CAsesino ^ asesino in asesinos) {
 				asesino->dibujarSprite(g);
+				if (protagonista->hay_colision(asesino) && clock() - cooldown >= 2000) {
+					this->config->set_cant_vidas(-1);
+					cooldown = clock();
+				}
 			}
 			for each (CPortal ^ portal in portales) {
 				portal->dibujarSprite(g);
+				if (protagonista->hay_colision(portal)) {
+					protagonista->set_x(rand()%500);
+					protagonista->set_y(rand() % 500);
+				}
 			}
 		}
 		
@@ -277,7 +296,7 @@ public:
 		for (short i = this->config->get_corruptos_cant() - 1; i > 0; i--) {
 			corruptos->RemoveAt(i);
 		}	
-		
+
 		iniciar_juego();
 
 	}
@@ -313,6 +332,35 @@ public:
 		}
 
 	}
+	void mover_corruptos() {
+		for each (CCorrupto ^ corrupto in corruptos) {
+			if (corrupto->get_x() > protagonista->get_x())
+				corrupto->mover(Direccion::Izquierda, laberinto);
+			else if (corrupto->get_x() < protagonista->get_x())
+				corrupto->mover(Direccion::Derecha, laberinto);
+
+			if (corrupto->get_y() > protagonista->get_y())
+				corrupto->mover(Direccion::Arriba, laberinto);
+			else if (corrupto->get_y() < protagonista->get_y())
+				corrupto->mover(Direccion::Abajo, laberinto);
+		}
+
+	}
+	void mover_corruptos2() {
+		for each (CCorrupto ^ corrupto in corruptos) {
+			for each (CAliado ^ aliado in aliados) {
+				if (corrupto->get_x() > aliado->get_x())
+					corrupto->mover(Direccion::Izquierda, laberinto);
+				else if (corrupto->get_x() < aliado->get_x())
+					corrupto->mover(Direccion::Derecha, laberinto);
+
+				if (corrupto->get_y() > aliado->get_y())
+					corrupto->mover(Direccion::Arriba, laberinto);
+				else if (corrupto->get_y() < aliado->get_y())
+					corrupto->mover(Direccion::Abajo, laberinto);
+			}
+		}
+	}
 	bool es_fin_juego() {
 		if (this->config->ts_actual == this->config->ts_total)
 			return true;
@@ -339,8 +387,8 @@ public:
 
 	void set_introjuego() {
 		List<CDialogo^>^ intro_juego = gcnew List<CDialogo^>();
-		intro_juego->Add(gcnew CDialogo("Â¡Â¡Â¡CUIDADO!!!\n\nHan sido liberados los \"corruptos\",\nquienes van a ir buscando a tus aliados\ny los irÃ¡n corrompiendo uno por uno.", this->area_juego));
-		intro_juego->Add(gcnew CDialogo("Recuerda que mientras mÃ¡s tardes en salir,\nlos \"corruptos\" pueden ir cerrando tratos con los \"asesinos\",\ndespiadados seres que no dudaran ni un segundo en matarte.", this->area_juego));
+		intro_juego->Add(gcnew CDialogo("¡¡¡CUIDADO!!!\n\nHan sido liberados los \"corruptos\",\nquienes van a ir buscando a tus aliados\ny los irán corrompiendo uno por uno.", this->area_juego));
+		intro_juego->Add(gcnew CDialogo("Recuerda que mientras más tardes en salir,\nlos \"corruptos\" pueden ir cerrando tratos con los \"asesinos\",\ndespiadados seres que no dudaran ni un segundo en matarte.", this->area_juego));
 		intro_juego->Add(gcnew CDialogo("Te deseamos suerte en tu viaje,\ny te apoyamos en el camino de Zion hacia la libertad.", this->area_juego));
 		this->introjuego = gcnew CDialogos(intro_juego, gcnew CGrafico("Imagenes\\prota_alliesUI.png", 382 * 2, 258 * 2), this->area_juego, this->tamanho_celda);
 	}
@@ -349,7 +397,7 @@ public:
 		List<String^>^ chat_corrupt = gcnew List<String^>();
 		List<String^>^ chat_assassin = gcnew List<String^>();
 		chat_corrupt->Add("Corrupt:\nHemos fallado en detener al anticiudadano,\nnecesitamos su ayuda.");
-		chat_assassin->Add("Assassin:\nEsta bien, aniquilarÃ© al rebelde,\npero les saldrÃ¡ caro.");
+		chat_assassin->Add("Assassin:\nEsta bien, aniquilaré al rebelde,\npero les saldrá caro.");
 		chat_corrupt->Add("Corrupt:\nTodo sea para eliminar a esa escoria.");
 		chat_assassin->Add("Assassin:\nHecho.");
 		chat_alianza = gcnew CChat(gcnew CGrafico("Imagenes\\policia.png", System::Drawing::Rectangle(10, 36, 40, 40), this->tamanho_celda, this->tamanho_celda),
@@ -382,13 +430,13 @@ public:
 		pintar_ui(graficador);
 	}
 	void set_creditos() {
-		std::string creditos_txt = "CRÃ‰DITOS:\n\nDesarrollado por:\n";
-		creditos_txt+= "Arte & ProgramaciÃ³n | Carolain Anto ChÃ¡vez\n";
-		creditos_txt += "Arte & ProgramaciÃ³n | Julio Arturo MorÃ³n Campos\n";
-		creditos_txt += "ProducciÃ³n & ProgramaciÃ³n | Santiago Sebastian Heredia Orejuela\n";
-		creditos_txt += "ProducciÃ³n & ProgramaciÃ³n | Gabriel Omar Quispe Kobashikawa\n";
-		creditos_txt += "\nMÃšSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
-		creditos_txt += "\nCURSO:\nProgramaciÃ³n II\n";
+		std::string creditos_txt = "CRÉDITOS:\n\nDesarrollado por:\n";
+		creditos_txt+= "Arte & Programación | Carolain Anto Chávez\n";
+		creditos_txt += "Arte & Programación | Julio Arturo Morón Campos\n";
+		creditos_txt += "Producción & Programación | Santiago Sebastian Heredia Orejuela\n";
+		creditos_txt += "Producción & Programación | Gabriel Omar Quispe Kobashikawa\n";
+		creditos_txt += "\nMÚSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
+		creditos_txt += "\nCURSO:\nProgramación II\n";
 		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
 		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego);
 	}
@@ -404,10 +452,10 @@ public:
 private:
 	void set_intro0() {
 		List<CDialogo^>^ intro_descrip = gcnew List<CDialogo^>();
-		intro_descrip->Add(gcnew CDialogo("Existe un mundo llamado Zion\nque se encuentra regido por un grupo de personas de gran poder,\nquienes han establecido una dictadura total\ndonde ningÃºn ciudadano tiene voz ni voto,\ny son atormentados constantemente\ncon tal de que se mantengan volubles ante la tiranÃ­a del grupo.", this->area_juego));
-		intro_descrip->Add(gcnew CDialogo("Pero hay algo que este grupo de dictadores ignora,\nes que durante aÃ±os,se ha ido formando en silencio una rebeliÃ³n,\ncon el propÃ³sito de liberar a todos los pueblos\ny alcanzar la armonÃ­a que una vez existiÃ³ Zion,\ny que ahora solo vive en la memoria de los mÃ¡s viejos.", this->area_juego));
-		intro_descrip->Add(gcnew CDialogo("El lÃ­der de este grupo de rebeldes\nha estado viviendo por mucho tiempo en el grupo privilegiado,\nbuscando alcanzar los altos mandos.\n\nDespuÃ©s de aÃ±os de soportar ver maltratos hacia su pueblo,\npor fin estÃ¡ listo para actuar.", this->area_juego));
-		intro_descrip->Add(gcnew CDialogo("Durante su estancia\nrecopilÃ³ informaciÃ³n acerca de los mundos adyacentes a Zion,\ny encontrÃ³ uno con el que puede contar\npara la liberaciÃ³n de su pueblo.\n\nPero para ello debe salir de Zion personalmente,\nrenunciando asÃ­ a su posiciÃ³n como gobernante\ny siendo declarado como\n\"ANITICIUDADANO\"", this->area_juego));
+		intro_descrip->Add(gcnew CDialogo("Existe un mundo llamado Zion\nque se encuentra regido por un grupo de personas de gran poder,\nquienes han establecido una dictadura total\ndonde ningún ciudadano tiene voz ni voto,\ny son atormentados constantemente\ncon tal de que se mantengan volubles ante la tiranía del grupo.", this->area_juego));
+		intro_descrip->Add(gcnew CDialogo("Pero hay algo que este grupo de dictadores ignora,\nes que durante años,se ha ido formando en silencio una rebelión,\ncon el propósito de liberar a todos los pueblos\ny alcanzar la armonía que una vez existió Zion,\ny que ahora solo vive en la memoria de los más viejos.", this->area_juego));
+		intro_descrip->Add(gcnew CDialogo("El líder de este grupo de rebeldes\nha estado viviendo por mucho tiempo en el grupo privilegiado,\nbuscando alcanzar los altos mandos.\n\nDespués de años de soportar ver maltratos hacia su pueblo,\npor fin está listo para actuar.", this->area_juego));
+		intro_descrip->Add(gcnew CDialogo("Durante su estancia\nrecopiló información acerca de los mundos adyacentes a Zion,\ny encontró uno con el que puede contar\npara la liberación de su pueblo.\n\nPero para ello debe salir de Zion personalmente,\nrenunciando así a su posición como gobernante\ny siendo declarado como\n\"ANITICIUDADANO\"", this->area_juego));
 		intro0 = gcnew CDialogos(intro_descrip, this->area_juego);
 	}
 
@@ -418,13 +466,13 @@ private:
 		instrucciones->Add("Lo controlas usando las teclas direccionales");
 		instrucciones->Add("Esta es tu barra de vida, inicias con *cantidad de vida* de vida");
 		instrucciones->Add("La meta del juego es lograr atravesar el laberinto sin morir");
-		instrucciones->Add("A lo largo del laberinto te podrÃ¡s encontrar con tres tipos de personaje:");
-		instrucciones->Add("ALIADOS:\nSon personajes que te ayudaran en tu viaje\ny te seguirÃ¡n a lo largo de este dando su vida por la tuya.");
-		instrucciones->Add("CORRUPTOS:\nEstan en tu contra, caminan a lo largo del mapa\ny cuando encuentran un aliado lo corrompen convirtiÃ©ndolos en corruptos");
+		instrucciones->Add("A lo largo del laberinto te podrás encontrar con tres tipos de personaje:");
+		instrucciones->Add("ALIADOS:\nSon personajes que te ayudaran en tu viaje\ny te seguirán a lo largo de este dando su vida por la tuya.");
+		instrucciones->Add("CORRUPTOS:\nEstan en tu contra, caminan a lo largo del mapa\ny cuando encuentran un aliado lo corrompen convirtiéndolos en corruptos");
 		instrucciones->Add("ASESINOS:\ncuando encuentran un aliado lo asesinan y lo suplantan\ncambiando su aspecto, siendo iguales a los aliados.");
-		instrucciones->Add("InteracciÃ³n especial:\nUna vez los assassins son liberados, se generaran portales en distintas partes del laberinto,\nlo que permitirÃ¡ un escape de cualquier situaciÃ³n de riesgo de forma segura");
-		instrucciones->Add("A lo largo del mapa se han colocado balas, las cuales cargaran tu pistola,\nla que usarÃ¡s para salir de las situaciones de alto riesgo haciendo frente al peligro.");
-		instrucciones->Add("Eso es todo lo que debes saber para tu misiÃ³n");
+		instrucciones->Add("Interacción especial:\nUna vez los assassins son liberados, se generaran portales en distintas partes del laberinto,\nlo que permitirá un escape de cualquier situación de riesgo de forma segura");
+		instrucciones->Add("A lo largo del mapa se han colocado balas, las cuales cargaran tu pistola,\nla que usarás para salir de las situaciones de alto riesgo haciendo frente al peligro.");
+		instrucciones->Add("Eso es todo lo que debes saber para tu misión");
 		instrucciones->Add("Te deseamos suerte en tu viaje y esperamos que acabes con la injustica de este mundo.");
 		
 	}*/

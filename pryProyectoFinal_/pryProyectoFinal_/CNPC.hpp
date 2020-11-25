@@ -83,8 +83,8 @@ private:
 	short radio_peligro;
 	vector<vector<short>>* circulo_peligro_map;
 public:
-	CAsesino(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c, short lado) :
-		CNPC("Imagenes\\asesino.png", area, recorte, n_f, n_c, direccion, lado) {
+	CAsesino(System::Drawing::Rectangle area, short lado) :
+		CNPC("Imagenes\\asesino.png", area, System::Drawing::Rectangle(0,0,0,0), 4, 4, direccion, lado) {
 		dx = dy = 5;
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
@@ -119,9 +119,9 @@ private:
 	int tiempo_s_corrupcion;
 
 public:
-	CCorrupto(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado,bool esinvx,bool esinvy) :
-		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado,esinvx,esinvy) {
-
+	CCorrupto(System::Drawing::Rectangle area,short lado,bool esinvx,bool esinvy) :
+		CNPC("Imagenes\\policia.png",area, System::Drawing::Rectangle(0,0,0,0), 4, 4, direccion,lado,esinvx,esinvy) {
+		dx = dy = rand() % 3 + 1;
 	}
 	~CCorrupto() {}
 	
@@ -135,8 +135,8 @@ ref class CPortal : public CNPC {
 private:
 	int duracion;
 public:
-	CPortal(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c, short lado) :
-		CNPC("Imagenes\\portal_sprites.png", area, recorte, n_f, n_c, direccion, lado) {
+	CPortal(System::Drawing::Rectangle area, short lado) :
+		CNPC("Imagenes\\portal_sprites.png", area, System::Drawing::Rectangle(0,0,0,0), 2, 4, direccion, lado) {
 		dx = dy = 0;
 		this->recorte.Width = this->imagen->Width / this->an_columnas;
 		this->recorte.Height = this->imagen->Height / this->an_filas;
