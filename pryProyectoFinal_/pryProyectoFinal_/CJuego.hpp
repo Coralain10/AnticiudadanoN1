@@ -471,8 +471,8 @@ public:
 		graficador->DrawString("Creditos", this->tipografia, Brushes::White, btn_creditos->get_x() + (btn_creditos->get_ancho() / 4), btn_creditos->get_y() + (btn_creditos->get_alto() / 4));
 	}
 	void dibujar_creditos(Graphics^ graficador) {
-		graficador->Clear(System::Drawing::Color::Black);
-		//this->creditos->dibujar_fondo(graficador);
+		//graficador->Clear(System::Drawing::Color::Black);
+		this->creditos->dibujar_fondo(graficador);
 		this->creditos->dibujar_dialogo(graficador);
 		this->btn_reiniciar->dibujar(graficador);
 		pintar_ui(graficador);
@@ -485,7 +485,7 @@ public:
 		creditos_txt += "Producción & Programación | Gabriel Omar Quispe Kobashikawa\n";
 		creditos_txt += "\nMÚSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
 		creditos_txt += "\nCURSO:\nProgramación II\n";
-		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
+		creditos_txt += "\nGracias especiales al profesor\nRicardo Gonzales Valenzuela";
 		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego, gcnew CGrafico("Imagenes\\creditos.png", 256 * 2, 192 * 2));
 	}
 

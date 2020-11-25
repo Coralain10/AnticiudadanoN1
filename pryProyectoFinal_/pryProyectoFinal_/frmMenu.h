@@ -279,9 +279,9 @@ namespace pryProyectoFinal {
 
 	private: System::Void animar_juegoP1(System::Object^ sender, System::EventArgs^ e) {
 		buffer_aux->Render();
-		this->juego->pintar_ui(buffer->Graphics);
 		this->juego->jugar(buffer->Graphics);
 		this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
+		this->juego->pintar_ui(buffer->Graphics);
 		if (this->juego->get_ha_ganado()) {
 			this->juego->set_ganar();
 			this->tmrJuegoP2->Enabled = false;
@@ -309,8 +309,8 @@ namespace pryProyectoFinal {
 		{
 			this->buffer_aux->Render();
 			this->juego->jugar(buffer->Graphics);
-			this->juego->pintar_ui(buffer->Graphics);
 			this->juego->get_btn_reiniciar()->dibujar(this->buffer->Graphics);
+			this->juego->pintar_ui(buffer->Graphics);
 			this->buffer->Render();
 			if (this->juego->get_ha_ganado()) {
 				this->juego->set_ganar();
@@ -338,7 +338,6 @@ namespace pryProyectoFinal {
 		this->buffer->Render();
 	}
 	private: System::Void mostrar_creditos(System::Object^ sender, System::EventArgs^ e) {
-		//this->juego->get_creditos()->dibujar_fondo(this->buffer->Graphics);
 		this->juego->dibujar_creditos(this->buffer->Graphics);
 		this->buffer->Render();
 	}
