@@ -283,20 +283,22 @@ public:
 	void reiniciar_lab() {
 		delete this->laberinto;
 		this->laberinto = gcnew CLaberinto((short)(area_juego.Width / tamanho_celda), (short)(area_juego.Height / tamanho_celda), tamanho_celda);
-
+		this->protagonista->set_ubicacion(this->laberinto->get_pos_entrada().X*tamanho_celda, this->laberinto->get_pos_entrada().Y*tamanho_celda);
 		if (this->ganar != nullptr)
 			remove_ganar();
 		if (this->gameover != nullptr)
 			remove_ganar();
 		if (this->creditos != nullptr)
 			remove_creditos();
-		for (short i = this->config->get_aliados_cant()-1; i > 0; i--){
+		for (short i = this->aliados->Count-1; i > 0; i--){
 			aliados->RemoveAt(i);
 		}
-		for (short i = this->config->get_corruptos_cant() - 1; i > 0; i--) {
+		for (short i = this->corruptos->Count - 1; i > 0; i--) {
 			corruptos->RemoveAt(i);
 		}	
-
+		for (short i = this->asesinos->Count - 1; i > 0; i--) {
+			asesinos->RemoveAt(i);
+		}
 		iniciar_juego();
 
 	}
