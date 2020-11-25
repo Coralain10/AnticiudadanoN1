@@ -230,8 +230,6 @@ public:
 	}
 	void interactuar(Direccion direccion) {
 		this->ha_ganado = this->protagonista->gano(direccion, this->laberinto);
-		if(this->protagonista->get_balas_disparadas()->Count>0)
-		this->protagonista->get_balas_disparadas()[this->protagonista->get_balas_disparadas()->Count-1]->ubicar(direccion);
 	}
 	void disparar() {
 		this->protagonista->iniciar_disparo(this->tamanho_celda);
@@ -293,20 +291,25 @@ public:
 			}
 		}
 		
-		for (short i = this->protagonista->get_balas_disparadas()->Count-1; i >= 0; i--) {
-			
-			if (this->aumentar_dificultad() == true && this->protagonista->get_balas_disparadas()->Count>0) {
-				for (short j = this->asesinos->Count-1; j >= 0; j--) {
+		for (short i = this->protagonista->get_balas_disparadas()->Count - 1; i >= 0; i--) {
+
+			if (this->aumentar_dificultad() == true && this->protagonista->get_balas_disparadas()->Count > 0) {
+				for (short j = this->asesinos->Count - 1; j >= 0; j--) {
 					if (asesinos[j]->hay_colision(this->protagonista->get_balas_disparadas()[i])) {
+						delete asesinos[j];
 						asesinos->RemoveAt(j);
 						this->protagonista->eliminar_bala(i);
 						break;
 					}
 				}
 			}
-			if (this->protagonista->get_balas_disparadas()->Count > 0) {
+		}
+		for (short i = this->protagonista->get_balas_disparadas()->Count - 1; i >= 0; i--) {
+		
+			if (this->protagonista->get_balas_disparadas()[i] != nullptr) {
 				for (short j = this->corruptos->Count - 1; j >= 0; j--) {
 					if (corruptos[j]->hay_colision(this->protagonista->get_balas_disparadas()[i])) {
+						delete corruptos[j];
 						corruptos->RemoveAt(j);
 						this->protagonista->eliminar_bala(i);
 						break;
@@ -336,6 +339,9 @@ public:
 		}	
 		for (short i = this->asesinos->Count - 1; i > 0; i--) {
 			asesinos->RemoveAt(i);
+		}
+		for (short i = this->protagonista->get_balas_disparadas()->Count - 1; i > 0; i--) {
+			this->protagonista->get_balas_disparadas()->RemoveAt(i);
 		}
 		iniciar_juego();
 

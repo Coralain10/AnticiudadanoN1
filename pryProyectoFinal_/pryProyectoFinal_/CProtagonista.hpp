@@ -34,7 +34,14 @@ public:
 		this->cant_balas +=aux;
 	}
 	void iniciar_disparo(short tamanho_celda) {
-		this->balas_disparadas->Add(gcnew CEntidad("Imagenes\\bala.png", System::Drawing::Rectangle(this->x, this->y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 1, direccion, "BALA", tamanho_celda));
+		if (cant_balas > 0) {
+			CEntidad^ aux = gcnew CEntidad("Imagenes\\bala.png", System::Drawing::Rectangle(this->x, this->y, tamanho_celda, tamanho_celda), System::Drawing::Rectangle(0, 0, 0, 0), 4, 1, direccion, "BALA", tamanho_celda);
+			aux->ubicar((Direccion)this->direccion);
+			aux->set_dy(10);
+			aux->set_dx(10);
+			this->balas_disparadas->Add(aux);
+			cant_balas--;
+		}
 	}
 	void eliminar_bala(short pos_bala) {
 		this->balas_disparadas->RemoveAt(pos_bala);
