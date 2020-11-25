@@ -82,6 +82,7 @@ namespace pryProyectoFinal {
 			this->Nud_cant_aliados->Name = L"Nud_cant_aliados";
 			this->Nud_cant_aliados->Size = System::Drawing::Size(120, 20);
 			this->Nud_cant_aliados->TabIndex = 0;
+			this->Nud_cant_aliados->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10, 0, 0, 0 });
 			// 
 			// Nud_cant_vidas
 			// 
@@ -94,6 +95,7 @@ namespace pryProyectoFinal {
 			this->Nud_cant_vidas->Name = L"Nud_cant_vidas";
 			this->Nud_cant_vidas->Size = System::Drawing::Size(120, 20);
 			this->Nud_cant_vidas->TabIndex = 0;
+			this->Nud_cant_vidas->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 5, 0, 0, 0 });
 			// 
 			// btn_aceptar
 			// 
@@ -168,6 +170,7 @@ namespace pryProyectoFinal {
 			this->Nud_cant_tiempojuego->Name = L"Nud_cant_tiempojuego";
 			this->Nud_cant_tiempojuego->Size = System::Drawing::Size(120, 20);
 			this->Nud_cant_tiempojuego->TabIndex = 5;
+			this->Nud_cant_tiempojuego->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 60, 0, 0, 0 });
 			// 
 			// lbl_tiempo_total
 			// 
@@ -178,9 +181,10 @@ namespace pryProyectoFinal {
 			this->lbl_tiempo_total->ForeColor = System::Drawing::SystemColors::Info;
 			this->lbl_tiempo_total->Location = System::Drawing::Point(422, 174);
 			this->lbl_tiempo_total->Name = L"lbl_tiempo_total";
-			this->lbl_tiempo_total->Size = System::Drawing::Size(203, 14);
+			this->lbl_tiempo_total->Size = System::Drawing::Size(203, 28);
 			this->lbl_tiempo_total->TabIndex = 6;
-			this->lbl_tiempo_total->Text = L"Cantidad del tiempo de juego";
+			this->lbl_tiempo_total->Text = L"Cantidad del tiempo de juego\r\n(segundos)";
+			this->lbl_tiempo_total->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			// 
 			// frm_configuracion
 			// 

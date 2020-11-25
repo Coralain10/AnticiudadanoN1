@@ -133,6 +133,8 @@ private:
 	List<CPortal^>^ portales;
 	CProtagonista^ protagonista;
 
+	Bitmap^ img_conspiracion;
+
 	bool inicio_juego;
 	bool ha_ganado;
 	bool ha_perdido;
@@ -150,6 +152,7 @@ public:
 		this->btn_creditos->set_ubicacion(area.Width/2 - tamanho_celda*2, area.Height - (4*tamanho_celda));
 		this->btn_reiniciar = gcnew CGrafico("Imagenes\\reiniciar.png", (area.Width - 5 * tamanho_celda), tamanho_celda, (short)(tamanho_celda * 1.5), (short)(tamanho_celda * 1.5));
 		this->laberinto = gcnew CLaberinto((short)(area.Width / tamanho_celda), (short)(area.Height / tamanho_celda), tamanho_celda);
+		this->img_conspiracion = gcnew Bitmap("Imagenes\\corrupt_assasinUI.png");
 		this->aliados = gcnew List<CAliado^>();
 		this->corruptos = gcnew List<CCorrupto^>();
 		this->asesinos = gcnew List<CAsesino^>();
@@ -446,13 +449,12 @@ public:
 		chat_assassin->Add("Assassin:\nEsta bien, aniquilaré al rebelde,\npero les saldrá caro.");
 		chat_corrupt->Add("Corrupt:\nTodo sea para eliminar a esa escoria.");
 		chat_assassin->Add("Assassin:\nHecho.");
-		chat_alianza = gcnew CChat(gcnew CGrafico("Imagenes\\policia.png", System::Drawing::Rectangle(10, 36, 40, 40), this->tamanho_celda, this->tamanho_celda),
-			gcnew CGrafico("Imagenes\\asesino.png", System::Drawing::Rectangle(10, 50, 40, 40), this->tamanho_celda, this->tamanho_celda),
+		chat_alianza = gcnew CChat(gcnew CGrafico(img_conspiracion, System::Drawing::Rectangle(80, 10, 90, 90), this->tamanho_celda*2, this->tamanho_celda*2),
+			gcnew CGrafico(img_conspiracion, System::Drawing::Rectangle(230, 20, 90, 90), this->tamanho_celda*2, this->tamanho_celda*2),
 			chat_corrupt, chat_assassin, this->area_juego, this->tamanho_celda);
 	}
 	void set_splash_conspiracion(Graphics^ graficador) {
-		CGrafico^ img_conspiracion = gcnew CGrafico("Imagenes\\corrupt_assasinUI.png", 416 * 2, 259 * 2);
-		splash_conspiracion = gcnew CDialogo("Conspiracion realizada", this->area_juego, img_conspiracion);
+		splash_conspiracion = gcnew CDialogo("Conspiracion realizada", this->area_juego, gcnew CGrafico(img_conspiracion, 416 * 2, 259 * 2));
 		this->splash_conspiracion->dibujar_fondo(graficador);
 		this->splash_conspiracion->dibujar_dialogo(graficador);
 	}
@@ -484,7 +486,7 @@ public:
 		creditos_txt += "\nMÚSICA UTILIZADA : \n1.Halo 3: ODST - Rain (8Bit Remix)(https:\//www.youtube.com/watch?v=1s0VviYG_GU)\n2.Mega Man (NES) Music - Ice Man Stage(https:\//www.youtube.com/watch?v=CUZlDht8iro&list=PL7EF_qp0zBDmKNoUhxqH7qwDOg_mcmLR4&index=5)\n";
 		creditos_txt += "\nCURSO:\nProgramación II\n";
 		creditos_txt += "\nGracias especiales al profesor Ricardo Gonzales Valenzuela";
-		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego);
+		creditos = gcnew CDialogo(gcnew String(creditos_txt.c_str()), this->area_juego, gcnew CGrafico("Imagenes\\creditos.png", 256 * 2, 192 * 2));
 	}
 
 	void remove_intro0() { delete this->intro0; this->intro0 = nullptr; }
