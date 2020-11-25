@@ -83,8 +83,12 @@ private:
 	short radio_peligro;
 	vector<vector<short>>* circulo_peligro_map;
 public:
-	CAsesino(String^ ruta, System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c,short lado) :
-		CNPC(ruta, area, recorte, n_f, n_c, direccion,lado) {}
+	CAsesino(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c, short lado) :
+		CNPC("Imagenes\\asesino.png", area, recorte, n_f, n_c, direccion, lado) {
+		dx = dy = 5;
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
+	}
 	~CAsesino() {
 		delete circulo_peligro_map;
 	}
@@ -126,4 +130,16 @@ public:
 	}
 	void set_tiempo_corrup(int segundos) { this->tiempo_s_corrupcion; }
 	int get_tiempo_s_corrup() { return tiempo_s_corrupcion; }
+};
+ref class CPortal : public CNPC {
+private:
+	int duracion;
+public:
+	CPortal(System::Drawing::Rectangle area, System::Drawing::Rectangle recorte, short n_f, short n_c, short lado) :
+		CNPC("Imagenes\\portal_sprites.png", area, recorte, n_f, n_c, direccion, lado) {
+		dx = dy = 0;
+		this->recorte.Width = this->imagen->Width / this->an_columnas;
+		this->recorte.Height = this->imagen->Height / this->an_filas;
+	}
+
 };
